@@ -192,10 +192,237 @@ fun onPlayerInteractEvent(event: HandInteractEvent, @First(typeFilter = [Player:
 
 ### Adding the magic of coroutines
 
+
+
+#### Motivation
+
 You might be wondering why you should actually care about adding
 coroutines to your project if the approach above is already very fancy.
 
 The problem of the approach above is that async and sync actions can stack quite easily.
 Let's simply take a look at an example.
 
+```kotlin
+private val pluginContainer: PluginContainer
+    
+@Listener
+fun onPlayerInteractEvent(event: HandInteractEvent, @First(typeFilter = [Player::class]) player: Player) {
+    async(plugin){
+       val data = getDataFromDatabase()
 
+       sync(plugin){
+           if (data.contains("give-apple")) {
+               giveAppleToPlayer()
+
+               async(plugin){
+                   val appleConfiguration = getAppleConfigurationFromFile()
+
+                   sync(plugin){
+                       if(appleConfiguration.contains("apple-lifetime")){
+                           applyLifeTimeToApple()
+                       }
+                   }
+               }
+           }
+       }
+   }
+}
+ ```   
+ 
+Of course, this could be simplified but you are getting the point.  
+Also, parallel tasks are still lots of work to accomplish.
+
+#### Creating a Dispatcher (Bukkit)
+
+The first problem we need to solve in order use coroutines is letting Kotlin now how our custom framework handles
+threads otherwise it does not know how to schedule our tasks correctly on each thread. 
+
+This may sound difficult but has become very easy to implement in Kotlin +1.3.
+
+There are some default dispatchers available for Android or JavaFX, however there is not one for Bukkit, Spigot or Sponge.
+
+When taking a look at the JavaFX implementation which is most similar to our use case we can come up with the following.
+
+Add a dispatcher for the main thread.
+
+```kotlin
+class MinecraftCoroutineDispatcher(private val plugin: Plugin) : CoroutineDispatcher() {
+    /**
+     * Handles dispatching the coroutine on the correct thread.
+     */
+    override fun dispatch(context: CoroutineContext, block: Runnable) {
+        if (Bukkit.isPrimaryThread()) {
+            block.run()
+        } else {
+            plugin.server.scheduler.runTask(plugin, block)
+        }
+    }
+}
+ ``` 
+ 
+Add a dispatcher for async threads.
+
+```kotlin
+class AsyncCoroutineDispatcher(private val plugin: Plugin) : CoroutineDispatcher() {
+    /**
+     * Handles dispatching the coroutine on the correct thread.
+     */
+    override fun dispatch(context: CoroutineContext, block: Runnable) {
+        if (Bukkit.isPrimaryThread()) {
+            plugin.server.scheduler.runTaskAsynchronously(plugin, block)
+        } else {
+            block.run()
+        }
+    }
+}
+ ``` 
+ 
+Now we need a place where to store the instances of the dispatchers. The following code snippet is only an example and should be
+replace with more clean approaches.
+ 
+```kotlin
+object DispatcherContainer {
+    private var asyncCoroutine: CoroutineContext? = null
+    private var syncCoroutine: CoroutineContext? = null
+
+    /**
+     * Gets the async coroutine context.
+     */
+    val async: CoroutineContext
+        get() {
+            if (asyncCoroutine == null) {
+                asyncCoroutine = AsyncCoroutineDispatcher(JavaPlugin.getPlugin(YourPlugin::class.java))
+            }
+
+            return asyncCoroutine!!
+        }
+
+    /**
+     * Gets the sync coroutine context.
+     */
+    val sync: CoroutineContext
+        get() {
+            if (syncCoroutine == null) {
+                syncCoroutine = MinecraftCoroutineDispatcher(JavaPlugin.getPlugin(YourPlugin::class.java))
+            }
+
+            return syncCoroutine!!
+        }
+}
+ ``` 
+
+You might have noticed that some overhead is required in order to add coroutines to your solution. 
+
+This means you should keep in mind that smaller projects should stay with the discussed extensions approach instead of adding this powerful framework.
+
+#### Adding syntactic sugar
+
+After adding these 3 classes you are already done, however adding some syntactic sugar is always nice.
+
+Define the following code globally.
+
+```kotlin
+/**
+ * Minecraft async dispatcher.
+ */
+val Dispatchers.async: CoroutineContext
+    get() =  DispatcherContainer.async
+
+/**
+ * Minecraft sync dispatcher.
+ */
+val Dispatchers.minecraft: CoroutineContext
+    get() =  DispatcherContainer.sync
+ ``` 
+
+
+#### Using the coroutines
+
+It is highly recommend to copy the following snippets into a event method in order to get a feeling how
+the actions flow together.
+
+**All samples below do NOT block the main thread!**
+
+```kotlin
+@EventHandler
+fun onPlayerInteractEvent(event: PlayerInteractEvent) {
+    println("Event on Thread " + Thread.currentThread().id)
+
+    // Launch always starts a coroutine.
+    GlobalScope.launch(Dispatchers.minecraft) {
+        println("Launch-1 on Thread " + Thread.currentThread().id)
+
+        // Use withContext for dispatching async operations.
+        val data = withContext(Dispatchers.async) {
+            Thread.sleep(1000)
+            println("Async-1-Database on Thread " + Thread.currentThread().id)
+            arrayListOf("give-apple")
+        }
+
+        // Once the data is here, continue on the main thread.
+        println("Launch-2 on Thread " + Thread.currentThread().id)
+    }
+ }
+ 
+ // Execution Order: Event, Launch-1, Async-1, Launch-2
+ ``` 
+ 
+```kotlin
+@EventHandler
+fun onPlayerInteractEvent(event: PlayerInteractEvent) {
+    println("Event on Thread " + Thread.currentThread().id)
+    
+    // Launch always starts a coroutine.
+    GlobalScope.launch(Dispatchers.minecraft) {
+        println("Launch-1 on Thread " + Thread.currentThread().id)
+
+        // Use withContext for dispatching async operations.
+        val data = withContext(Dispatchers.async) {
+            Thread.sleep(1000)
+            println("Async-1-Database on Thread " + Thread.currentThread().id)
+            arrayListOf("give-apple")
+        }
+
+        // Once the data is here, continue on the main thread.
+        println("Launch-2 on Thread " + Thread.currentThread().id)
+
+        if (data.contains("give-apple")) {
+            println("Launch-3 on Thread " + Thread.currentThread().id)
+            val currentMilliSeconds = System.currentTimeMillis()
+
+            // Use async for parallel async operations.
+            val appleConfigTask = async(Dispatchers.async) {
+                Thread.sleep(2000)
+                println("Async-2-Config on Thread " + Thread.currentThread().id)
+                arrayListOf("life-time")
+            }
+
+            // Use async for parallel async operations.
+            val appleDefinitionTask = async(Dispatchers.async) {
+                Thread.sleep(3000)
+                println("Async-3-Definition on Thread " + Thread.currentThread().id)
+                arrayListOf("definition")
+            }
+
+            println("Launch-4 on Thread " + Thread.currentThread().id)
+
+            // Wait until both tasks are finished. 
+            // This does not block the main thread either.
+            val appleConfig = appleConfigTask.await()
+            val appleDefinition = appleDefinitionTask.await()
+
+            // As both tasks get executed parallel, it only took ~3 seconds instead of ~5 seconds to finish them.
+            val milliSeconds = System.currentTimeMillis() - currentMilliSeconds
+            println("Launch-5 on Thread " + Thread.currentThread().id + " after " + milliSeconds + ".")
+            
+            if (appleConfig.contains("life-time") && appleDefinition.contains("definition")) {
+                println("Good job! You have understood coroutines!")
+            }
+        }
+    }
+ }
+ 
+ // Execution Order: Event, Launch-1, Async-1, Launch-2
+ ``` 
+
+For further information, please refer to [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html, Date: [09/11/2018]) for the official documentation. 
