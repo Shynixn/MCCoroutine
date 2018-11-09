@@ -2,12 +2,19 @@
 
 MCCoroutine is a summary of how to use the power of Kotlin corroutines on Bukkit, Spigot or Sponge Minecraft server.
 
+## Contents
+
+* [Getting started](https://github.com/Shynixn/MCCoroutine#getting-started)
+* [UseCase](https://github.com/Shynixn/MCCoroutine#UseCase)
+* [Adding coroutines to your project](https://github.com/Shynixn/MCCoroutine#Adding-coroutines-to-your-project)
+* [Using coroutines in your project](https://github.com/Shynixn/MCCoroutine#Using-coroutines-in-your-project)
+
 ## Target Audience
 
 ### What's Kotlin?
 
-If this is your first question, please refer to the official [Kotlin] (https://kotlinlang.org/) page to get
-you started. This guide deals with advanced options.
+If this is your first question, please refer to the official [Kotlin](https://kotlinlang.org/) page to get
+you started. 
 
 ### This guide is for users who:
 
@@ -25,7 +32,7 @@ Source:
 
 ## UseCase
 
-In your server software a ordinary approach for scheduling asynchronous actions might look like this:
+In your server software, an ordinary approach for scheduling asynchronous actions might look like this:
 
 #### Java - Bukkit
 ```java
@@ -71,16 +78,16 @@ Both implementations cover the same usecase, however it is not that easy to gues
 
 Let's quickly go over to the Kotlin part, because it is getting smelly in here.
 
-### Applying Kotlin, Extension and Functions
+## Applying Kotlin, Extension and Functions
 
 Let's apply some powerful syntactic sugar options Kotlin already provided in +1.2.*
 
 This guide does not cover the details of the used functions, please refer to the following pages:
 
-* Refer to [Functions](https://kotlinlang.org/docs/reference/functions.html, Date: [09/11/2018]).
-* Refer to [Extensions](https://kotlinlang.org/docs/reference/extensions.html#extensions, Date: [09/11/2018]).
+* Refer to [Functions](https://kotlinlang.org/docs/reference/functions.html). Date: [09/11/2018]
+* Refer to [Extensions](https://kotlinlang.org/docs/reference/extensions.html).  Date: [09/11/2018]
 
-#### Extend the function of Any object
+### Extend the function of Any object
 
 ##### Bukkit
 
@@ -190,11 +197,9 @@ fun onPlayerInteractEvent(event: HandInteractEvent, @First(typeFilter = [Player:
 }
  ```   
 
-### Adding the magic of coroutines
+## Adding coroutines to your project
 
-
-
-#### Motivation
+### Motivation
 
 You might be wondering why you should actually care about adding
 coroutines to your project if the approach above is already very fancy.
@@ -336,7 +341,7 @@ val Dispatchers.minecraft: CoroutineContext
  ``` 
 
 
-#### Using the coroutines
+## Using coroutines in your project
 
 It is highly recommend to copy the following snippets into a event method in order to get a feeling how
 the actions flow together.
