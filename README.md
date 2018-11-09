@@ -241,7 +241,7 @@ Also, parallel tasks are still lots of work to accomplish.
 
 #### Creating a Dispatcher (Bukkit)
 
-The first problem we need to solve in order use coroutines is letting Kotlin now how our custom framework handles
+The first problem we need to solve in order use coroutines is letting Kotlin know how our custom framework handles
 threads otherwise it does not know how to schedule our tasks correctly on each thread. 
 
 This may sound difficult but has become very easy to implement in Kotlin +1.3.
