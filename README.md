@@ -427,7 +427,7 @@ fun onPlayerInteractEvent(event: PlayerInteractEvent) {
     }
  }
  
- // Execution Order: Event, Launch-1, Async-1, Launch-2
+ // Execution Order: Event, Launch-1, Async-1, Launch-2, Launch-3, Launch-4, Async-2, Async-3, Launch-5, Good job!
  ``` 
 
-For further information, please refer to [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html, Date: [09/11/2018]) for the official documentation. 
+For further information, please refer to [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) for the official documentation. 
