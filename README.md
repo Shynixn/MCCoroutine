@@ -289,32 +289,19 @@ replace with more clean approaches.
  
 ```kotlin
 object DispatcherContainer {
-    private var asyncCoroutine: CoroutineContext? = null
-    private var syncCoroutine: CoroutineContext? = null
-
     /**
      * Gets the async coroutine context.
      */
-    val async: CoroutineContext
-        get() {
-            if (asyncCoroutine == null) {
-                asyncCoroutine = AsyncCoroutineDispatcher(JavaPlugin.getPlugin(YourPlugin::class.java))
-            }
-
-            return asyncCoroutine!!
-        }
+    val async: CoroutineContext by lazy {
+        AsyncCoroutineDispatcher(JavaPlugin.getPlugin(YourPlugin::class.java))
+    }
 
     /**
      * Gets the sync coroutine context.
      */
-    val sync: CoroutineContext
-        get() {
-            if (syncCoroutine == null) {
-                syncCoroutine = MinecraftCoroutineDispatcher(JavaPlugin.getPlugin(YourPlugin::class.java))
-            }
-
-            return syncCoroutine!!
-        }
+    val sync: CoroutineContext by lazy {
+        MinecraftCoroutineDispatcher(JavaPlugin.getPlugin(YourPlugin::class.java))
+    }
 }
  ``` 
 
