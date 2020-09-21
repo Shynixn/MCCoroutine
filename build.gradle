@@ -1,0 +1,226 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: kotlinVersion
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
+    id 'io.codearte.nexus-staging' version '0.20.0'
+    id "de.marcphilipp.nexus-publish" version '0.2.0'
+}
+
+apply plugin: 'org.jetbrains.dokka'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+}
+
+nexusStaging {
+    packageGroup = "com.github.shynixn"
+    username = project.hasProperty("ossrhUsername") ? project.findProperty("ossrhUsername") : System.getenv('SONATYPE_USERNAME')
+    password = project.hasProperty("ossrhPassword") ? project.findProperty("ossrhPassword") : System.getenv('SONATYPE_PASSWORD')
+    delayBetweenRetriesInMillis = 10000
+    numberOfRetries = 100
+}
+
+allprojects {
+    apply plugin: 'jacoco'
+}
+
+subprojects {
+    group 'com.github.shynixn.mccoroutine'
+    version '1.0.0-SNAPSHOT'
+
+    sourceCompatibility = 1.8
+
+    apply plugin: 'kotlin-platform-jvm'
+    apply plugin: 'signing'
+    apply plugin: 'maven-publish'
+    apply plugin: 'java-library'
+    apply plugin: "de.marcphilipp.nexus-publish"
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled = true
+            html.enabled = false
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging.showStandardStreams = true
+        failFast = true
+
+        testLogging {
+            events(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.STARTED)
+            displayGranularity = 0
+            showExceptions = true
+            showCauses = true
+            showStackTraces = true
+            exceptionFormat = TestExceptionFormat.FULL
+        }
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        classifier = 'sources'
+    }
+
+    task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'javadoc'
+        outputDirectory = "$buildDir/javadoc"
+    }
+
+    task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+        from javadoc
+        classifier = 'javadoc'
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+                pom {
+                    name = 'MCCoroutine'
+                    description = 'MCCoroutine bukkit api server extension to work with Kotlin Coroutines.'
+                    url = 'https://github.com/Shynixn/MCCoroutine'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'http://www.opensource.org/licenses/mit-license.php'
+                        }
+                    }
+                    developers {
+                        developer {
+                            name = 'Shynixn'
+                            url = 'https://github.com/Shynixn'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/Shynixn/MCCoroutine.git'
+                        developerConnection = 'scm:git:ssh://github.com:Shynixn/MCCoroutine.git'
+                        url = 'http://github.com/Shynixn/MCCoroutine.git/tree/master'
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+                credentials {
+                    username = project.hasProperty("ossrhUsername") ? project.findProperty("ossrhUsername") : System.getenv('SONATYPE_USERNAME')
+                    password = project.hasProperty("ossrhPassword") ? project.findProperty("ossrhPassword") : System.getenv('SONATYPE_PASSWORD')
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        jcenter()
+    }
+
+    dependencies {
+        testCompile 'org.jetbrains.kotlin:kotlin-test'
+        testCompile 'org.jetbrains.kotlin:kotlin-test-junit'
+        testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+        testCompile 'org.mockito:mockito-core:2.23.0'
+
+        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    }
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (project.findProperty("signing.keyId") == null) {
+        ext."signing.keyId" = System.getenv('SIGNING_KEYID')
+        ext."signing.password" = System.getenv('SIGNING_KEYPASSWORD')
+        ext."signing.secretKeyRingFile" = '/home/travis/build/Shynixn/MCCoroutine/travis_secret_key'
+    }
+}
+
+task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(subprojects.sourceSets.main.output)
+    executionData = files(subprojects.jacocoTestReport.executionData)
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+    }
+    onlyIf = {
+        true
+    }
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
+}
+
+task generateJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "docs/apidocs"
+    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bukkit-core/src/main/java'))
+}
+
+task downloadDependencies(type: Exec) {
+    def build = new File('build')
+
+    if (!build.exists()) {
+        build.mkdir()
+    }
+
+    def folder = new File(build, 'buildtools')
+
+    if (!folder.exists()) {
+        folder.mkdir()
+    }
+
+    def file = new File(folder, "BuildTools.jar")
+
+    if (!file.exists()) {
+        new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar').withInputStream { i -> file.withOutputStream { it << i } }
+    }
+
+    def text = "cd build/buildtools"
+    text += " && java -jar BuildTools.jar --rev 1.16.2"
+    text += " && mvn install:install-file -Dfile=spigot-1.16.2.jar -DgroupId=org.spigotmc -DartifactId=spigot116R2 -Dversion=1.16.2-R2.0 -Dpackaging=jar"
+
+    standardOutput = new ByteArrayOutputStream()
+
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', text
+    } else {
+        commandLine 'sh', '-c', text
+    }
+}
