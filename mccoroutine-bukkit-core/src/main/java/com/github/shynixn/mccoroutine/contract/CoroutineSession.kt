@@ -23,6 +23,11 @@ interface CoroutineSession {
     val dispatcherMinecraft: CoroutineContext
 
     /**
+     * Gets the async dispatcher.
+     */
+    val dispatcherAsync: CoroutineContext
+
+    /**
      * Launches the given function on the Minecraft Thread and handles
      * coroutine scopes correctly.
      */

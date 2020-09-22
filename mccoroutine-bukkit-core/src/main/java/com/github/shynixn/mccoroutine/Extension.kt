@@ -25,6 +25,14 @@ val Plugin.minecraftDispatcher: CoroutineContext
     }
 
 /**
+ * Gets the plugin async dispatcher.
+ */
+val Plugin.asyncDispatcher: CoroutineContext
+    get() {
+        return mcCoroutine.getCoroutineSession(this).dispatcherAsync
+    }
+
+/**
  * Launches the given function in the Coroutine Scope of the given plugin.
  * This function may be called immediately without any delay if the Thread
  * calling this function Bukkit.isPrimaryThread() is true. This means
