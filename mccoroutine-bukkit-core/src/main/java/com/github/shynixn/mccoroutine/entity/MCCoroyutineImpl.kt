@@ -4,10 +4,10 @@ import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import com.github.shynixn.mccoroutine.listener.PluginListener
-import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
+import kotlin.coroutines.CoroutineContext
 
-internal class MCCoroutineImpl : MCCoroutine {
+internal class MCCoroyutineImpl : MCCoroutine {
     private val items = HashMap<Plugin, CoroutineSession>()
 
     /**
@@ -22,17 +22,16 @@ internal class MCCoroutineImpl : MCCoroutine {
     }
 
     /**
-     * Gets the event service for the given plugin.
-     */
-    override fun getEventService(plugin: Plugin): EventService {
-        TODO("Not yet implemented")
-    }
-
-    /**
      * Disables coroutine for the given plugin.
      */
     override fun disable(plugin: Plugin) {
-        TODO("Not yet implemented")
+        if (!items.containsKey(plugin)) {
+            return
+        }
+
+        val session = items[plugin]!!
+        session.dispose()
+        items.remove(plugin)
     }
 
     /**
@@ -40,8 +39,7 @@ internal class MCCoroutineImpl : MCCoroutine {
      */
     private fun startCoroutineSession(plugin: Plugin) {
         val pluginListener = PluginListener(this, plugin)
-        val coroutineSession = CoroutineSessionImpl()
-        items[plugin] = coroutineSession
+        items[plugin] = CoroutineSessionImpl(plugin)
         plugin.server.pluginManager.registerEvents(pluginListener, plugin)
     }
 }

@@ -1,10 +1,17 @@
 package com.github.shynixn.mccoroutine.entity
 
+import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import com.github.shynixn.mccoroutine.invokeSuspend
 import com.github.shynixn.mccoroutine.launchMinecraft
+import com.github.shynixn.mccoroutine.minecraftDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.ProducerScope
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.flowOn
 import org.bukkit.Bukkit
 import org.bukkit.Warning
 import org.bukkit.event.*
@@ -20,11 +27,12 @@ import java.util.logging.Level
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
-internal class EventServiceImpl : EventService {
+internal class EventServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) :
+    EventService {
     /**
      * Registers a suspend listener.
      */
-    override fun registerSuspendListener(listener: Listener, plugin: Plugin) {
+    override fun registerSuspendListener(listener: Listener) {
         val registeredListeners = createCoroutineListener(listener, plugin)
 
         val method = SimplePluginManager::class.java
@@ -41,8 +49,32 @@ internal class EventServiceImpl : EventService {
     /**
      * Creates a new event flow for the given event clazz.
      */
-    override fun <T : Event> createEventFlow(event: Class<T>): Flow<T> {
-        TODO("Not yet implemented")
+    override fun <T : Event> createEventFlow(
+        event: Class<T>,
+        priority: EventPriority,
+        ignoredCancelled: Boolean
+    ): Flow<T> {
+        val executor = EventExecutor { listener, event ->
+            coroutineSession.flows[listener]!!.channel.offer(event)
+        }
+        val listener = object : Listener {}
+
+        for (item in HandlerList.getHandlerLists()) {
+            item.register(
+                RegisteredListener(
+                    listener,
+                    executor,
+                    EventPriority.NORMAL,
+                    plugin,
+                    false
+                )
+            )
+        }
+
+        return channelFlow<T> {
+            coroutineSession.flows.put(listener, this as ProducerScope<Event>)
+            awaitClose {}
+        }.flowOn(plugin.minecraftDispatcher)
     }
 
     private fun createCoroutineListener(listener: Listener, plugin: Plugin): HashMap<*, *> {

@@ -9,11 +9,6 @@ internal interface MCCoroutine {
     fun getCoroutineSession(plugin: Plugin): CoroutineSession
 
     /**
-     * Gets the event service for the given plugin.
-     */
-    fun getEventService(plugin: Plugin): EventService
-
-    /**
      * Disables coroutine for the given plugin.
      */
     fun disable(plugin: Plugin)

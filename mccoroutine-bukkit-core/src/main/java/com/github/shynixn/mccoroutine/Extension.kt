@@ -1,18 +1,28 @@
 package com.github.shynixn.mccoroutine
 
-import com.github.shynixn.mccoroutine.entity.MCCoroutineImpl
+import com.github.shynixn.mccoroutine.entity.MCCoroyutineImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import org.bukkit.event.Event
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
 import java.lang.reflect.Method
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Static session.
  */
-private val mcCoroutine = MCCoroutineImpl()
+private val mcCoroutine = MCCoroyutineImpl()
+
+/**
+ * Gets the plugin minecraft dispatcher.
+ */
+val Plugin.minecraftDispatcher: CoroutineContext
+    get() {
+        return mcCoroutine.getCoroutineSession(this).dispatcherMinecraft
+    }
 
 /**
  * Launches the given function in the Coroutine Scope of the given plugin.
@@ -22,7 +32,7 @@ private val mcCoroutine = MCCoroutineImpl()
  * @param f callback function inside a coroutine scope.
  */
 fun Plugin.launchMinecraft(f: suspend CoroutineScope.() -> Unit) {
-
+    mcCoroutine.getCoroutineSession(this).launchOnMinecraft(f)
 }
 
 /**
@@ -33,7 +43,7 @@ fun Plugin.launchMinecraft(f: suspend CoroutineScope.() -> Unit) {
  * @param f callback function inside a coroutine scope.
  */
 fun Plugin.launchAsync(f: suspend CoroutineScope.() -> Unit) {
-
+    mcCoroutine.getCoroutineSession(this).launchOnAsync(f)
 }
 
 /**
@@ -51,8 +61,13 @@ fun Plugin.launchAsync(f: suspend CoroutineScope.() -> Unit) {
  * @param event Event clazz.
  * @param plugin Bukkit Plugin.
  */
-fun <T : Event> PluginManager.registerSuspendingEventFlow(event: Class<T>, plugin: Plugin): Flow<T> {
-    return mcCoroutine.getEventService(plugin).createEventFlow(event)
+fun <T : Event> PluginManager.registerSuspendingEventFlow(
+    event: Class<T>,
+    plugin: Plugin,
+    priority: EventPriority = EventPriority.NORMAL,
+    ignoreCancelled: Boolean = false
+): Flow<T> {
+    return mcCoroutine.getCoroutineSession(plugin).eventService.createEventFlow(event, priority, ignoreCancelled)
 }
 
 /**
@@ -72,7 +87,7 @@ fun <T : Event> PluginManager.registerSuspendingEventFlow(event: Class<T>, plugi
  * @param plugin Bukkit Plugin.
  */
 fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
-    return mcCoroutine.getEventService(plugin).registerSuspendListener(listener, plugin)
+    return mcCoroutine.getCoroutineSession(plugin).eventService.registerSuspendListener(listener)
 }
 
 /**
