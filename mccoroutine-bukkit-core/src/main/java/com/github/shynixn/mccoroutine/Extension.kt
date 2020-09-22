@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
 import java.lang.reflect.Method
 import kotlin.coroutines.CoroutineContext
+import kotlin.reflect.KClass
 
 /**
  * Static session.
@@ -76,6 +77,30 @@ fun <T : Event> PluginManager.registerSuspendingEventFlow(
     ignoreCancelled: Boolean = false
 ): Flow<T> {
     return mcCoroutine.getCoroutineSession(plugin).eventService.createEventFlow(event, priority, ignoreCancelled)
+}
+
+/**
+ * Registers a flow of of the given event type. Makes event listening more flexible than Listener
+ * implementation and does not use any kind of reflection.
+ *
+ * Example:
+ *
+ *  plugin.server.pluginManager
+ *       .registerSuspendingEventFlow(PlayerJoinEvent::class.java, plugin)
+ *       .collect {
+ *           println(it.eventName)
+ *       }
+ *
+ * @param event Event clazz.
+ * @param plugin Bukkit Plugin.
+ */
+fun <T : Event> PluginManager.registerSuspendingEventFlow(
+    event: KClass<T>,
+    plugin: Plugin,
+    priority: EventPriority = EventPriority.NORMAL,
+    ignoreCancelled: Boolean = false
+): Flow<T> {
+    return registerSuspendingEventFlow(event.java, plugin, priority, ignoreCancelled)
 }
 
 /**
