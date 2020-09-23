@@ -4,18 +4,24 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ProducerScope
 import org.bukkit.event.Event
 import org.bukkit.event.Listener
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 interface CoroutineSession {
     /**
      * Session flows.
      */
-    val flows: MutableMap<Listener, ProducerScope<Event>>
+    val flows: MutableMap<UUID, ProducerScope<Any>>
 
     /**
      * Gets the event service.
      */
     val eventService: EventService
+
+    /**
+     * Gets the command service.
+     */
+    val commandService: CommandService
 
     /**
      * Gets the minecraft dispatcher.

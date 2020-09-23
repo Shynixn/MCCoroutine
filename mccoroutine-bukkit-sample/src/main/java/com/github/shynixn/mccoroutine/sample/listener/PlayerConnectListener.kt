@@ -14,11 +14,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 class PlayerConnectListener(private val plugin: Plugin, private val userDataCache: UserDataCache) : Listener {
-    init {
-        val pluginManager = plugin.server.pluginManager
-        pluginManager.registerSuspendingEvents(this, plugin)
-    }
-
     /**
      * Gets called on player join event.
      */
@@ -38,6 +33,7 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
             ItemStack(Material.APPLE)
         }
 
+        userDataCache.clearCache(playerQuitEvent.player)
         println("[PlayerConnectListener] " + playerQuitEvent.player.name + " left the server. Don't forget your " + apple + ".")
     }
 }

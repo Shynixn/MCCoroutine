@@ -14,4 +14,11 @@ class FakeDatabase {
         userData.amountOfPlayerKills = 30
         return userData
     }
+
+    /**
+     * Simulates a save User data call.
+     */
+    fun saveUserData(userData: UserData) {
+        Thread.sleep(6000)
+    }
 }

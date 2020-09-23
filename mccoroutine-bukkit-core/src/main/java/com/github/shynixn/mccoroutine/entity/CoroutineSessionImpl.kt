@@ -1,6 +1,7 @@
 package com.github.shynixn.mccoroutine.entity
 
 import com.github.shynixn.mccoroutine.asyncDispatcher
+import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
@@ -8,24 +9,30 @@ import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.minecraftDispatcher
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ProducerScope
-import org.bukkit.event.Event
-import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
-import java.lang.Exception
+import java.util.*
 import java.util.logging.Level
+import kotlin.collections.HashMap
 import kotlin.coroutines.CoroutineContext
 
 internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSession {
     private val scope = CoroutineScope(plugin.minecraftDispatcher)
     private var disposed = false
 
-    override val flows: MutableMap<Listener, ProducerScope<Event>> = HashMap()
+    override val flows: MutableMap<UUID, ProducerScope<Any>> = HashMap()
 
     /**
      * Gets the event service.
      */
     override val eventService: EventService by lazy {
         EventServiceImpl(plugin, this)
+    }
+
+    /**
+     * Gets the command service.
+     */
+    override val commandService: CommandService by lazy {
+        CommandServiceImpl(plugin, this)
     }
 
     /**
@@ -47,7 +54,11 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
      */
     override fun dispose() {
         disposed = true
-        flows.values.forEach { e -> e.channel.close() }
+
+        for (item in flows.values) {
+            item.channel.close()
+        }
+
         flows.clear()
         scope.coroutineContext.cancelChildren()
     }

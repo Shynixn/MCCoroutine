@@ -3,6 +3,8 @@ package com.github.shynixn.mccoroutine
 import com.github.shynixn.mccoroutine.entity.MCCoroyutineImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.PluginCommand
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -121,6 +123,27 @@ fun <T : Event> PluginManager.registerSuspendingEventFlow(
  */
 fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
     return mcCoroutine.getCoroutineSession(plugin).eventService.registerSuspendListener(listener)
+}
+
+/**
+ * Registers an command executor with suspending function.
+ * Does exactly the same as PluginCommand.setExecutor.
+ */
+fun PluginCommand.setSuspendingExecutor(
+    suspendingCommandExecutor: SuspendingCommandExecutor
+) {
+    return mcCoroutine.getCoroutineSession(plugin).commandService.registerSuspendCommandExecutor(
+        this,
+        suspendingCommandExecutor
+    )
+}
+
+/**
+ * Registers a flow of for the command. Makes command listening more flexible than CommandExecutor
+ * implementation.
+ */
+fun PluginCommand.registerSuspendingCommandFlow(): Flow<CommandEvent> {
+    return mcCoroutine.getCoroutineSession(plugin).commandService.createCommandFlow(this)
 }
 
 /**

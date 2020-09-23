@@ -14,26 +14,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 class PlayerConnectFlow(private val plugin: Plugin, private val userDataCache: UserDataCache) {
-    init {
-        val pluginManager = plugin.server.pluginManager
-        plugin.launchMinecraft {
-            pluginManager.registerSuspendingEventFlow(PlayerJoinEvent::class, plugin)
-                .collect {
-                    onPlayerJoinEvent(it)
-                }
-        }
-        plugin.launchMinecraft {
-            pluginManager.registerSuspendingEventFlow(PlayerQuitEvent::class, plugin)
-                .collect {
-                    onPlayerQuitEvent(it)
-                }
-        }
-    }
-
     /**
      * Gets called on player join event.
      */
-    private suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
+    suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
         val userData = userDataCache.getUserDataFromPlayer(playerJoinEvent.player)
         println("[PlayerConnectFlow] " + playerJoinEvent.player.name + " joined the server. KillCount [${userData.amountOfPlayerKills}].")
     }
@@ -41,12 +25,13 @@ class PlayerConnectFlow(private val plugin: Plugin, private val userDataCache: U
     /**
      * Gets called on player quit event.
      */
-    private suspend fun onPlayerQuitEvent(playerQuitEvent: PlayerQuitEvent) {
+    suspend fun onPlayerQuitEvent(playerQuitEvent: PlayerQuitEvent) {
         val apple = withContext(plugin.asyncDispatcher) {
             Thread.sleep(500)
             ItemStack(Material.APPLE)
         }
 
+        userDataCache.clearCache(playerQuitEvent.player)
         println("[PlayerConnectFlow] " + playerQuitEvent.player.name + " left the server. Don't forget your " + apple + ".")
     }
 }

@@ -54,8 +54,9 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
         priority: EventPriority,
         ignoredCancelled: Boolean
     ): Flow<T> {
+        val uuid = UUID.randomUUID()
         val executor = EventExecutor { listener, event ->
-            coroutineSession.flows[listener]!!.channel.offer(event)
+            coroutineSession.flows[uuid]!!.channel.offer(event)
         }
         val listener = object : Listener {}
 
@@ -72,7 +73,7 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
         }
 
         return channelFlow<T> {
-            coroutineSession.flows.put(listener, this as ProducerScope<Event>)
+            coroutineSession.flows[uuid] = this as ProducerScope<Any>
             awaitClose {}
         }.flowOn(plugin.minecraftDispatcher)
     }
