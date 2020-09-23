@@ -10,9 +10,4 @@ interface CommandService {
      * Registers a suspend command executor.
      */
     fun registerSuspendCommandExecutor(pluginCommand: PluginCommand, commandExecutor: SuspendingCommandExecutor)
-
-    /**
-     * Creates a new command flow.
-     */
-    fun createCommandFlow(pluginCommand: PluginCommand): Flow<CommandEvent>
 }

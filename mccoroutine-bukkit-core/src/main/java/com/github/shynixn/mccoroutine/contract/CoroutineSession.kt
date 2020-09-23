@@ -9,11 +9,6 @@ import kotlin.coroutines.CoroutineContext
 
 interface CoroutineSession {
     /**
-     * Session flows.
-     */
-    val flows: MutableMap<UUID, ProducerScope<Any>>
-
-    /**
      * Gets the event service.
      */
     val eventService: EventService

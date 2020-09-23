@@ -19,8 +19,6 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     private val scope = CoroutineScope(plugin.minecraftDispatcher)
     private var disposed = false
 
-    override val flows: MutableMap<UUID, ProducerScope<Any>> = HashMap()
-
     /**
      * Gets the event service.
      */
@@ -54,12 +52,6 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
      */
     override fun dispose() {
         disposed = true
-
-        for (item in flows.values) {
-            item.channel.close()
-        }
-
-        flows.clear()
         scope.coroutineContext.cancelChildren()
     }
 

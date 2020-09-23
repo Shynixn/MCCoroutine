@@ -46,38 +46,6 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
         }
     }
 
-    /**
-     * Creates a new event flow for the given event clazz.
-     */
-    override fun <T : Event> createEventFlow(
-        event: Class<T>,
-        priority: EventPriority,
-        ignoredCancelled: Boolean
-    ): Flow<T> {
-        val uuid = UUID.randomUUID()
-        val executor = EventExecutor { listener, event ->
-            coroutineSession.flows[uuid]!!.channel.offer(event)
-        }
-        val listener = object : Listener {}
-
-        for (item in HandlerList.getHandlerLists()) {
-            item.register(
-                RegisteredListener(
-                    listener,
-                    executor,
-                    EventPriority.NORMAL,
-                    plugin,
-                    false
-                )
-            )
-        }
-
-        return channelFlow<T> {
-            coroutineSession.flows[uuid] = this as ProducerScope<Any>
-            awaitClose {}
-        }.flowOn(plugin.minecraftDispatcher)
-    }
-
     private fun createCoroutineListener(listener: Listener, plugin: Plugin): HashMap<*, *> {
         val ret: HashMap<Class<*>, Set<RegisteredListener?>> = HashMap()
 

@@ -25,29 +25,5 @@ class MCCoroutineSamplePlugin : JavaPlugin() {
         // Extension to traditional registration.
         server.pluginManager.registerSuspendingEvents(PlayerConnectListener(this, cache), this)
         this.getCommand("mccor")!!.setSuspendingExecutor(AdminCommandExecutor(cache))
-
-        // Most of the time you want to go with the options above. Below are only special cases
-        // for approaches.
-        val plugin = this
-        val playerConnectFlow = PlayerConnectFlow(this, cache)
-        val adminCommandFlow = AdminCommandFlow(cache)
-        launchMinecraft {
-            server.pluginManager.registerSuspendingEventFlow(PlayerJoinEvent::class, plugin)
-                .collect {
-                    playerConnectFlow.onPlayerJoinEvent(it)
-                }
-        }
-        launchMinecraft {
-            server.pluginManager.registerSuspendingEventFlow(PlayerQuitEvent::class, plugin)
-                .collect {
-                    playerConnectFlow.onPlayerQuitEvent(it)
-                }
-        }
-        launchMinecraft {
-            plugin.getCommand("mccorflow")!!.registerSuspendingCommandFlow()
-                .collect {
-                    adminCommandFlow.onCommand(it)
-                }
-        }
     }
 }
