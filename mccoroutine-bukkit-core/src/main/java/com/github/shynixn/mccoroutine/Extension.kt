@@ -2,19 +2,14 @@ package com.github.shynixn.mccoroutine
 
 import com.github.shynixn.mccoroutine.entity.MCCoroyutineImpl
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import org.bukkit.Bukkit
-import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand
 import org.bukkit.entity.Player
-import org.bukkit.event.Event
-import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
 import java.lang.reflect.Method
 import kotlin.coroutines.CoroutineContext
-import kotlin.reflect.KClass
 
 /**
  * Static session.
@@ -84,6 +79,13 @@ fun Plugin.launchAsync(f: suspend CoroutineScope.() -> Unit) {
  */
 fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
     return mcCoroutine.getCoroutineSession(plugin).eventService.registerSuspendListener(listener)
+}
+
+/**
+ * Registers the given packets for event listening.
+ */
+fun PluginManager.registerPackets(packets: List<Class<*>>, plugin: Plugin) {
+    mcCoroutine.getCoroutineSession(plugin).protocolService.registerPackets(packets)
 }
 
 /**

@@ -1,10 +1,6 @@
 package com.github.shynixn.mccoroutine.contract
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.ProducerScope
-import org.bukkit.event.Event
-import org.bukkit.event.Listener
-import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 interface CoroutineSession {

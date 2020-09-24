@@ -1,8 +1,6 @@
 package com.github.shynixn.mccoroutine.entity
 
-import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
-import com.github.shynixn.mccoroutine.contract.ProtocolService
 import com.github.shynixn.mccoroutine.invokeSuspend
 import com.github.shynixn.mccoroutine.launchMinecraft
 import org.bukkit.Bukkit
@@ -17,6 +15,7 @@ import java.lang.reflect.Method
 import java.util.*
 import java.util.logging.Level
 import kotlin.Any
+import kotlin.IllegalArgumentException
 import kotlin.Int
 import kotlin.String
 import kotlin.Throwable
@@ -42,6 +41,9 @@ internal class EventServiceImpl(private val plugin: Plugin) :
         }
     }
 
+    /**
+     * Ugly coroutine listener hacking.
+     */
     private fun createCoroutineListener(listener: Listener, plugin: Plugin): HashMap<*, *> {
         val ret: HashMap<Class<*>, Set<RegisteredListener?>> = HashMap()
 
@@ -146,6 +148,9 @@ internal class EventServiceImpl(private val plugin: Plugin) :
         }
     }
 
+    /**
+     * Creates a single event executor.
+     */
     private fun createEventExecutor(
         plugin: Plugin,
         eventClass: Class<*>,

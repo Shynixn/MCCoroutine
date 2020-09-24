@@ -9,13 +9,14 @@ import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
 import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.minecraftDispatcher
 import kotlinx.coroutines.*
-import org.apache.logging.log4j.core.net.Protocol
 import org.bukkit.plugin.Plugin
 import java.util.logging.Level
 import kotlin.coroutines.CoroutineContext
 
 internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSession {
-    private val scope = CoroutineScope(plugin.minecraftDispatcher)
+    private val scope by lazy {
+        CoroutineScope(plugin.minecraftDispatcher)
+    }
     private var disposed = false
 
     /**

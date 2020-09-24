@@ -2,7 +2,7 @@
 
 package com.github.shynixn.mccoroutine.entity
 
-import com.github.shynixn.mccoroutine.PacketEvent
+import com.github.shynixn.mccoroutine.PlayerPacketEvent
 import com.github.shynixn.mccoroutine.contract.ProtocolService
 import com.github.shynixn.mccoroutine.findClazz
 import io.netty.buffer.ByteBuf
@@ -11,12 +11,10 @@ import io.netty.channel.Channel
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
-import net.minecraft.server.v1_16_R2.*
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import java.util.*
-import java.util.function.Function
 import java.util.logging.Level
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
@@ -32,8 +30,10 @@ class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService {
         .getDeclaredField("playerConnection")
     private val sendPacketMethod = findClazz("net.minecraft.server.VERSION.PlayerConnection")
         .getDeclaredMethod("sendPacket", findClazz("net.minecraft.server.VERSION.Packet"))
-    private val dataSerializerClazz = findClazz("net.minecraft.sever.VERSION.PacketDataSerializer")
+    private val dataSerializerClazz = findClazz("net.minecraft.server.VERSION.PacketDataSerializer")
     private val dataSerializerConstructor = dataSerializerClazz.getDeclaredConstructor(ByteBuf::class.java)
+    private val dataSerializationPacketMethod = findClazz("net.minecraft.server.VERSION.Packet")
+        .getDeclaredMethod("b", dataSerializerClazz)
 
     private val cachedPlayerChannels = HashMap<Player, Channel>()
     private val registeredPackets = HashSet<Class<*>>()
@@ -108,24 +108,27 @@ class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService {
         }
 
         registeredPackets.clear()
+        println("Diposed everything.")
     }
 
     /**
      * On Message receive.
      */
     private fun onMessageReceive(player: Player, packet: Any): Boolean {
+        if (cachedPlayerChannels.isEmpty()) {
+            return false
+        }
+
         if (!this.registeredPackets.contains(packet.javaClass)) {
             return false
         }
 
         val buffer = Unpooled.buffer()
-        val dataSerializer = dataSerializerConstructor.newInstance(buffer) as PacketDataSerializer
-        dataSerializer.d(dataSerializer.readableBytes())
-
-        val content = buffer.array()
+        val dataSerializer = dataSerializerConstructor.newInstance(buffer)
+        dataSerializationPacketMethod.invoke(packet, dataSerializer)
 
         plugin.server.scheduler.runTask(plugin, Runnable {
-            val packetEvent = PacketEvent(packet, player)
+            val packetEvent = PlayerPacketEvent(packet, buffer, player)
             Bukkit.getPluginManager().callEvent(packetEvent)
         })
 

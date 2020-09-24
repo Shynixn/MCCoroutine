@@ -1,15 +1,21 @@
 package com.github.shynixn.mccoroutine
 
+import io.netty.buffer.ByteBuf
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
-open class PacketEvent(
+open class PlayerPacketEvent(
     /**
      * NMS packet.
      */
     val packet: Any,
+
+    /**
+     * Gets the byte data.
+     */
+    val byteData: ByteBuf,
 
     /**
      * Associated player receiving or getting sent the packet.
@@ -37,7 +43,7 @@ open class PacketEvent(
      * Returns all handles.
      */
     override fun getHandlers(): HandlerList {
-        return PacketEvent.handlers
+        return PlayerPacketEvent.handlers
     }
 
     /**
