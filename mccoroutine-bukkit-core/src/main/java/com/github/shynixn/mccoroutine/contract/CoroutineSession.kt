@@ -14,6 +14,11 @@ interface CoroutineSession {
     val eventService: EventService
 
     /**
+     * Gets the protocol service.
+     */
+    val protocolService: ProtocolService
+
+    /**
      * Gets the command service.
      */
     val commandService: CommandService

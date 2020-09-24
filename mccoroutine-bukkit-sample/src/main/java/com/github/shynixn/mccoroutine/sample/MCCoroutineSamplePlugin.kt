@@ -1,16 +1,11 @@
 package com.github.shynixn.mccoroutine.sample
 
-import com.github.shynixn.mccoroutine.*
+import com.github.shynixn.mccoroutine.registerSuspendingEvents
 import com.github.shynixn.mccoroutine.sample.commandexecutor.AdminCommandExecutor
-import com.github.shynixn.mccoroutine.sample.flow.AdminCommandFlow
-import com.github.shynixn.mccoroutine.sample.flow.PlayerConnectFlow
 import com.github.shynixn.mccoroutine.sample.impl.FakeDatabase
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
 import com.github.shynixn.mccoroutine.sample.listener.PlayerConnectListener
-import kotlinx.coroutines.flow.collect
-import org.bukkit.command.PluginCommand
-import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerQuitEvent
+import com.github.shynixn.mccoroutine.setSuspendingExecutor
 import org.bukkit.plugin.java.JavaPlugin
 
 class MCCoroutineSamplePlugin : JavaPlugin() {

@@ -3,8 +3,10 @@ package com.github.shynixn.mccoroutine
 import com.github.shynixn.mccoroutine.entity.MCCoroyutineImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand
+import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -18,6 +20,13 @@ import kotlin.reflect.KClass
  * Static session.
  */
 private val mcCoroutine = MCCoroyutineImpl()
+
+/**
+ * Gets the server NMS version.
+ */
+val serverVersion: String by lazy {
+    Bukkit.getServer().javaClass.getPackage().name.replace(".", ",").split(",")[3]
+}
 
 /**
  * Gets the plugin minecraft dispatcher.
@@ -87,6 +96,26 @@ fun PluginCommand.setSuspendingExecutor(
     return mcCoroutine.getCoroutineSession(plugin).commandService.registerSuspendCommandExecutor(
         this,
         suspendingCommandExecutor
+    )
+}
+
+/**
+ * Sends a native minecraft packet to the player client.
+ */
+fun <P> Player.sendPacket(plugin: Plugin, packet: P) {
+    require(packet is Any)
+    return mcCoroutine.getCoroutineSession(plugin).protocolService.sendPacket(this, packet)
+}
+
+/**
+ * Finds the version compatible class.
+ */
+fun findClazz(name: String): Class<*> {
+    return Class.forName(
+        name.replace(
+            "VERSION",
+            serverVersion
+        )
     )
 }
 

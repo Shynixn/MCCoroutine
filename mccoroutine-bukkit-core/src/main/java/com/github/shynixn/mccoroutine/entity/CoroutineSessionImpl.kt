@@ -4,15 +4,14 @@ import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
+import com.github.shynixn.mccoroutine.contract.ProtocolService
 import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
 import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.minecraftDispatcher
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.ProducerScope
+import org.apache.logging.log4j.core.net.Protocol
 import org.bukkit.plugin.Plugin
-import java.util.*
 import java.util.logging.Level
-import kotlin.collections.HashMap
 import kotlin.coroutines.CoroutineContext
 
 internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSession {
@@ -23,7 +22,14 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
      * Gets the event service.
      */
     override val eventService: EventService by lazy {
-        EventServiceImpl(plugin, this)
+        EventServiceImpl(plugin)
+    }
+
+    /**
+     * Gets the protocol service.
+     */
+    override val protocolService: ProtocolService by lazy {
+        ProtocolServiceImpl(plugin)
     }
 
     /**
@@ -53,6 +59,7 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     override fun dispose() {
         disposed = true
         scope.coroutineContext.cancelChildren()
+        protocolService.dispose()
     }
 
     /**

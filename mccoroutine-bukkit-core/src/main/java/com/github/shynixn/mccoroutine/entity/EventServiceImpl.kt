@@ -2,16 +2,9 @@ package com.github.shynixn.mccoroutine.entity
 
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
-import com.github.shynixn.mccoroutine.contract.MCCoroutine
+import com.github.shynixn.mccoroutine.contract.ProtocolService
 import com.github.shynixn.mccoroutine.invokeSuspend
 import com.github.shynixn.mccoroutine.launchMinecraft
-import com.github.shynixn.mccoroutine.minecraftDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.ProducerScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.flowOn
 import org.bukkit.Bukkit
 import org.bukkit.Warning
 import org.bukkit.event.*
@@ -19,15 +12,18 @@ import org.bukkit.plugin.*
 import org.bukkit.plugin.java.JavaPluginLoader
 import org.spigotmc.CustomTimingsHandler
 import java.lang.Deprecated
-import java.lang.IllegalArgumentException
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.*
 import java.util.logging.Level
+import kotlin.Any
+import kotlin.Int
+import kotlin.String
+import kotlin.Throwable
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
-internal class EventServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) :
+internal class EventServiceImpl(private val plugin: Plugin) :
     EventService {
     /**
      * Registers a suspend listener.
