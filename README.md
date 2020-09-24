@@ -75,6 +75,9 @@ database results is an essential component of both and a cache miss should not b
 ## Code Examples
 
 * If you need more information, check out the sample implementation of a plugin using MCCoroutine in the `mccoroutine-bukkit-sample` folder.
+* In detail coroutines work with context switches but for simplification cases this guide uses the term `async operations` instead of `context switches`.
+
+### Event Listener, Commands, Schedulers
 
 ##### Registering a suspending event listener
 
@@ -97,6 +100,189 @@ class PlayerConnectListener : Listener {
 ```kotlin
 import com.github.shynixn.mccoroutine.registerSuspendingEvents
 
-Plugin plugin;
+Plugin plugin
 server.pluginManager.registerSuspendingEvents(PlayerConnectListener(), plugin)
+```
+
+##### Registering a suspending command executor
+
+* If you need to perform async operations, implement the SuspendingCommandExecutor instead of the standard command executor.
+
+```kotlin
+import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
+
+class AdminCommandExecutor: SuspendingCommandExecutor {
+    override suspend fun onCommand(sender: CommandSender,command: Command,label: String,args: Array<out String>): Boolean {
+        return false
+    }
+}
+```
+
+* Register the command executor using the extension method for the ``PluginCommand``.
+
+```kotlin
+import com.github.shynixn.mccoroutine.setSuspendingExecutor
+
+Plugin plugin
+String commandName
+plugin.getCommand(commandName)!!.setSuspendingExecutor(AdminCommandExecutor())
+```
+
+##### Schedulers
+
+* Launching a sync (Bukkit Thread) scheduler.
+
+```kotlin
+import import com.github.shynixn.mccoroutine.launchMinecraft
+
+Plugin plugin
+plugin.launchMinecraft {
+    // Delayed task.
+    // Delay frees the main thread for the amount of milliseconds and does not block.
+    delay(500)
+
+    // Repeating task.
+    while (true) {
+        delay(20)
+    }
+
+    // Task is over.
+}
+```
+
+* Launching an async scheduler.
+
+```kotlin
+import import com.github.shynixn.mccoroutine.launchAsync
+
+Plugin plugin
+plugin.launchAsync {
+    // Delayed task.
+    // Delay frees the main thread for the amount of milliseconds and does not block.
+    delay(500)
+
+    // Repeating task.
+    while (true) {
+        delay(20)
+    }
+
+    // Task is over.
+}
+```
+
+### Recommend extension methods (These will be used later in this guide)
+
+As you may have noticed, almost every call to the api needs a plugin instance which kind of
+hurts using the api. In order to make it easier, add the following extension methods to your plugin.
+
+```kotlin
+// Just put these functions global anywhere in your plugin.
+import com.github.shynixn.mccoroutine.launchAsync
+import com.github.shynixn.mccoroutine.launchMinecraft
+import com.github.shynixn.mccoroutine.asyncDispatcher
+import com.github.shynixn.mccoroutine.minecraftDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlin.coroutines.CoroutineContext
+
+fun launchMinecraft(f: suspend CoroutineScope.() -> Unit) {
+    JavaPlugin.getPlugin(YourPluginClass::class.java).launchMinecraft(f)
+}
+
+fun launchAsync(f: suspend CoroutineScope.() -> Unit) {
+    JavaPlugin.getPlugin(YourPluginClass::class.java).launchAsync(f)
+}
+
+val Dispatchers.minecraft: CoroutineContext
+    get() {
+        return JavaPlugin.getPlugin(YourPluginClass::class.java).minecraftDispatcher
+    }
+
+val Dispatchers.async: CoroutineContext
+    get() {
+        return JavaPlugin.getPlugin(YourPluginClass::class.java).asyncDispatcher
+    }
+```
+
+```kotlin
+// Now we can use the dispatchers and launch functions everywhere.
+fun someFunctionInYourProject(){
+    launchMinecraft {
+        // Delayed task.
+        // Delay frees the main thread for the amount of milliseconds and does not block.
+        delay(500)
+    }
+}
+```
+
+### Async operations (and context switches)
+
+* Let's assume we have got a PlayerJoinEvent where we want to load some data async from a database. (We ignore the fact
+that a event called AsyncPlayerPreLoginEvent already exists.)
+
+1. Add the recommend extension methods above
+2. Register and write the event class as mentioned above.
+
+```kotlin
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+
+// Some DataBase class which does jdbc operations.
+class PlayerConnectListener(private val database : Database) : Listener {
+    @EventHandler
+    suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
+        
+        // withContext is a method to switch to a given coroutine context.
+        // In this case it switches the context to the async bukkit scheduler.
+        // After switching the calling thread is suspended and does other pending work. 
+        // This call does not block.
+        val userData = withContext(Dispatchers.async) {
+            // We can confirm that this code is executed on a different thread.
+            println(Bukkit.isPrimaryThread().toString())
+            database.getUserDataFromPlayer(playerJoinEvent.player)
+        }
+        
+        // The Bukkit Thread will automatically continue here after userData has been loaded.
+        // It is possible that other events happened in the mean time but now the Bukkit Thread has got time for us.
+        // Confirm we are on the primary thread.
+        println(Bukkit.isPrimaryThread().toString())
+    
+        // Remove the following line because it will not compile anyway.
+        // This is just for you to notice that cancelling events or changing the result is no longer possible 
+        // after a context switch. Makes sense because you cannot change what has already happened.
+        playerJoinEvent.isCancelled = true
+
+        // Do something with the user data ..
+    }
+}
+```
+// Some DataBase class which does jdbc operations.
+class PlayerConnectListener(private val database : Database) : Listener {
+    @EventHandler
+    suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
+        
+        // withContext is a method to switch to a given coroutine context.
+        // In this case it switches the context to the async bukkit scheduler.
+        // After switching the calling thread is suspended and does other pending work. 
+        // This call does not block.
+        val userData = withContext(Dispatchers.async) {
+            // We can confirm that this code is executed on a different thread.
+            println(Bukkit.isPrimaryThread().toString())
+            database.getUserDataFromPlayer(playerJoinEvent.player)
+        }
+        
+        // The Bukkit Thread will automatically continue here after userData has been loaded.
+        // It is possible that other events happened in the mean time but now the Bukkit Thread has got time for us.
+        // Confirm we are on the primary thread.
+        println(Bukkit.isPrimaryThread().toString())
+    
+        // Remove the following line because it will not compile anyway.
+        // This is just for you to notice that cancelling events or changing the result is no longer possible 
+        // after a context switch. Makes sense because you cannot change what has already happened.
+        playerJoinEvent.isCancelled = true
+
+        // Do something with the user data ..
+    }
+}
 ```
