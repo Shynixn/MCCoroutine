@@ -279,7 +279,7 @@ private val database : Database) : Listener {
 }
 ```
 
-### Loading data from multiple different sources parallel
+##### Loading data from multiple different sources parallel
 
 ```kotlin
 import org.bukkit.event.EventHandler
@@ -312,7 +312,7 @@ private val database1 : Database, private val database2 : Database) : Listener {
 }
 ```
 
-### How to handle caching 
+##### How to handle caching 
 
 ```kotlin
 // Assume we have got a database implementation.
