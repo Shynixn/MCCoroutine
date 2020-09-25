@@ -56,6 +56,26 @@ dependencies {
 
 [MCCoroutine.jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.github.shynixn.structureblocklib&a=structureblocklib-bukkit-api&v=LATEST)
 
+
+**If you want to do packet level manipulation, add the following dependency**
+
+**Maven**
+```xml
+<dependency>
+     <groupId>io.netty</groupId>
+     <artifactId>netty-all</artifactId>
+     <version>4.1.52.Final</version>
+     <scope>provided</scope>
+</dependency>
+```
+**Gradle**
+
+```xml
+dependencies {
+    compileOnly("io.netty:netty-all:4.1.52.Final")
+}
+```
+
 ## Getting started 
 
 **Introduction**
@@ -217,6 +237,8 @@ fun someFunctionInYourProject(){
 
 ### Async operations (and context switches)
 
+##### Loading data async from a database on player join
+
 * Let's assume we have got a PlayerJoinEvent where we want to load some data async from a database. (We ignore the fact
 that a event called AsyncPlayerPreLoginEvent already exists.)
 
@@ -227,9 +249,9 @@ that a event called AsyncPlayerPreLoginEvent already exists.)
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
-
+class PlayerConnectListener(
 // Some DataBase class which does jdbc operations.
-class PlayerConnectListener(private val database : Database) : Listener {
+private val database : Database) : Listener {
     @EventHandler
     suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
         
@@ -257,32 +279,153 @@ class PlayerConnectListener(private val database : Database) : Listener {
     }
 }
 ```
+
+### Loading data from multiple different sources parallel
+
+```kotlin
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+import kotlinx.coroutines.coroutineScope
+
+class PlayerConnectListener(
 // Some DataBase class which does jdbc operations.
-class PlayerConnectListener(private val database : Database) : Listener {
+private val database1 : Database, private val database2 : Database) : Listener {
     @EventHandler
     suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
-        
-        // withContext is a method to switch to a given coroutine context.
-        // In this case it switches the context to the async bukkit scheduler.
-        // After switching the calling thread is suspended and does other pending work. 
-        // This call does not block.
-        val userData = withContext(Dispatchers.async) {
-            // We can confirm that this code is executed on a different thread.
-            println(Bukkit.isPrimaryThread().toString())
-            database.getUserDataFromPlayer(playerJoinEvent.player)
-        }
-        
-        // The Bukkit Thread will automatically continue here after userData has been loaded.
-        // It is possible that other events happened in the mean time but now the Bukkit Thread has got time for us.
-        // Confirm we are on the primary thread.
-        println(Bukkit.isPrimaryThread().toString())
-    
-        // Remove the following line because it will not compile anyway.
-        // This is just for you to notice that cancelling events or changing the result is no longer possible 
-        // after a context switch. Makes sense because you cannot change what has already happened.
-        playerJoinEvent.isCancelled = true
+        // In order to use async we need to be in a new coroutine scope.
+        val result = coroutineScope {
+            val data1Job = async(Dispatchers.async) {
+                database1.getUserDataFromPlayer(playerJoinEvent.player)
+            }
 
-        // Do something with the user data ..
+            val data2Job = async(Dispatchers.async) {
+                database2.getOtherData(playerJoinEvent.player)
+            }
+            
+            // Both jobs are now running in parallel. 
+            // Await all waits for both tasks to be finished.
+            awaitAll(data1, data2)
+            // Await does now return the data immidately.
+            Pair(data1.await(), data2Job.await())
+        }
     }
 }
 ```
+
+### How to handle caching 
+
+```kotlin
+// Assume we have got a database implementation.
+class FakeDatabase {
+    /**
+     *  Simulates a getUserData call to a real database by delaying the result.
+     */
+    fun getUserDataFromPlayer(player: Player): UserData {
+        Thread.sleep(5000)
+        val userData = UserData()
+        userData.amountOfEntityKills = 20
+        userData.amountOfPlayerKills = 30
+        return userData
+    }
+}
+
+class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDatabase) {
+    private val cache = HashMap<UUID, Deferred<UserData>>()
+
+    /**
+     * Clears the player cache.
+     */
+    fun clearCache(player: Player) {
+        cache.remove(player.uniqueId)
+    }
+
+    /**
+     * Gets the user data from the player.
+     */
+    suspend fun getUserDataFromPlayer(player: Player): UserData {
+        // Open a coroutine scope because we want to manage waiting with async
+        return coroutineScope {
+            // Still on bukkit primary thread.
+            // If the runtime cache does not have the userdata -> Cache miss.
+            if (!cache.containsKey(player.uniqueId)) {
+                // Still on bukkit primary thread.
+                // Create a new job to get the user data from the database and cache it.
+                // Thread is now suspended and does other work. 
+                // It is now possible that since the primary thread is free, it can call getUserDataFromPlayer again
+                // before the operation below has finished. However, this time it does not enter this branch as the job is already cached.
+                cache[player.uniqueId] = async(Dispatchers.async) {
+                    // Async thread.
+                    fakeDatabase.getUserDataFromPlayer(player)
+                }
+            }
+          
+            // Suspends the calling thread until the data has been loaded.
+            // If the data has already been loaded, it returns immediately the result without suspension. 
+            // It is possible that the bukkit primary thread is suspended multiple times here and continuous each time once the value
+            // is there.
+            cache[player.uniqueId]!!.await()
+        }
+    }
+}
+```
+
+## Shipping and Running
+
+* In order to use the StructureBlockLib Api on your server, you need to put the implementation of the Api on your server.
+* This can only be achieved by shipping the following dependencies with your plugin.
+
+**Maven**
+```xml
+<dependency>
+     <groupId>com.github.shynixn.mccoroutine</groupId>
+     <artifactId>mccoroutine-bukkit-api</artifactId>
+     <version>0.0.1</version>
+     <scope>compile</scope>
+</dependency>
+<dependency>
+     <groupId>com.github.shynixn.mccoroutine</groupId>
+     <artifactId>mccoroutine-bukkit-core</artifactId>
+     <version>0.0.1</version>
+     <scope>compile</scope>
+</dependency>
+<dependency>
+     <groupId>org.jetbrains.kotlinx</groupId>
+     <artifactId>kotlinx-coroutines-core</artifactId>
+     <version>1.x.x</version> 
+     <scope>compile</scope>
+</dependency>
+<dependency>
+     <groupId>org.jetbrains.kotlin</groupId>
+     <artifactId>kotlin-reflect</artifactId>
+     <version>1.x.x</version> 
+     <scope>compile</scope>
+</dependency>
+<dependency>
+     <groupId>io.netty</groupId>
+     <artifactId>netty-all</artifactId>
+     <version>4.1.52.Final</version>
+     <scope>provided</scope>
+</dependency>
+```
+**Gradle**
+
+```xml
+dependencies {
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.1")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
+    compileOnly("io.netty:netty-all:4.1.52.Final")
+}
+```
+
+## Contributing
+
+* Fork the MCCoroutine project on github and clone it to your local environment
+* Install Java 8+
+* Execute gradle sync for dependencies
+
+## Licence
+
+The source code is licensed under the MIT license. 
