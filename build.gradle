@@ -41,7 +41,7 @@ allprojects {
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '1.0.0-SNAPSHOT'
+    version '0.0.1-SNAPSHOT'
 
     sourceCompatibility = 1.8
 

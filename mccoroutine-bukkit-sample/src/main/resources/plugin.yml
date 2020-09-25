@@ -1,5 +1,5 @@
 name: MCCoroutine-Sample
-version: 1.0.0
+version: 0.0.1-SNAPSHOT
 author: Shynixn
 main: com.github.shynixn.mccoroutine.sample.MCCoroutineSamplePlugin
 commands:
