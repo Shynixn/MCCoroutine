@@ -33,7 +33,7 @@ suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
 
 ## Installation
 
-1. Include the dependency to StructureBlockLib
+Include the dependency to StructureBlockLib
 
 **Maven**
 ```xml
