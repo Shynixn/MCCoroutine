@@ -382,12 +382,6 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
 ```xml
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
-     <artifactId>mccoroutine-bukkit-api</artifactId>
-     <version>0.0.1</version>
-     <scope>compile</scope>
-</dependency>
-<dependency>
-     <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-core</artifactId>
      <version>0.0.1</version>
      <scope>compile</scope>
@@ -415,7 +409,6 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.1")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
