@@ -19,6 +19,6 @@ script:
 after_success:
   - ./gradlew jacocoRootReport
   - bash <(curl -s https://codecov.io/bash)
-#  - ./travis-status.sh success $DISCORD_TOKEN
-#after_failure:
-#  - ./travis-status.sh failure $DISCORD_TOKEN
+  - ./travis-status.sh success $DISCORD_TOKEN
+after_failure:
+  - ./travis-status.sh failure $DISCORD_TOKEN
