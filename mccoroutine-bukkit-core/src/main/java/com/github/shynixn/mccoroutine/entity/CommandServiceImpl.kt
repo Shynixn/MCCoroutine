@@ -7,7 +7,7 @@ import com.github.shynixn.mccoroutine.launchMinecraft
 import org.bukkit.command.PluginCommand
 import org.bukkit.plugin.Plugin
 
-class CommandServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) : CommandService {
+internal class CommandServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) : CommandService {
     /**
      * Registers a suspend command executor.
      */

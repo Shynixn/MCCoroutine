@@ -1,12 +1,13 @@
-package com.github.shynixn.mccoroutine.entity
+package com.github.shynixn.mccoroutine.impl
 
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
+import com.github.shynixn.mccoroutine.entity.CoroutineSessionImpl
 import com.github.shynixn.mccoroutine.listener.PluginListener
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 
-internal class MCCoroyutineImpl : MCCoroutine {
+class MCCoroutineImpl : MCCoroutine {
     private val items = HashMap<Plugin, CoroutineSession>()
 
     /**

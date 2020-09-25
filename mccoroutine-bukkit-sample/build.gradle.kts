@@ -25,6 +25,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":mccoroutine-bukkit-api"))
     implementation(project(":mccoroutine-bukkit-core"))
 
     compileOnly("io.netty:netty-all:4.1.52.Final")

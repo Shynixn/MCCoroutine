@@ -1,6 +1,6 @@
 package com.github.shynixn.mccoroutine
 
-import com.github.shynixn.mccoroutine.entity.MCCoroyutineImpl
+import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit
 import org.bukkit.command.PluginCommand
@@ -14,7 +14,17 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Static session.
  */
-private val mcCoroutine = MCCoroyutineImpl()
+private val mcCoroutine: MCCoroutine by lazy {
+    try {
+        Class.forName("com.github.shynixn.mccoroutine.impl.MCCoroutineImpl")
+            .newInstance() as MCCoroutine
+    } catch (e: Exception) {
+        throw RuntimeException(
+            "Failed to load MCCoroutine implementation. Share mccoroutine-bukkit-core into your plugin.",
+            e
+        )
+    }
+}
 
 /**
  * Gets the server NMS version.
@@ -120,12 +130,3 @@ fun findClazz(name: String): Class<*> {
         )
     )
 }
-
-/**
- * Internal reflection suspend.
- */
-internal suspend fun Method.invokeSuspend(obj: Any, vararg args: Any?): Any? =
-    kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn { cont ->
-        invoke(obj, *args, cont)
-    }
-

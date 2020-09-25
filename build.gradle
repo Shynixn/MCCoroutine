@@ -190,37 +190,6 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 task generateJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'javadoc'
     outputDirectory = "docs/apidocs"
-    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bukkit-core/src/main/java'))
-}
-
-task downloadDependencies(type: Exec) {
-    def build = new File('build')
-
-    if (!build.exists()) {
-        build.mkdir()
-    }
-
-    def folder = new File(build, 'buildtools')
-
-    if (!folder.exists()) {
-        folder.mkdir()
-    }
-
-    def file = new File(folder, "BuildTools.jar")
-
-    if (!file.exists()) {
-        new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar').withInputStream { i -> file.withOutputStream { it << i } }
-    }
-
-    def text = "cd build/buildtools"
-    text += " && java -jar BuildTools.jar --rev 1.16.2"
-    text += " && mvn install:install-file -Dfile=spigot-1.16.2.jar -DgroupId=org.spigotmc -DartifactId=spigot116R2 -Dversion=1.16.2-R2.0 -Dpackaging=jar"
-
-    standardOutput = new ByteArrayOutputStream()
-
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        commandLine 'cmd', '/c', text
-    } else {
-        commandLine 'sh', '-c', text
-    }
+    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bukkit-api/src/main/java')
+            , new File(this.projectDir as File, '/mccoroutine-bukkit-core/src/main/java'))
 }

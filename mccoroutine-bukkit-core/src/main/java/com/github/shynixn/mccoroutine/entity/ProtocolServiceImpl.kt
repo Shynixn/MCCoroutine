@@ -22,7 +22,7 @@ import kotlin.collections.HashSet
 /**
  * Handles packet level manipulation.
  */
-class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService {
+internal class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService {
     private val handlerName = "MCCoroutine " + "-" + UUID.randomUUID().toString()
     private val playerToNmsPlayer = findClazz("org.bukkit.craftbukkit.VERSION.entity.CraftPlayer")
         .getDeclaredMethod("getHandle")

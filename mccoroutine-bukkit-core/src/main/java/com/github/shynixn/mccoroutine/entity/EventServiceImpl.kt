@@ -1,7 +1,7 @@
 package com.github.shynixn.mccoroutine.entity
 
 import com.github.shynixn.mccoroutine.contract.EventService
-import com.github.shynixn.mccoroutine.invokeSuspend
+import com.github.shynixn.mccoroutine.extension.invokeSuspend
 import com.github.shynixn.mccoroutine.launchMinecraft
 import org.bukkit.Bukkit
 import org.bukkit.Warning
