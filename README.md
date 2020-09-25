@@ -236,7 +236,7 @@ class PlayerPacketListener : Listener {
 
 * Create a new class which takes the byte buffer, so you can work with version independet data.
 
-```
+```kotlin
 class MyPacketPlayInPositionLooks(private val byteBuf: ByteBuf) {
     val x: Double
     val y: Double
