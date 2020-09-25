@@ -11,7 +11,7 @@ You can find the original article of the repository [here](https://github.com/Sh
 
 ```kotlin
 // A new extension function 
-server.pluginManager.registerSuspendingEvents(PlayerConnectListener(this, cache), this)
+server.pluginManager.registerSuspendingEvents(PlayerConnectListener(), plugin)
 ```
 
 ```kotlin
@@ -190,6 +190,71 @@ plugin.launchAsync {
     }
 
     // Task is over.
+}
+```
+
+##### Listening to incoming and outgoing packets
+
+* Register all packets you want to watch.
+
+```kotlin
+import com.github.shynixn.mccoroutine.findClazz
+import com.github.shynixn.mccoroutine.registerPackets
+
+Plugin plugin
+server.pluginManager.registerPackets(listOf(findClazz("net.minecraft.server.VERSION.PacketPlayInFlying\$PacketPlayInPositionLook")),plugin)  
+```
+
+* Create and register a listener as seen above.
+* Add the PlayerPacketEvent.
+
+```kotlin
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+import com.github.shynixn.mccoroutine.PlayerPacketEvent
+
+class PlayerPacketListener : Listener {
+    @EventHandler
+     suspend fun onPlayerPacketEvent(playerPacketEvent: PlayerPacketEvent) {
+        // Access the NMS packet 
+        // (not recommend, use the byteData and create your own packet instances as seen below)
+        val handle = playerPacketEvent.packet   
+    
+        // However, you use it to find out the type of the packet.
+        if(playerPacketEvent.packet.javaClass.simpleName != "PacketPlayInPositionLook"){
+            return
+        }
+     
+        // Access the byte buffer (Requires io.netty dependency mentioned above)
+        val packet = MyPacketPlayInPositionLooks(playerPacketEvent.byteData)
+        
+        // Do something with packet ...
+     }
+}
+```
+
+* Create a new class which takes the byte buffer, so you can work with version independet data.
+
+```
+class MyPacketPlayInPositionLooks(private val byteBuf: ByteBuf) {
+    val x: Double
+    val y: Double
+    val z: Double
+    val yaw: Float
+    val pitch: Float
+    val f: Boolean
+    val hasPos: Boolean = true
+    val hasLook: Boolean = true
+
+    init {
+        x = byteBuf.readDouble()
+        y = byteBuf.readDouble()
+        z = byteBuf.readDouble()
+        yaw = byteBuf.readFloat()
+        pitch = byteBuf.readFloat()
+        f = byteBuf.readUnsignedByte().toInt() != 0
+    }
 }
 ```
 
