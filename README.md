@@ -33,7 +33,7 @@ suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
 
 ## Installation
 
-Include the dependency to StructureBlockLib
+Include the dependency to MCCoroutine
 
 **Maven**
 ```xml
@@ -54,8 +54,7 @@ dependencies {
 
 **Jar File**
 
-[MCCoroutine.jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.github.shynixn.structureblocklib&a=structureblocklib-bukkit-api&v=LATEST)
-
+[MCCoroutine.jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.github.shynixn.mccoroutine&a=mccoroutine-bukkit-api&v=LATEST)
 
 **If you want to do packet level manipulation, add the following dependency**
 
@@ -372,7 +371,7 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
 
 ## Shipping and Running
 
-* In order to use the StructureBlockLib Api on your server, you need to put the implementation of the Api on your server.
+* In order to use the MCCoroutine Api on your server, you need to put the implementation of the Api on your server.
 * This can only be achieved by shipping the following dependencies with your plugin.
 
 **Maven**
