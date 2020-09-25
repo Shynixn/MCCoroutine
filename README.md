@@ -3,6 +3,8 @@
 MCCoroutine is an extension to bukkit server implementations (Spigot, Paper, etc.) to use Kotlin Coroutines (also called async/await) pattern for
 all common operations.
 
+JavaDocs: https://shynixn.github.io/MCCoroutine/apidocs/
+
 You can find the original article of the repository [here](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md).
 
 **A short listener example:**
