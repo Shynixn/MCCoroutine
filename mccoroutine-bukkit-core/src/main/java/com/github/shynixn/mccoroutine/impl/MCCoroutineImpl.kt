@@ -38,6 +38,10 @@ class MCCoroutineImpl : MCCoroutine {
      * Starts a new coroutine session.
      */
     private fun startCoroutineSession(plugin: Plugin) {
+        if (!plugin.isEnabled) {
+            throw RuntimeException("Plugin ${plugin.name} attempt to start a new coroutine session while being disabled. If you need to call a suspension method in JavaPlugin\$onDisable, use kotlinx.coroutines.runblocking{} instead of launch{}.")
+        }
+
         val pluginListener = PluginListener(this, plugin)
         items[plugin] = CoroutineSessionImpl(plugin)
 

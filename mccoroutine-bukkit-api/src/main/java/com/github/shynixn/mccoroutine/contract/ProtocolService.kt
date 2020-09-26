@@ -1,5 +1,6 @@
 package com.github.shynixn.mccoroutine.contract
 
+import io.netty.buffer.ByteBuf
 import org.bukkit.entity.Player
 
 interface ProtocolService {
@@ -17,6 +18,11 @@ interface ProtocolService {
      * Sends a packet to the given player.
      */
     fun sendPacket(player: Player, packet: Any)
+
+    /**
+     * Sends a byte buffer to the given player.
+     */
+    fun sendBytePacket(player: Player, packetClazz: Class<*>, byteBuf: ByteBuf)
 
     /**
      * Disposes the protocol service.

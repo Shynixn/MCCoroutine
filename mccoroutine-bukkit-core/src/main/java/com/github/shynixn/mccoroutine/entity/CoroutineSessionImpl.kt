@@ -1,6 +1,5 @@
 package com.github.shynixn.mccoroutine.entity
 
-import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
@@ -14,10 +13,14 @@ import java.util.logging.Level
 import kotlin.coroutines.CoroutineContext
 
 internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSession {
-    private val scope by lazy {
+    private var disposed = false
+
+    /**
+     * Gets the scope.
+     */
+    override val scope: CoroutineScope by lazy {
         CoroutineScope(plugin.minecraftDispatcher)
     }
-    private var disposed = false
 
     /**
      * Gets the event service.
@@ -64,41 +67,15 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     }
 
     /**
-     * Launches the given function on the Minecraft Thread and handles
-     * coroutine scopes correctly.
+     * Launches the given function on the plugin coroutine scope.
      */
-    override fun launchOnMinecraft(f: suspend CoroutineScope.() -> Unit) {
+    override fun launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit) {
         if (disposed) {
             return
         }
 
-        // Launch a new coroutine on the minecraft thread on the plugin scope.
-        scope.launch(plugin.minecraftDispatcher) {
-            try {
-                // The user may or may not launch multiple sub suspension operations. If
-                // one of those fails, only this scope should fail instead of the plugin scope.
-                coroutineScope {
-                    f.invoke(this)
-                }
-            } catch (e: CancellationException) {
-                plugin.logger.log(Level.INFO, "Coroutine has been cancelled.")
-            } catch (e: Exception) {
-                plugin.logger.log(
-                    Level.SEVERE,
-                    "This is not an error of MCCoroutine! See sub exception for details.",
-                    e
-                )
-            }
-        }
-    }
-
-    /**
-     * Launches the given function on an Async Thread and handles
-     * coroutine scopes correctly.
-     */
-    override fun launchOnAsync(f: suspend CoroutineScope.() -> Unit) {
-        // Launch a new coroutine on the minecraft thread on the plugin scope.
-        scope.launch(plugin.asyncDispatcher) {
+        // Launch a new coroutine on the current thread thread on the plugin scope.
+        scope.launch(dispatcher) {
             try {
                 // The user may or may not launch multiple sub suspension operations. If
                 // one of those fails, only this scope should fail instead of the plugin scope.

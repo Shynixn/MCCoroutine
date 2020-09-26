@@ -44,7 +44,7 @@ Include the dependency to MCCoroutine
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-api</artifactId>
-     <version>0.0.1</version>
+     <version>0.0.2</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -52,7 +52,7 @@ Include the dependency to MCCoroutine
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.1")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.2")
 }
 ```
 
@@ -156,10 +156,10 @@ plugin.getCommand(commandName)!!.setSuspendingExecutor(AdminCommandExecutor())
 * Launching a sync (Bukkit Thread) scheduler.
 
 ```kotlin
-import import com.github.shynixn.mccoroutine.launchMinecraft
+import com.github.shynixn.mccoroutine.launch
 
 Plugin plugin
-plugin.launchMinecraft {
+plugin.launch {
     // Delayed task.
     // Delay frees the main thread for the amount of milliseconds and does not block.
     delay(500)
@@ -176,7 +176,7 @@ plugin.launchMinecraft {
 * Launching an async scheduler.
 
 ```kotlin
-import import com.github.shynixn.mccoroutine.launchAsync
+import com.github.shynixn.mccoroutine.launchAsync
 
 Plugin plugin
 plugin.launchAsync {
@@ -191,6 +191,15 @@ plugin.launchAsync {
 
     // Task is over.
 }
+```
+
+#### Other scope operations
+
+```kotlin
+import com.github.shynixn.mccoroutine.scope
+
+Plugin plugin
+val scope = plugin.scope
 ```
 
 ##### Listening to incoming and outgoing packets
@@ -266,15 +275,15 @@ hurts using the api. In order to make it easier, add the following extension met
 ```kotlin
 // Just put these functions global anywhere in your plugin.
 import com.github.shynixn.mccoroutine.launchAsync
-import com.github.shynixn.mccoroutine.launchMinecraft
+import com.github.shynixn.mccoroutine.launch
 import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.minecraftDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
-fun launchMinecraft(f: suspend CoroutineScope.() -> Unit) {
-    JavaPlugin.getPlugin(YourPluginClass::class.java).launchMinecraft(f)
+fun launch(f: suspend CoroutineScope.() -> Unit) {
+    JavaPlugin.getPlugin(YourPluginClass::class.java).launch(f)
 }
 
 fun launchAsync(f: suspend CoroutineScope.() -> Unit) {
@@ -295,7 +304,7 @@ val Dispatchers.async: CoroutineContext
 ```kotlin
 // Now we can use the dispatchers and launch functions everywhere.
 fun someFunctionInYourProject(){
-    launchMinecraft {
+    launch {
         // Delayed task.
         // Delay frees the main thread for the amount of milliseconds and does not block.
         delay(500)
@@ -438,6 +447,37 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
 }
 ```
 
+##### How to connect any other sync Api
+
+```kotlin
+// Assume we want to provide our userdata stats via placeholder api.
+class PlaceHolderApiConnector(private val cache : UserDataCache) {
+    override fun onPlaceholderRequest(player: Player?, text: String?): String? {
+        var result: String? = null
+        
+        // If the user data is already fetched and cached, the result will not be
+        // null because zero context switches are going to happen.
+        // If the user data is not fetched. Simply return null and start fetching the data.
+        // The unconfined dispatcher does not perform any context switch and stays on the same calling thread.
+        plugin.launch(Dispatchers.Unconfined){
+            result = onPlaceHolderRequestSuspend(player, text)
+        }
+
+        return result
+    }
+    
+    private suspend fun onPlaceHolderRequestSuspend(player: Player?, text: String?): String? {
+        if(player == null){
+            return null
+        }
+
+        val userData =  cache.getUserDataFromPlayer(player!!)
+
+        // ..
+    }
+}
+```
+
 ## Shipping and Running
 
 * In order to use the MCCoroutine Api on your server, you need to put the implementation of the Api on your server.
@@ -448,7 +488,7 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-core</artifactId>
-     <version>0.0.1</version>
+     <version>0.0.2</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -474,7 +514,7 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.1")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
     compileOnly("io.netty:netty-all:4.1.52.Final")

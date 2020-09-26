@@ -34,6 +34,8 @@ internal class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService
     private val dataSerializerConstructor = dataSerializerClazz.getDeclaredConstructor(ByteBuf::class.java)
     private val dataSerializationPacketMethod = findClazz("net.minecraft.server.VERSION.Packet")
         .getDeclaredMethod("b", dataSerializerClazz)
+    private val dataDeSerializationPacketMethod = findClazz("net.minecraft.server.VERSION.Packet")
+        .getDeclaredMethod("a", dataSerializerClazz)
 
     private val cachedPlayerChannels = HashMap<Player, Channel>()
     private val registeredPackets = HashSet<Class<*>>()
@@ -100,6 +102,16 @@ internal class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService
     }
 
     /**
+     * Sends a byte buffer to the given player.
+     */
+    override fun sendBytePacket(player: Player, packetClazz: Class<*>, byteBuf: ByteBuf) {
+        val packet = packetClazz.newInstance()
+        val dataSerializer = dataSerializerConstructor.newInstance(byteBuf)
+        dataDeSerializationPacketMethod.invoke(packet, dataSerializer)
+        sendPacket(player, packet)
+    }
+
+    /**
      * Disposes the protocol service.
      */
     override fun dispose() {
@@ -108,7 +120,6 @@ internal class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService
         }
 
         registeredPackets.clear()
-        println("Diposed everything.")
     }
 
     /**
