@@ -3,6 +3,7 @@ package unittest
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import com.github.shynixn.mccoroutine.listener.PluginListener
 import helper.MockedMCCoroutine
+import helper.any
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -102,8 +103,6 @@ class PluginListenerTest {
         // Assert
         assertTrue(unRegisterCalled)
     }
-
-    private fun <T> any(type: Class<T>): T = Mockito.any<T>(type)
 
     private fun createWithDependencies(
         mcCoroutine: MCCoroutine,

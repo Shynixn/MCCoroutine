@@ -10,7 +10,7 @@ internal class AsyncCoroutineDispatcher(private val plugin: Plugin) : CoroutineD
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        if (Bukkit.isPrimaryThread()) {
+        if (plugin.server.isPrimaryThread) {
             plugin.server.scheduler.runTaskAsynchronously(plugin, block)
         } else {
             block.run()
