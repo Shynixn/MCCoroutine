@@ -2,7 +2,7 @@ package com.github.shynixn.mccoroutine.entity
 
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
-import com.github.shynixn.mccoroutine.launchMinecraft
+import com.github.shynixn.mccoroutine.launch
 import org.bukkit.Bukkit
 import org.bukkit.Warning
 import org.bukkit.event.*
@@ -166,7 +166,7 @@ internal class EventServiceImpl(private val plugin: Plugin) :
                         timings.startTiming()
                     }
 
-                    plugin.launchMinecraft {
+                    plugin.launch {
                         try {
                             // Try as suspension function.
                             method.invokeSuspend(listener, event)

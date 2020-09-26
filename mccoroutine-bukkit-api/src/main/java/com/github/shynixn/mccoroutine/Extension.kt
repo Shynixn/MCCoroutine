@@ -1,6 +1,7 @@
 package com.github.shynixn.mccoroutine
 
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
+import io.netty.buffer.ByteBuf
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit
 import org.bukkit.command.PluginCommand
@@ -8,7 +9,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
-import java.lang.reflect.Method
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -50,14 +50,23 @@ val Plugin.asyncDispatcher: CoroutineContext
     }
 
 /**
+ * Gets the plugin coroutine scope.
+ */
+val Plugin.scope: CoroutineScope
+    get() {
+        return mcCoroutine.getCoroutineSession(this).scope
+    }
+
+/**
  * Launches the given function in the Coroutine Scope of the given plugin.
  * This function may be called immediately without any delay if the Thread
  * calling this function Bukkit.isPrimaryThread() is true. This means
  * for example that event cancelling or modifying return values is still possible.
+ * @param dispatcher Optional coroutine context. The default context is minecraft dispatcher.
  * @param f callback function inside a coroutine scope.
  */
-fun Plugin.launchMinecraft(f: suspend CoroutineScope.() -> Unit) {
-    mcCoroutine.getCoroutineSession(this).launchOnMinecraft(f)
+fun Plugin.launch(dispatcher: CoroutineContext = this.minecraftDispatcher, f: suspend CoroutineScope.() -> Unit) {
+    mcCoroutine.getCoroutineSession(this).launch(dispatcher, f)
 }
 
 /**
@@ -68,7 +77,7 @@ fun Plugin.launchMinecraft(f: suspend CoroutineScope.() -> Unit) {
  * @param f callback function inside a coroutine scope.
  */
 fun Plugin.launchAsync(f: suspend CoroutineScope.() -> Unit) {
-    mcCoroutine.getCoroutineSession(this).launchOnAsync(f)
+    mcCoroutine.getCoroutineSession(this).launch(this.asyncDispatcher, f)
 }
 
 /**
@@ -117,6 +126,15 @@ fun PluginCommand.setSuspendingExecutor(
 fun <P> Player.sendPacket(plugin: Plugin, packet: P) {
     require(packet is Any)
     return mcCoroutine.getCoroutineSession(plugin).protocolService.sendPacket(this, packet)
+}
+
+/**
+ * Sends the bytebuffer packet to the player client.
+ * @param clazz NMS Packet class.
+ * @param buf Byte buffer serialized.
+ */
+fun Player.sendPacket(plugin: Plugin, clazz: Class<*>, buf: ByteBuf) {
+    return mcCoroutine.getCoroutineSession(plugin).protocolService.sendBytePacket(this, clazz, buf)
 }
 
 /**

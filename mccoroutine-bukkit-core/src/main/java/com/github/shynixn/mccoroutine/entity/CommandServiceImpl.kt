@@ -3,11 +3,12 @@ package com.github.shynixn.mccoroutine.entity
 import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
-import com.github.shynixn.mccoroutine.launchMinecraft
+import com.github.shynixn.mccoroutine.launch
 import org.bukkit.command.PluginCommand
 import org.bukkit.plugin.Plugin
 
-internal class CommandServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) : CommandService {
+internal class CommandServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) :
+    CommandService {
     /**
      * Registers a suspend command executor.
      */
@@ -19,7 +20,7 @@ internal class CommandServiceImpl(private val plugin: Plugin, private val corout
             // If the result is delayed we can automatically assume it is true.
             var success = true
 
-            plugin.launchMinecraft {
+            plugin.launch {
                 success = commandExecutor.onCommand(p0, p1, p2, p3)
             }
 

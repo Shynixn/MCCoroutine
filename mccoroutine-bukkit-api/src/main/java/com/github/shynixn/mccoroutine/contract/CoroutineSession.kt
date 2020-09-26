@@ -5,6 +5,11 @@ import kotlin.coroutines.CoroutineContext
 
 interface CoroutineSession {
     /**
+     * Gets the scope.
+     */
+    val scope: CoroutineScope
+
+    /**
      * Gets the event service.
      */
     val eventService: EventService
@@ -30,16 +35,9 @@ interface CoroutineSession {
     val dispatcherAsync: CoroutineContext
 
     /**
-     * Launches the given function on the Minecraft Thread and handles
-     * coroutine scopes correctly.
+     * Launches the given function on the plugin coroutine scope.
      */
-    fun launchOnMinecraft(f: suspend CoroutineScope.() -> Unit)
-
-    /**
-     * Launches the given function on an Async Thread and handles
-     * coroutine scopes correctly.
-     */
-    fun launchOnAsync(f: suspend CoroutineScope.() -> Unit)
+    fun launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit)
 
     /**
      * Disposes the session.
