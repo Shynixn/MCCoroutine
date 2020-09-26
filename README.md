@@ -438,6 +438,38 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
 }
 ```
 
+##### How to connect any other sync Api
+
+```kotlin
+// Assume we want to provide our userdata stats via placeholder api.
+class PlaceHolderApiConnector(private val cache : UserDataCache) {
+    override fun onPlaceholderRequest(player: Player?, text: String?): String? {
+        var result: String? = null
+        
+        // If the user data is already fetched and cached, the result will not be
+        // null because zero context switches are going to happen.
+        // If the user data is not fetched. Simply return null and start fetching the data.
+        plugin.launchMinecraft {
+            result = onPlaceHolderRequestSuspend(player, text)
+        }
+
+        return result
+    }
+    
+    private suspend fun onPlaceHolderRequestSuspend(player: Player?, text: String?): String? {
+        if(player == null){
+            return null
+        }
+
+        val userData =  cache.getUserDataFromPlayer(player!!)
+
+        // ..
+    }
+}
+```
+
+
+
 ## Shipping and Running
 
 * In order to use the MCCoroutine Api on your server, you need to put the implementation of the Api on your server.

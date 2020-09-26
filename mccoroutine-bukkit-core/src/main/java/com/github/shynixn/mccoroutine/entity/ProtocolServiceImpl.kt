@@ -108,7 +108,6 @@ internal class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService
         }
 
         registeredPackets.clear()
-        println("Diposed everything.")
     }
 
     /**

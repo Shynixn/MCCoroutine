@@ -20,7 +20,7 @@ private val mcCoroutine: MCCoroutine by lazy {
             .newInstance() as MCCoroutine
     } catch (e: Exception) {
         throw RuntimeException(
-            "Failed to load MCCoroutine implementation. Share mccoroutine-bukkit-core into your plugin.",
+            "Failed to load MCCoroutine implementation. Shade mccoroutine-bukkit-core into your plugin.",
             e
         )
     }
