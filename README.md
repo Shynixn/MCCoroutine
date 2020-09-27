@@ -44,7 +44,7 @@ Include the dependency to MCCoroutine
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-api</artifactId>
-     <version>0.0.2</version>
+     <version>0.0.3</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -52,7 +52,7 @@ Include the dependency to MCCoroutine
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.2")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.3")
 }
 ```
 
@@ -488,7 +488,7 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-core</artifactId>
-     <version>0.0.2</version>
+     <version>0.0.3</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -514,7 +514,7 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.2")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
     compileOnly("io.netty:netty-all:4.1.52.Final")
