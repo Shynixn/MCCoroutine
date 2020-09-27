@@ -26,12 +26,19 @@ private val mcCoroutine: MCCoroutine by lazy {
     }
 }
 
+private var serverVersionInternal: String? = null
+
 /**
  * Gets the server NMS version.
  */
-val serverVersion: String by lazy {
-    Bukkit.getServer().javaClass.getPackage().name.replace(".", ",").split(",")[3]
-}
+val Plugin.serverVersion: String
+    get() {
+        if (serverVersionInternal == null) {
+            serverVersionInternal = server.javaClass.getPackage().name.replace(".", ",").split(",")[3]
+        }
+
+        return serverVersionInternal!!
+    }
 
 /**
  * Gets the plugin minecraft dispatcher.
@@ -62,11 +69,22 @@ val Plugin.scope: CoroutineScope
  * This function may be called immediately without any delay if the Thread
  * calling this function Bukkit.isPrimaryThread() is true. This means
  * for example that event cancelling or modifying return values is still possible.
- * @param dispatcher Optional coroutine context. The default context is minecraft dispatcher.
+ * @param dispatcher Coroutine context. The default context is minecraft dispatcher.
  * @param f callback function inside a coroutine scope.
  */
-fun Plugin.launch(dispatcher: CoroutineContext = this.minecraftDispatcher, f: suspend CoroutineScope.() -> Unit) {
+fun Plugin.launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit) {
     mcCoroutine.getCoroutineSession(this).launch(dispatcher, f)
+}
+
+/**
+ * Launches the given function in the Coroutine Scope of the given plugin.
+ * This function may be called immediately without any delay if the Thread
+ * calling this function Bukkit.isPrimaryThread() is true. This means
+ * for example that event cancelling or modifying return values is still possible.
+ * @param f callback function inside a coroutine scope.
+ */
+fun Plugin.launch(f: suspend CoroutineScope.() -> Unit) {
+    mcCoroutine.getCoroutineSession(this).launch(minecraftDispatcher, f)
 }
 
 /**
@@ -140,7 +158,7 @@ fun Player.sendPacket(plugin: Plugin, clazz: Class<*>, buf: ByteBuf) {
 /**
  * Finds the version compatible class.
  */
-fun findClazz(name: String): Class<*> {
+fun Plugin.findClazz(name: String): Class<*> {
     return Class.forName(
         name.replace(
             "VERSION",

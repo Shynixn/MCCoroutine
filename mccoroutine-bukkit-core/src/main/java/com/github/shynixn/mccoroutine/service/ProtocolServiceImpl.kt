@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.github.shynixn.mccoroutine.entity
+package com.github.shynixn.mccoroutine.service
 
 import com.github.shynixn.mccoroutine.PlayerPacketEvent
 import com.github.shynixn.mccoroutine.contract.ProtocolService
@@ -24,17 +24,17 @@ import kotlin.collections.HashSet
  */
 internal class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService {
     private val handlerName = "MCCoroutine " + "-" + UUID.randomUUID().toString()
-    private val playerToNmsPlayer = findClazz("org.bukkit.craftbukkit.VERSION.entity.CraftPlayer")
+    private val playerToNmsPlayer = plugin.findClazz("org.bukkit.craftbukkit.VERSION.entity.CraftPlayer")
         .getDeclaredMethod("getHandle")
-    private val playerConnectionField = findClazz("net.minecraft.server.VERSION.EntityPlayer")
+    private val playerConnectionField = plugin.findClazz("net.minecraft.server.VERSION.EntityPlayer")
         .getDeclaredField("playerConnection")
-    private val sendPacketMethod = findClazz("net.minecraft.server.VERSION.PlayerConnection")
-        .getDeclaredMethod("sendPacket", findClazz("net.minecraft.server.VERSION.Packet"))
-    private val dataSerializerClazz = findClazz("net.minecraft.server.VERSION.PacketDataSerializer")
+    private val sendPacketMethod = plugin.findClazz("net.minecraft.server.VERSION.PlayerConnection")
+        .getDeclaredMethod("sendPacket", plugin.findClazz("net.minecraft.server.VERSION.Packet"))
+    private val dataSerializerClazz = plugin.findClazz("net.minecraft.server.VERSION.PacketDataSerializer")
     private val dataSerializerConstructor = dataSerializerClazz.getDeclaredConstructor(ByteBuf::class.java)
-    private val dataSerializationPacketMethod = findClazz("net.minecraft.server.VERSION.Packet")
+    private val dataSerializationPacketMethod = plugin.findClazz("net.minecraft.server.VERSION.Packet")
         .getDeclaredMethod("b", dataSerializerClazz)
-    private val dataDeSerializationPacketMethod = findClazz("net.minecraft.server.VERSION.Packet")
+    private val dataDeSerializationPacketMethod = plugin.findClazz("net.minecraft.server.VERSION.Packet")
         .getDeclaredMethod("a", dataSerializerClazz)
 
     private val cachedPlayerChannels = HashMap<Player, Channel>()
@@ -59,10 +59,10 @@ internal class ProtocolServiceImpl(private val plugin: Plugin) : ProtocolService
             .invoke(player)
         val connection = playerConnectionField
             .get(nmsPlayer)
-        val netWorkManager = findClazz("net.minecraft.server.VERSION.PlayerConnection")
+        val netWorkManager = plugin.findClazz("net.minecraft.server.VERSION.PlayerConnection")
             .getDeclaredField("networkManager")
             .get(connection)
-        val channel = findClazz("net.minecraft.server.VERSION.NetworkManager")
+        val channel = plugin.findClazz("net.minecraft.server.VERSION.NetworkManager")
             .getDeclaredField("channel")
             .get(netWorkManager) as Channel
 
