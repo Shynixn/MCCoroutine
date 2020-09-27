@@ -26,12 +26,19 @@ private val mcCoroutine: MCCoroutine by lazy {
     }
 }
 
+private var serverVersionInternal: String? = null
+
 /**
  * Gets the server NMS version.
  */
-val serverVersion: String by lazy {
-    Bukkit.getServer().javaClass.getPackage().name.replace(".", ",").split(",")[3]
-}
+val Plugin.serverVersion: String
+    get() {
+        if (serverVersionInternal == null) {
+            serverVersionInternal = server.javaClass.getPackage().name.replace(".", ",").split(",")[3]
+        }
+
+        return serverVersionInternal!!
+    }
 
 /**
  * Gets the plugin minecraft dispatcher.
@@ -151,7 +158,7 @@ fun Player.sendPacket(plugin: Plugin, clazz: Class<*>, buf: ByteBuf) {
 /**
  * Finds the version compatible class.
  */
-fun findClazz(name: String): Class<*> {
+fun Plugin.findClazz(name: String): Class<*> {
     return Class.forName(
         name.replace(
             "VERSION",

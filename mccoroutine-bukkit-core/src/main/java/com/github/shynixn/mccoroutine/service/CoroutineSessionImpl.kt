@@ -1,4 +1,4 @@
-package com.github.shynixn.mccoroutine.entity
+package com.github.shynixn.mccoroutine.service
 
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
@@ -74,8 +74,25 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
             return
         }
 
+        if (dispatcher == Dispatchers.Unconfined) {
+            // If the dispatcher is unconfined. Always schedule immediately.
+            launchInternal(dispatcher, CoroutineStart.UNDISPATCHED, f)
+            return
+        }
+
+        launchInternal(dispatcher, CoroutineStart.DEFAULT, f)
+    }
+
+    /**
+     * Executes the launch
+     */
+    private fun launchInternal(
+        dispatcher: CoroutineContext,
+        coroutineStart: CoroutineStart,
+        f: suspend CoroutineScope.() -> Unit
+    ) {
         // Launch a new coroutine on the current thread thread on the plugin scope.
-        scope.launch(dispatcher) {
+        scope.launch(dispatcher, coroutineStart) {
             try {
                 // The user may or may not launch multiple sub suspension operations. If
                 // one of those fails, only this scope should fail instead of the plugin scope.

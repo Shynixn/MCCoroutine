@@ -55,7 +55,7 @@ class MockedCoroutineSession : CoroutineSession {
      * Launches the given function on the plugin coroutine scope.
      */
     override fun launch(dispatcher: CoroutineContext, f: suspend kotlinx.coroutines.CoroutineScope.() -> Unit) {
-        GlobalScope.launch(Dispatchers.Unconfined) {
+        GlobalScope.launch(dispatcher) {
             f.invoke(this)
         }
     }

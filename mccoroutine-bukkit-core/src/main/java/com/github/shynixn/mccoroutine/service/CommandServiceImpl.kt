@@ -1,9 +1,9 @@
-package com.github.shynixn.mccoroutine.entity
+package com.github.shynixn.mccoroutine.service
 
 import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
-import com.github.shynixn.mccoroutine.launch
+import kotlinx.coroutines.Dispatchers
 import org.bukkit.command.PluginCommand
 import org.bukkit.plugin.Plugin
 
@@ -20,7 +20,7 @@ internal class CommandServiceImpl(private val plugin: Plugin, private val corout
             // If the result is delayed we can automatically assume it is true.
             var success = true
 
-            plugin.launch {
+            coroutineSession.launch(Dispatchers.Unconfined) {
                 success = commandExecutor.onCommand(p0, p1, p2, p3)
             }
 

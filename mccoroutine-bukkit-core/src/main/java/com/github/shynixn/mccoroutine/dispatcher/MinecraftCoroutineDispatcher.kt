@@ -10,6 +10,10 @@ internal class MinecraftCoroutineDispatcher(private val plugin: Plugin) : Corout
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
+        if (!plugin.isEnabled) {
+            return
+        }
+
         if (plugin.server.isPrimaryThread) {
             block.run()
         } else {

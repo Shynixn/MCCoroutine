@@ -1,9 +1,9 @@
-package com.github.shynixn.mccoroutine.entity
+package com.github.shynixn.mccoroutine.service
 
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
 import com.github.shynixn.mccoroutine.launch
-import org.bukkit.Bukkit
+import kotlinx.coroutines.Dispatchers
 import org.bukkit.Warning
 import org.bukkit.event.*
 import org.bukkit.plugin.*
@@ -36,7 +36,7 @@ internal class EventServiceImpl(private val plugin: Plugin) :
 
         for (entry in registeredListeners.entries) {
             val clazz = entry.key as Class<*>
-            val handlerList = method.invoke(Bukkit.getPluginManager(), clazz) as HandlerList
+            val handlerList = method.invoke(plugin.server.pluginManager, clazz) as HandlerList
             handlerList.registerAll(entry.value as MutableCollection<RegisteredListener>)
         }
     }
@@ -109,7 +109,7 @@ internal class EventServiceImpl(private val plugin: Plugin) :
                 while (Event::class.java.isAssignableFrom(clazz)) {
                     if (clazz.getAnnotation(Deprecated::class.java) != null) {
                         val warning = clazz.getAnnotation(Warning::class.java)
-                        val warningState: Warning.WarningState = Bukkit.getServer().getWarningState()
+                        val warningState: Warning.WarningState = plugin.server.getWarningState()
                         if (warningState.printFor(warning)) {
                             plugin.logger.log(
                                 Level.WARNING,
@@ -166,7 +166,8 @@ internal class EventServiceImpl(private val plugin: Plugin) :
                         timings.startTiming()
                     }
 
-                    plugin.launch {
+                    // Unconfined because async events should be supported too.
+                    plugin.launch(Dispatchers.Unconfined) {
                         try {
                             // Try as suspension function.
                             method.invokeSuspend(listener, event)
