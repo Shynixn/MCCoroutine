@@ -3,18 +3,19 @@ package com.github.shynixn.mccoroutine.service
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
 import com.github.shynixn.mccoroutine.launch
+import com.github.shynixn.mccoroutine.minecraftDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.bukkit.Warning
 import org.bukkit.event.*
 import org.bukkit.plugin.*
 import org.bukkit.plugin.java.JavaPluginLoader
-import org.spigotmc.CustomTimingsHandler
 import java.lang.Deprecated
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.*
 import java.util.logging.Level
 import kotlin.Any
+import kotlin.Exception
 import kotlin.IllegalArgumentException
 import kotlin.Int
 import kotlin.String
@@ -129,12 +130,7 @@ internal class EventServiceImpl(private val plugin: Plugin) :
                     clazz = clazz.superclass
                 }
 
-                val timings = CustomTimingsHandler(
-                    "Plugin: " + plugin.description.fullName + " Event: " + listener.javaClass.name + "::" + method.name + "(" + eventClass.simpleName + ")",
-                    JavaPluginLoader.pluginParentTimer
-                )
-
-                val executor = createEventExecutor(plugin, eventClass, method, timings)
+                val executor = createEventExecutor(plugin, eventClass, method)
                 eventSet!!.add(
                     RegisteredListener(
                         listener,
@@ -154,20 +150,21 @@ internal class EventServiceImpl(private val plugin: Plugin) :
     private fun createEventExecutor(
         plugin: Plugin,
         eventClass: Class<*>,
-        method: Method,
-        timings: CustomTimingsHandler
+        method: Method
     ): EventExecutor {
         return EventExecutor { listener, event ->
             try {
                 if (eventClass.isAssignableFrom(event.javaClass)) {
                     val isAsync = event.isAsynchronous
 
-                    if (!isAsync) {
-                        timings.startTiming()
+                    val dispatcher = if (isAsync) {
+                        // Unconfined because async events should be supported too.
+                        Dispatchers.Unconfined
+                    } else {
+                        plugin.minecraftDispatcher
                     }
 
-                    // Unconfined because async events should be supported too.
-                    plugin.launch(Dispatchers.Unconfined) {
+                    plugin.launch(dispatcher) {
                         try {
                             // Try as suspension function.
                             method.invokeSuspend(listener, event)
@@ -175,10 +172,6 @@ internal class EventServiceImpl(private val plugin: Plugin) :
                             // Try as ordinary function.
                             method.invoke(listener, event)
                         }
-                    }
-
-                    if (!isAsync) {
-                        timings.stopTiming()
                     }
                 }
             } catch (var4: InvocationTargetException) {

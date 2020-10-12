@@ -3,6 +3,7 @@ package com.github.shynixn.mccoroutine.sample.impl
 import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.sample.entity.UserData
 import kotlinx.coroutines.*
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 
@@ -33,9 +34,11 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
         return coroutineScope {
             if (!cache.containsKey(player)) {
                 cache[player] = async(plugin.asyncDispatcher) {
+                    println("[Cache] is downloading async: " + !Bukkit.isPrimaryThread())
                     fakeDatabase.getUserDataFromPlayer(player)
                 }
             }
+            println("[Cache] is downloading waiting on Primary Thread: " + Bukkit.isPrimaryThread())
             cache[player]!!.await()
         }
     }
