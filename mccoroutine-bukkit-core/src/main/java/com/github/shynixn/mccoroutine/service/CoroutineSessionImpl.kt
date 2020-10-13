@@ -3,7 +3,6 @@ package com.github.shynixn.mccoroutine.service
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
-import com.github.shynixn.mccoroutine.contract.ProtocolService
 import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
 import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.minecraftDispatcher
@@ -26,14 +25,7 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
      * Gets the event service.
      */
     override val eventService: EventService by lazy {
-        EventServiceImpl(plugin)
-    }
-
-    /**
-     * Gets the protocol service.
-     */
-    override val protocolService: ProtocolService by lazy {
-        ProtocolServiceImpl(plugin)
+        EventServiceImpl(plugin, this)
     }
 
     /**
@@ -63,7 +55,6 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     override fun dispose() {
         disposed = true
         scope.coroutineContext.cancelChildren()
-        protocolService.dispose()
     }
 
     /**

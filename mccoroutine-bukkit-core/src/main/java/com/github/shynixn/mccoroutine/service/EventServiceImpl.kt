@@ -1,5 +1,6 @@
 package com.github.shynixn.mccoroutine.service
 
+import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
 import com.github.shynixn.mccoroutine.launch
@@ -23,7 +24,7 @@ import kotlin.Throwable
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
-internal class EventServiceImpl(private val plugin: Plugin) :
+internal class EventServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) :
     EventService {
     /**
      * Registers a suspend listener.
@@ -161,10 +162,10 @@ internal class EventServiceImpl(private val plugin: Plugin) :
                         // Unconfined because async events should be supported too.
                         Dispatchers.Unconfined
                     } else {
-                        plugin.minecraftDispatcher
+                        coroutineSession.dispatcherMinecraft
                     }
 
-                    plugin.launch(dispatcher) {
+                    coroutineSession.launch(dispatcher) {
                         try {
                             // Try as suspension function.
                             method.invokeSuspend(listener, event)

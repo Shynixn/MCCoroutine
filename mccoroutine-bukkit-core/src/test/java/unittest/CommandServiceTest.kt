@@ -23,6 +23,7 @@ class CommandServiceTest {
     fun registerSuspendCommandExecutor_ValidParameters_ShouldRegisterExecutor() {
         // Arrange
         val plugin = Mockito.mock(Plugin::class.java)
+        Mockito.`when`(plugin.isEnabled).thenReturn(true)
         var commandExecutorCalled = false
         val suspendingCommandExecutor = object : SuspendingCommandExecutor {
             override suspend fun onCommand(

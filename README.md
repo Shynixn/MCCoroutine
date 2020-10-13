@@ -29,7 +29,7 @@ suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
 
 * Full implementation of Kotlin Coroutines (async/await)
 * Extension functions for already established functions
-* Connection to events, commands, schedulers and packet stream
+* Connection to events, commands, schedulers
 * Coroutine LifeCycle scope for plugins (supports plugin reloading)
 * No NMS
 * Support for Minecraft 1.7 - Latest
@@ -60,25 +60,6 @@ dependencies {
 
 [MCCoroutine.jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.github.shynixn.mccoroutine&a=mccoroutine-bukkit-api&v=LATEST)
 
-**If you want to do packet level manipulation, add the following dependency**
-
-**Maven**
-```xml
-<dependency>
-     <groupId>io.netty</groupId>
-     <artifactId>netty-all</artifactId>
-     <version>4.1.52.Final</version>
-     <scope>provided</scope>
-</dependency>
-```
-**Gradle**
-
-```xml
-dependencies {
-    compileOnly("io.netty:netty-all:4.1.52.Final")
-}
-```
-
 ## Getting started 
 
 **Introduction**
@@ -92,7 +73,7 @@ Source:
 
 **Notes**
 
-This library was created for my plugins **PetBlocks** and **BlockBall** as I had to deal with sometimes short, sometimes long running async operations and packet manipulation. Caching 
+This library was created for my plugins **PetBlocks** and **BlockBall** as I had to deal with sometimes short, sometimes long running async operations. Caching 
 database results is an essential component of both and a cache miss should not block the server in any way.
 
 ## Code Examples
@@ -200,71 +181,6 @@ import com.github.shynixn.mccoroutine.scope
 
 Plugin plugin
 val scope = plugin.scope
-```
-
-##### Listening to incoming and outgoing packets
-
-* Register all packets you want to watch.
-
-```kotlin
-import com.github.shynixn.mccoroutine.findClazz
-import com.github.shynixn.mccoroutine.registerPackets
-
-Plugin plugin
-server.pluginManager.registerPackets(listOf(findClazz("net.minecraft.server.VERSION.PacketPlayInFlying\$PacketPlayInPositionLook")),plugin)  
-```
-
-* Create and register a listener as seen above.
-* Add the PlayerPacketEvent.
-
-```kotlin
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerJoinEvent
-import com.github.shynixn.mccoroutine.PlayerPacketEvent
-
-class PlayerPacketListener : Listener {
-    @EventHandler
-     suspend fun onPlayerPacketEvent(playerPacketEvent: PlayerPacketEvent) {
-        // Access the NMS packet 
-        // (not recommend, use the byteData and create your own packet instances as seen below)
-        val handle = playerPacketEvent.packet   
-    
-        // However, you use it to find out the type of the packet.
-        if(playerPacketEvent.packet.javaClass.simpleName != "PacketPlayInPositionLook"){
-            return
-        }
-     
-        // Access the byte buffer (Requires io.netty dependency mentioned above)
-        val packet = MyPacketPlayInPositionLooks(playerPacketEvent.byteData)
-        
-        // Do something with packet ...
-     }
-}
-```
-
-* Create a new class which takes the byte buffer, so you can work with version independet data.
-
-```kotlin
-class MyPacketPlayInPositionLooks(private val byteBuf: ByteBuf) {
-    val x: Double
-    val y: Double
-    val z: Double
-    val yaw: Float
-    val pitch: Float
-    val f: Boolean
-    val hasPos: Boolean = true
-    val hasLook: Boolean = true
-
-    init {
-        x = byteBuf.readDouble()
-        y = byteBuf.readDouble()
-        z = byteBuf.readDouble()
-        yaw = byteBuf.readFloat()
-        pitch = byteBuf.readFloat()
-        f = byteBuf.readUnsignedByte().toInt() != 0
-    }
-}
 ```
 
 ### Recommend extension methods (These will be used later in this guide)
@@ -503,12 +419,6 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
      <version>1.x.x</version> 
      <scope>compile</scope>
 </dependency>
-<dependency>
-     <groupId>io.netty</groupId>
-     <artifactId>netty-all</artifactId>
-     <version>4.1.52.Final</version>
-     <scope>provided</scope>
-</dependency>
 ```
 **Gradle**
 
@@ -517,7 +427,6 @@ dependencies {
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
-    compileOnly("io.netty:netty-all:4.1.52.Final")
 }
 ```
 

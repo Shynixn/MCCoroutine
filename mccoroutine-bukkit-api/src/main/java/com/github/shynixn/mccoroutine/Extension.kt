@@ -1,11 +1,8 @@
 package com.github.shynixn.mccoroutine
 
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
-import io.netty.buffer.ByteBuf
 import kotlinx.coroutines.CoroutineScope
-import org.bukkit.Bukkit
 import org.bukkit.command.PluginCommand
-import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
@@ -119,13 +116,6 @@ fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
 }
 
 /**
- * Registers the given packets for event listening.
- */
-fun PluginManager.registerPackets(packets: List<Class<*>>, plugin: Plugin) {
-    mcCoroutine.getCoroutineSession(plugin).protocolService.registerPackets(packets)
-}
-
-/**
  * Registers an command executor with suspending function.
  * Does exactly the same as PluginCommand.setExecutor.
  */
@@ -136,23 +126,6 @@ fun PluginCommand.setSuspendingExecutor(
         this,
         suspendingCommandExecutor
     )
-}
-
-/**
- * Sends a native minecraft packet to the player client.
- */
-fun <P> Player.sendPacket(plugin: Plugin, packet: P) {
-    require(packet is Any)
-    return mcCoroutine.getCoroutineSession(plugin).protocolService.sendPacket(this, packet)
-}
-
-/**
- * Sends the bytebuffer packet to the player client.
- * @param clazz NMS Packet class.
- * @param buf Byte buffer serialized.
- */
-fun Player.sendPacket(plugin: Plugin, clazz: Class<*>, buf: ByteBuf) {
-    return mcCoroutine.getCoroutineSession(plugin).protocolService.sendBytePacket(this, clazz, buf)
 }
 
 /**

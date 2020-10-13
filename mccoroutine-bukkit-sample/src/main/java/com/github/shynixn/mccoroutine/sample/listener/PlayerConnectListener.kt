@@ -1,10 +1,7 @@
 package com.github.shynixn.mccoroutine.sample.listener
 
-import com.github.shynixn.mccoroutine.PlayerPacketEvent
 import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
-import com.github.shynixn.mccoroutine.sample.packet.MyPacketPlayInPositionLooks
-import com.github.shynixn.mccoroutine.sample.packet.MySupportedPacketType
 import kotlinx.coroutines.withContext
 import org.bukkit.Bukkit
 import org.bukkit.Material

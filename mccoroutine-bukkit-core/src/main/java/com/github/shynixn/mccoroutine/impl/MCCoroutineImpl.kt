@@ -4,7 +4,6 @@ import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import com.github.shynixn.mccoroutine.service.CoroutineSessionImpl
 import com.github.shynixn.mccoroutine.listener.PluginListener
-import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 
 class MCCoroutineImpl : MCCoroutine {
@@ -44,11 +43,6 @@ class MCCoroutineImpl : MCCoroutine {
 
         val pluginListener = PluginListener(this, plugin)
         items[plugin] = CoroutineSessionImpl(plugin)
-
-        for (player in plugin.server.onlinePlayers) {
-            getCoroutineSession(plugin).protocolService.register(player)
-        }
-
         plugin.server.pluginManager.registerEvents(pluginListener, plugin)
     }
 }

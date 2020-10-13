@@ -3,7 +3,6 @@ package helper
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
-import com.github.shynixn.mccoroutine.contract.ProtocolService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,11 +24,6 @@ class MockedCoroutineSession : CoroutineSession {
     override var eventService: EventService = Mockito.mock(EventService::class.java)
 
     /**
-     * Gets the protocol service.
-     */
-    override var protocolService: ProtocolService = Mockito.mock(ProtocolService::class.java)
-
-    /**
      * Gets the command service.
      */
     override var commandService: CommandService = Mockito.mock(CommandService::class.java)
@@ -37,7 +31,7 @@ class MockedCoroutineSession : CoroutineSession {
     /**
      * Gets the minecraft dispatcher.
      */
-    override var dispatcherMinecraft: CoroutineContext = Mockito.mock(CoroutineContext::class.java)
+    override var dispatcherMinecraft: CoroutineContext = Dispatchers.Unconfined
 
     /**
      * Gets the async dispatcher.
