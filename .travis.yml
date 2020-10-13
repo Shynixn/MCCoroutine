@@ -18,6 +18,13 @@ script:
   - if [[ $TRAVIS_BRANCH == *"master"* ]]; then git push --quiet https://Shynixn:$GH_TOKEN@github.com/Shynixn/MCCoroutine.git HEAD:master; fi ;
 after_success:
   - ./gradlew jacocoRootReport
+  - if [[ $TRAVIS_COMMIT_MESSAGE == *"--snapshot"* ]]; then ./gradlew publish > /dev/null; fi ;
+  - if [[ $TRAVIS_COMMIT_MESSAGE == *"--release"* && $TRAVIS_BRANCH == *"master"* ]]; then ./gradlew clean publishToNexus > /dev/null; fi ;
+  - if [[ $TRAVIS_COMMIT_MESSAGE == *"--release"* && $TRAVIS_BRANCH == *"master"* ]]; then ./gradlew closeAndReleaseRepository; fi ;
+  - if [[ $TRAVIS_BRANCH == *"master"* ]]; then rm -rf docs/build && rm -rf docs/apidocs; fi ;
+  - if [[ $TRAVIS_BRANCH == *"master"* ]]; then ./gradlew generateJavaDocPages > /dev/null; fi ;
+  - if [[ $TRAVIS_BRANCH == *"master"* ]]; then git add docs && git commit --message "Travis build $TRAVIS_BUILD_NUMBER [skip travis-ci]"; fi ;
+  - if [[ $TRAVIS_BRANCH == *"master"* ]]; then git push --quiet https://Shynixn:$GH_TOKEN@github.com/Shynixn/MCCoroutine.git HEAD:master; fi ;
   - bash <(curl -s https://codecov.io/bash)
   - ./travis-status.sh success $DISCORD_TOKEN
 after_failure:
