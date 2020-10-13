@@ -21,7 +21,7 @@ internal class CommandServiceImpl(private val plugin: Plugin, private val corout
             // If the result is delayed we can automatically assume it is true.
             var success = true
 
-            coroutineSession.launch(plugin.minecraftDispatcher) {
+            coroutineSession.launch(coroutineSession.dispatcherMinecraft) {
                 success = commandExecutor.onCommand(p0, p1, p2, p3)
             }
 

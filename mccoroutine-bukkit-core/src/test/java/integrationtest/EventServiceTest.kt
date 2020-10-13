@@ -2,6 +2,7 @@ package integrationtest
 
 import com.github.shynixn.mccoroutine.launch
 import com.github.shynixn.mccoroutine.service.EventServiceImpl
+import helper.MockedCoroutineSession
 import helper.any
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -41,7 +42,6 @@ class EventServiceTest {
         Mockito.`when`(plugin.server).thenReturn(server)
         Mockito.`when`(server.scheduler).thenReturn(scheduler)
         Mockito.`when`(server.pluginManager).thenReturn(Mockito.mock(PluginManager::class.java))
-        plugin.launch { }
         val pluginManager = SimplePluginManager(server, Mockito.mock(SimpleCommandMap::class.java))
         Mockito.`when`(server.pluginManager).thenReturn(pluginManager)
         Mockito.`when`(server.logger).thenReturn(Logger.getGlobal())
@@ -143,7 +143,7 @@ class EventServiceTest {
     }
 
     private fun createWithDependencies(plugin: Plugin): EventServiceImpl {
-        return EventServiceImpl(plugin)
+        return EventServiceImpl(plugin, MockedCoroutineSession())
     }
 
     class DemoListener(
