@@ -2,6 +2,7 @@ package com.github.shynixn.mccoroutine.sample.listener
 
 import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.withContext
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -19,7 +20,7 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
     @EventHandler
     suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
         println("[PlayerConnectListener-Join] Is starting on Primary Thread: " + Bukkit.isPrimaryThread())
-        val userData = userDataCache.getUserDataFromPlayer(playerJoinEvent.player)
+        val userData = userDataCache.getUserDataFromPlayerAsync(playerJoinEvent.player).await()
         println("[PlayerConnectListener-Join] " + playerJoinEvent.player.name + " joined the server. KillCount [${userData.amountOfPlayerKills}].")
         println("[PlayerConnectListener-Join] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())
     }
