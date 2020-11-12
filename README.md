@@ -336,7 +336,7 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
     /**
      * Gets the user data from the player.
      */
-    suspend fun getUserDataFromPlayer(player: Player): UserData {
+    suspend fun getUserDataFromPlayerAsync(player: Player): Deferred<UserData> {
         // Open a coroutine scope because we want to manage waiting with async
         return coroutineScope {
             // Still on bukkit primary thread.
@@ -353,11 +353,93 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
                 }
             }
           
-            // Suspends the calling thread until the data has been loaded.
-            // If the data has already been loaded, it returns immediately the result without suspension. 
-            // It is possible that the bukkit primary thread is suspended multiple times here and continuous each time once the value
-            // is there.
-            cache[player.uniqueId]!!.await()
+            // Returns the Deferred UserData. It may already contain the result, it may still be running 
+            // in the background. When calling .await() on this value we can suspend the function until it is ready.
+            cache[player.uniqueId]!!
+        }
+    }
+}
+
+class PlayerConnectListener(private val userDataCache: UserDataCache) : Listener {
+    /**
+       Gets called on player join. May be called multiple times for the same player 
+       in a short time period if the player continously quits and joins the server. 
+
+       However, as the same deferred instance is returned every time we can suspend 
+       multiple times here without problems. It also only creates only 1 single database request.
+    */ 
+    @EventHandler
+    suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
+        val userData = userDataCache.getUserDataFromPlayerAsync(playerJoinEvent.player).await()
+    }
+}
+
+```
+
+#### How to call a suspend function from Java
+
+```java 
+public class EntityInteractListener implements Listener {
+    private final UserDataCache userDataCache;
+
+    public EntityInteractListener(UserDataCache userDataCache) {
+        this.userDataCache = userDataCache;
+    }
+    
+    // We cannot call getUserDataFromPlayerAsync directly instead we assume,
+    // we get traditional Java 8 CompletionStage as return value.
+    @EventHandler
+    public void onPlayerInteractEvent(PlayerInteractAtEntityEvent event) {
+        CompletionStage<UserData> future = this.userDataCache.getUserDataFromPlayer(event.getPlayer());
+        future.thenAccept(useData -> {
+            // Got data.
+        }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
+        });
+    }
+}
+```
+
+```kotlin
+class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDatabase) {
+    private val cache = HashMap<UUID, Deferred<UserData>>()
+
+    /**
+     * Clears the player cache.
+     */
+    fun clearCache(player: Player) {
+        cache.remove(player.uniqueId)
+    }
+
+    /**
+     * Gets the user data from the player.
+     *
+     * This method is only useful if you plan to access suspend functions from Java. It
+     * is not possible to call suspend functions directly from java, so we need to
+     * wrap it into a Java 8 CompletionStage.
+     *
+     * This might be useful if you plan to provide a Developer Api for your plugin as other
+     * plugins may be written in Java or if you have got Java code in your plugin.
+     */
+    fun getUserDataFromPlayer(player: Player): CompletionStage<UserData> {
+        return plugin.scope.future {
+            getUserDataFromPlayerAsync(player).await()
+        }
+    }
+
+    /**
+     * Gets the user data from the player.
+     */
+    suspend fun getUserDataFromPlayerAsync(player: Player): Deferred<UserData> {
+        return coroutineScope {
+            if (!cache.containsKey(player.uniqueId)) {
+                cache[player.uniqueId] = async(Dispatchers.async) {
+                    fakeDatabase.getUserDataFromPlayer(player)
+                }
+            }
+          
+            cache[player.uniqueId]!!
         }
     }
 }
@@ -414,6 +496,12 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
      <scope>compile</scope>
 </dependency>
 <dependency>
+     <groupId>org.jetbrains.kotlinx</groupId>
+     <artifactId>kotlinx-coroutines-jdk8</artifactId>
+     <version>1.x.x</version> 
+     <scope>compile</scope>
+</dependency>
+<dependency>
      <groupId>org.jetbrains.kotlin</groupId>
      <artifactId>kotlin-reflect</artifactId>
      <version>1.x.x</version> 
@@ -426,6 +514,7 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 dependencies {
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
 }
 ```

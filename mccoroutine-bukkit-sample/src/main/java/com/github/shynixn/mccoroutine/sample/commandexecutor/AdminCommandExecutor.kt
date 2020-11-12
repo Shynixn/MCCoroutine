@@ -23,7 +23,7 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache) : Suspendin
             val otherPlayer = Bukkit.getPlayer(playerName)!!
 
             println("[AdminCommandExecutor] Is starting on Primary Thread: " + Bukkit.isPrimaryThread())
-            val userData = userDataCache.getUserDataFromPlayer(otherPlayer)
+            val userData = userDataCache.getUserDataFromPlayerAsync(otherPlayer).await()
             userData.amountOfPlayerKills = playerKills
             userDataCache.saveUserData(otherPlayer)
             println("[AdminCommandExecutor] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())

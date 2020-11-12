@@ -2,10 +2,16 @@ package com.github.shynixn.mccoroutine.sample.impl
 
 import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.sample.entity.UserData
-import kotlinx.coroutines.*
+import com.github.shynixn.mccoroutine.scope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.future.future
+import kotlinx.coroutines.withContext
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
+import java.util.concurrent.CompletionStage
 
 class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDatabase) {
     private val cache = HashMap<Player, Deferred<UserData>>()
@@ -30,7 +36,7 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
     /**
      * Gets the user data from the player.
      */
-    suspend fun getUserDataFromPlayer(player: Player): UserData {
+    suspend fun getUserDataFromPlayerAsync(player: Player): Deferred<UserData> {
         return coroutineScope {
             if (!cache.containsKey(player)) {
                 cache[player] = async(plugin.asyncDispatcher) {
@@ -39,7 +45,23 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
                 }
             }
             println("[Cache] is downloading waiting on Primary Thread: " + Bukkit.isPrimaryThread())
-            cache[player]!!.await()
+            cache[player]!!
+        }
+    }
+
+    /**
+     * Gets the user data from the player.
+     *
+     * This method is only useful if you plan to access suspend functions from Java. It
+     * is not possible to call suspend functions directly from java, so we need to
+     * wrap it into a Java 8 CompletionStage.
+     *
+     * This might be useful if you plan to provide a Developer Api for your plugin as other
+     * plugins may be written in Java or if you have got Java code in your plugin.
+     */
+    fun getUserDataFromPlayer(player: Player): CompletionStage<UserData> {
+        return plugin.scope.future {
+            getUserDataFromPlayerAsync(player).await()
         }
     }
 }
