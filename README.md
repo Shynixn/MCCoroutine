@@ -387,7 +387,7 @@ public class EntityInteractListener implements Listener {
     }
     
     // We cannot call getUserDataFromPlayerAsync directly instead we assume,
-    // we get traditional Java 8 CompletionStage as return value.
+    // we get a traditional Java 8 CompletionStage as return value.
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractAtEntityEvent event) {
         CompletionStage<UserData> future = this.userDataCache.getUserDataFromPlayer(event.getPlayer());
