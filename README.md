@@ -1,4 +1,7 @@
-# MCCoroutine
+# MCCoroutine 
+[![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api/badge.svg?style=flat-square
+)](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api) [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/MCCoroutine/master/LICENSE)
+
 
 MCCoroutine is an extension to bukkit server implementations (Spigot, Paper, etc.) to use Kotlin Coroutines (also called async/await) pattern for
 all common operations.
