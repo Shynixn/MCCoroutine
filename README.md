@@ -44,7 +44,7 @@ Include the dependency to MCCoroutine
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-api</artifactId>
-     <version>0.0.4</version>
+     <version>0.0.5</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -52,7 +52,7 @@ Include the dependency to MCCoroutine
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.4")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.5")
 }
 ```
 
@@ -198,12 +198,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
-fun launch(f: suspend CoroutineScope.() -> Unit) {
-    JavaPlugin.getPlugin(YourPluginClass::class.java).launch(f)
+fun launch(f: suspend CoroutineScope.() -> Unit): Job {
+    return JavaPlugin.getPlugin(YourPluginClass::class.java).launch(f)
 }
 
-fun launchAsync(f: suspend CoroutineScope.() -> Unit) {
-    JavaPlugin.getPlugin(YourPluginClass::class.java).launchAsync(f)
+fun launchAsync(f: suspend CoroutineScope.() -> Unit): Job {
+    return JavaPlugin.getPlugin(YourPluginClass::class.java).launchAsync(f)
 }
 
 val Dispatchers.minecraft: CoroutineContext
@@ -486,7 +486,7 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-core</artifactId>
-     <version>0.0.4</version>
+     <version>0.0.5</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -512,7 +512,7 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.4")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.5")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")

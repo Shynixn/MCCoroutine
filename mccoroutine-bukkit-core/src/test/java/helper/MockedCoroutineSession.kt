@@ -3,10 +3,7 @@ package helper
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.mockito.Mockito
 import kotlin.coroutines.CoroutineContext
 
@@ -48,8 +45,8 @@ class MockedCoroutineSession : CoroutineSession {
     /**
      * Launches the given function on the plugin coroutine scope.
      */
-    override fun launch(dispatcher: CoroutineContext, f: suspend kotlinx.coroutines.CoroutineScope.() -> Unit) {
-        GlobalScope.launch(dispatcher) {
+    override fun launch(dispatcher: CoroutineContext, f: suspend kotlinx.coroutines.CoroutineScope.() -> Unit) : Job {
+        return GlobalScope.launch(dispatcher) {
             f.invoke(this)
         }
     }

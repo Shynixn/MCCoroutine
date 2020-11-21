@@ -60,18 +60,17 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     /**
      * Launches the given function on the plugin coroutine scope.
      */
-    override fun launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit) {
+    override fun launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit) : Job {
         if (disposed) {
-            return
+            return Job()
         }
 
         if (dispatcher == Dispatchers.Unconfined) {
             // If the dispatcher is unconfined. Always schedule immediately.
-            launchInternal(dispatcher, CoroutineStart.UNDISPATCHED, f)
-            return
+            return launchInternal(dispatcher, CoroutineStart.UNDISPATCHED, f)
         }
 
-        launchInternal(dispatcher, CoroutineStart.DEFAULT, f)
+        return launchInternal(dispatcher, CoroutineStart.DEFAULT, f)
     }
 
     /**
@@ -81,9 +80,9 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
         dispatcher: CoroutineContext,
         coroutineStart: CoroutineStart,
         f: suspend CoroutineScope.() -> Unit
-    ) {
+    )  : Job {
         // Launch a new coroutine on the current thread thread on the plugin scope.
-        scope.launch(dispatcher, coroutineStart) {
+        return scope.launch(dispatcher, coroutineStart) {
             try {
                 // The user may or may not launch multiple sub suspension operations. If
                 // one of those fails, only this scope should fail instead of the plugin scope.

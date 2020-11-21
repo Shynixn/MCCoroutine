@@ -2,6 +2,7 @@ package com.github.shynixn.mccoroutine
 
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import org.bukkit.command.PluginCommand
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
@@ -68,9 +69,10 @@ val Plugin.scope: CoroutineScope
  * for example that event cancelling or modifying return values is still possible.
  * @param dispatcher Coroutine context. The default context is minecraft dispatcher.
  * @param f callback function inside a coroutine scope.
+ * @return Cancelable coroutine job.
  */
-fun Plugin.launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit) {
-    mcCoroutine.getCoroutineSession(this).launch(dispatcher, f)
+fun Plugin.launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit): Job {
+    return mcCoroutine.getCoroutineSession(this).launch(dispatcher, f)
 }
 
 /**
@@ -79,9 +81,10 @@ fun Plugin.launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> 
  * calling this function Bukkit.isPrimaryThread() is true. This means
  * for example that event cancelling or modifying return values is still possible.
  * @param f callback function inside a coroutine scope.
+ * @return Cancelable coroutine job.
  */
-fun Plugin.launch(f: suspend CoroutineScope.() -> Unit) {
-    mcCoroutine.getCoroutineSession(this).launch(minecraftDispatcher, f)
+fun Plugin.launch(f: suspend CoroutineScope.() -> Unit): Job {
+    return mcCoroutine.getCoroutineSession(this).launch(minecraftDispatcher, f)
 }
 
 /**
@@ -90,9 +93,10 @@ fun Plugin.launch(f: suspend CoroutineScope.() -> Unit) {
  * calling this function Bukkit.isPrimaryThread() is false. This means
  * for example that event cancelling or modifying return values is still possible.
  * @param f callback function inside a coroutine scope.
+ * @return Cancelable coroutine job.
  */
-fun Plugin.launchAsync(f: suspend CoroutineScope.() -> Unit) {
-    mcCoroutine.getCoroutineSession(this).launch(this.asyncDispatcher, f)
+fun Plugin.launchAsync(f: suspend CoroutineScope.() -> Unit): Job {
+    return mcCoroutine.getCoroutineSession(this).launch(this.asyncDispatcher, f)
 }
 
 /**
