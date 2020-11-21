@@ -3,26 +3,17 @@ package com.github.shynixn.mccoroutine.service
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
-import com.github.shynixn.mccoroutine.launch
-import com.github.shynixn.mccoroutine.minecraftDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.bukkit.Warning
 import org.bukkit.event.*
 import org.bukkit.plugin.*
-import org.bukkit.plugin.java.JavaPluginLoader
 import java.lang.Deprecated
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
-import java.util.*
 import java.util.logging.Level
-import kotlin.Any
-import kotlin.Exception
 import kotlin.IllegalArgumentException
-import kotlin.Int
 import kotlin.String
 import kotlin.Throwable
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 internal class EventServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) :
     EventService {
@@ -37,119 +28,96 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
         method.isAccessible = true
 
         for (entry in registeredListeners.entries) {
-            val clazz = entry.key as Class<*>
+            val clazz = entry.key
             val handlerList = method.invoke(plugin.server.pluginManager, clazz) as HandlerList
             handlerList.registerAll(entry.value as MutableCollection<RegisteredListener>)
         }
     }
 
     /**
-     * Ugly coroutine listener hacking.
+     * Creates a listener according to the spigot implementation.
      */
-    private fun createCoroutineListener(listener: Listener, plugin: Plugin): HashMap<*, *> {
-        val ret: HashMap<Class<*>, Set<RegisteredListener?>> = HashMap()
+    private fun createCoroutineListener(
+        listener: Listener,
+        plugin: Plugin
+    ): Map<Class<*>, MutableSet<RegisteredListener>> {
+        val eventMethods = HashSet<Method>()
 
-        val methods: HashSet<*>
         try {
-            val publicMethods = listener.javaClass.methods
-            val privateMethods = listener.javaClass.declaredMethods
-            methods = HashSet<Any?>(publicMethods.size + privateMethods.size, 1.0f)
-            var var11 = publicMethods
-            var var10 = publicMethods.size
-            var method: Method?
-            var var9: Int
-            var9 = 0
-            while (var9 < var10) {
-                method = var11[var9]
-                methods.add(method)
-                ++var9
-            }
-            var11 = privateMethods
-            var10 = privateMethods.size
-            var9 = 0
-            while (var9 < var10) {
-                method = var11[var9]
-                methods.add(method)
-                ++var9
-            }
-        } catch (var15: NoClassDefFoundError) {
-            plugin.logger.severe("Plugin " + plugin.description.fullName + " has failed to register events for " + listener.javaClass + " because " + var15.message + " does not exist.")
-            return ret
+            // Adds public methods of the current class and inherited classes
+            eventMethods.addAll(listener.javaClass.methods)
+            // Adds all methods of the current class
+            eventMethods.addAll(listener.javaClass.declaredMethods)
+        } catch (e: NoClassDefFoundError) {
+            plugin.logger.severe("Plugin " + plugin.description.fullName + " has failed to register events for " + listener.javaClass + " because " + e.message + " does not exist.")
+            return emptyMap()
         }
 
-        val var17: Iterator<*> = methods.iterator()
+        val result = mutableMapOf<Class<*>, MutableSet<RegisteredListener>>()
 
-        while (true) {
-            while (true) {
-                var method: Method
-                var eh: EventHandler?
-                do {
-                    do {
-                        do {
-                            if (!var17.hasNext()) {
-                                return ret
-                            }
-                            method = var17.next() as Method
-                            eh = method.getAnnotation(EventHandler::class.java)
-                        } while (eh == null)
-                    } while (method.isBridge)
-                } while (method.isSynthetic)
+        for (method in eventMethods) {
+            val annotation = method.getAnnotation(EventHandler::class.java)
 
-                var checkClass: Class<*> = method.getParameterTypes()[0]
-                val eventClass = checkClass.asSubclass(Event::class.java)
-                method.isAccessible = true
+            if (annotation == null || method.isBridge || method.isSynthetic) {
+                continue
+            }
 
-                var eventSet: MutableSet<RegisteredListener?>? = ret[eventClass] as MutableSet<RegisteredListener?>?
+            val eventClass = method.parameterTypes[0].asSubclass(Event::class.java)
+            method.isAccessible = true
 
-                if (eventSet == null) {
-                    eventSet = HashSet<RegisteredListener?>()
-                    ret[eventClass] = eventSet
-                }
+            if (!result.containsKey(eventClass)) {
+                result[eventClass] = HashSet()
+            }
 
-                var clazz: Class<*> = eventClass
+            var clazz: Class<*> = eventClass
 
-                while (Event::class.java.isAssignableFrom(clazz)) {
-                    if (clazz.getAnnotation(Deprecated::class.java) != null) {
-                        val warning = clazz.getAnnotation(Warning::class.java)
-                        val warningState: Warning.WarningState = plugin.server.getWarningState()
-                        if (warningState.printFor(warning)) {
-                            plugin.logger.log(
-                                Level.WARNING,
-                                String.format(
-                                    "\"%s\" has registered a listener for %s on method \"%s\", but the event is Deprecated. \"%s\"; please notify the authors %s.",
-                                    plugin.description.fullName,
-                                    clazz.name,
-                                    method.toGenericString(),
-                                    if (warning != null && warning.reason.length != 0) warning.reason else "Server performance will be affected",
-                                    Arrays.toString(plugin.description.authors.toTypedArray())
-                                ),
-                                if (warningState == Warning.WarningState.ON) AuthorNagException(null as String?) else null
-                            )
-                        }
-                        break
-                    }
+            while (Event::class.java.isAssignableFrom(clazz)) {
+                if (clazz.getAnnotation(Deprecated::class.java) == null) {
                     clazz = clazz.superclass
+                    continue
                 }
 
-                val executor = createEventExecutor(plugin, eventClass, method)
-                eventSet!!.add(
-                    RegisteredListener(
-                        listener,
-                        executor,
-                        eh!!.priority,
-                        plugin,
-                        eh!!.ignoreCancelled
-                    )
+                val warning = clazz.getAnnotation(Warning::class.java)
+                val warningState = plugin.server.warningState
+
+                if (!warningState.printFor(warning)) {
+                    break
+                }
+
+                plugin.logger.log(
+                    Level.WARNING,
+                    """"%s" has registered a listener for %s on method "%s", but the event is Deprecated. "%s"; please notify the authors %s.""".format(
+                        plugin.description.fullName,
+                        clazz.name,
+                        method.toGenericString(),
+                        if (warning?.reason?.isNotEmpty() == true) warning.reason else "Server performance will be affected",
+                        plugin.description.authors.toTypedArray().contentToString()
+                    ),
+                    if (warningState == Warning.WarningState.ON) {
+                        AuthorNagException(null as String?)
+                    } else null
                 )
             }
+
+            val executor = createEventExecutor(eventClass, method)
+            result[eventClass]!!.add(
+                RegisteredListener(
+                    listener,
+                    executor,
+                    annotation.priority,
+                    plugin,
+                    annotation.ignoreCancelled
+                )
+            )
         }
+
+        return result
     }
 
     /**
      * Creates a single event executor.
      */
     private fun createEventExecutor(
-        plugin: Plugin,
         eventClass: Class<*>,
         method: Method
     ): EventExecutor {
