@@ -1,6 +1,7 @@
 package com.github.shynixn.mccoroutine.contract
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 interface CoroutineSession {
@@ -31,8 +32,9 @@ interface CoroutineSession {
 
     /**
      * Launches the given function on the plugin coroutine scope.
+     * @return Cancelable coroutine job.
      */
-    fun launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit)
+    fun launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit) : Job
 
     /**
      * Disposes the session.
