@@ -36,7 +36,6 @@ class MCCoroutineSamplePlugin {
 
         // Extension to traditional registration.
         Sponge.getEventManager().registerSuspendingListeners(plugin, PlayerConnectListener(plugin, cache))
-        Sponge.getEventManager().registerSuspendingListeners(plugin, EntityInteractListener(cache))
         CommandSpec.builder()
             .description(Text.of("Command for operations."))
             .permission("mccoroutine.sample")

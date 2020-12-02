@@ -7,13 +7,15 @@ import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
 import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.minecraftDispatcher
 import kotlinx.coroutines.*
-import org.slf4j.Logger
 import org.spongepowered.api.plugin.PluginContainer
+import java.util.logging.Level
+import java.util.logging.Logger
 import kotlin.coroutines.CoroutineContext
 
-internal class CoroutineSessionImpl(private val plugin: PluginContainer, private val logger: Logger) :
+internal class CoroutineSessionImpl(private val plugin: PluginContainer) :
     CoroutineSession {
     private var disposed = false
+    private val logger = Logger.getLogger("MCCoroutine-" + plugin.name)
 
     /**
      * Gets the scope.
@@ -91,9 +93,10 @@ internal class CoroutineSessionImpl(private val plugin: PluginContainer, private
                     f.invoke(this)
                 }
             } catch (e: CancellationException) {
-                logger.debug("Coroutine has been cancelled.")
+                logger.log(Level.INFO, "Coroutine has been cancelled.")
             } catch (e: Exception) {
-                logger.error(
+                logger.log(
+                    Level.SEVERE,
                     "This is not an error of MCCoroutine! See sub exception for details.",
                     e
                 )

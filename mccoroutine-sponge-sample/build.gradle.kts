@@ -15,7 +15,7 @@ tasks.withType<ShadowJar> {
     archiveName = "$baseName-$version.$extension"
 
     // Change the output folder of the plugin.
-    // destinationDir = File("D:\\Benutzer\\Temp\\plugins")
+   // destinationDir = File("D:\\Benutzer\\Temp\\SpongePowered\\Sponge-2825-7.1.6\\mods")
 }
 
 repositories {

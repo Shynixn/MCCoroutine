@@ -7,7 +7,7 @@
         "Shynixn"
     ],
     "dependencies": [
-        "spongeapi@7.2.0",
+        "spongeapi@7.2.0"
     ],
     "requiredMods": [
         "spongeapi@7.2.0"

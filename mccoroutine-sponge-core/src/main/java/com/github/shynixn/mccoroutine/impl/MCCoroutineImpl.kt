@@ -38,7 +38,6 @@ class MCCoroutineImpl : MCCoroutine {
      * Starts a new coroutine session.
      */
     private fun startCoroutineSession(plugin: PluginContainer) {
-        val logger = Sponge.getServiceManager().provideUnchecked(Logger::class.java)
-        items[plugin] = CoroutineSessionImpl(plugin, logger)
+        items[plugin] = CoroutineSessionImpl(plugin)
     }
 }
