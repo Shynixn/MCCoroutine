@@ -115,7 +115,7 @@ fun PluginContainer.launchAsync(f: suspend CoroutineScope.() -> Unit): Job {
  * @param plugin Sponge Plugin.
  * @param listener Sponge Listener.
  */
-fun EventManager.registerSuspendingEvents(plugin: PluginContainer, listener: Any) {
+fun EventManager.registerSuspendingListeners(plugin: PluginContainer, listener: Any) {
     return mcCoroutine.getCoroutineSession(plugin).eventService.registerSuspendListener(listener)
 }
 

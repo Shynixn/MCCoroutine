@@ -1,0 +1,15 @@
+[{
+    "modid": "mccoroutinesample",
+    "name": "MCCoroutineSample",
+    "version": "0.0.5",
+    "description": "MCCoroutineSample is sample plugin to use MCCoroutine in Sponge.",
+    "authorList": [
+        "Shynixn"
+    ],
+    "dependencies": [
+        "spongeapi@7.2.0",
+    ],
+    "requiredMods": [
+        "spongeapi@7.2.0"
+    ]
+}]

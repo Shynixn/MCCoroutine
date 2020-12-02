@@ -15,9 +15,7 @@ interface SuspendingCommandExecutor {
      *
      * @param src The commander who is executing this command
      * @param args The parsed command arguments for this command
-     * @return the result of executing this command
-     * @throws CommandException If a user-facing error occurs while
-     * executing this command
+     * @return the result of executing this command.
      */
     suspend fun execute(src: CommandSource, args: CommandContext): CommandResult
 }
