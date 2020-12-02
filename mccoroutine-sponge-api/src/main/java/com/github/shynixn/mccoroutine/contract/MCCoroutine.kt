@@ -9,16 +9,6 @@ interface MCCoroutine {
     fun getCoroutineSession(plugin: PluginContainer): CoroutineSession
 
     /**
-     * Gets the command service.
-     */
-    val commandService: CommandService
-
-    /**
-     * Primary Thread id.
-     */
-    var primaryThreadId: Long
-
-    /**
      * Disables coroutine for the given plugin.
      */
     fun disable(plugin: PluginContainer)

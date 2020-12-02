@@ -116,7 +116,6 @@ fun PluginContainer.launchAsync(f: suspend CoroutineScope.() -> Unit): Job {
  * @param listener Sponge Listener.
  */
 fun EventManager.registerSuspendingEvents(plugin: PluginContainer, listener: Any) {
-    mcCoroutine.primaryThreadId = Thread.currentThread().id
     return mcCoroutine.getCoroutineSession(plugin).eventService.registerSuspendListener(listener)
 }
 
@@ -125,20 +124,12 @@ fun EventManager.registerSuspendingEvents(plugin: PluginContainer, listener: Any
  * Does exactly the same as CommandSpec.Builder.executor().
  */
 fun CommandSpec.Builder.suspendingExecutor(
+    plugin: PluginContainer,
     suspendingCommandExecutor: SuspendingCommandExecutor
-) {
-    mcCoroutine.primaryThreadId = Thread.currentThread().id
-    mcCoroutine.commandService.registerSuspendCommandExecutor(this, suspendingCommandExecutor)
-}
-
-/**
- * Finds the version compatible class.
- */
-fun PluginContainer.findClazz(name: String): Class<*> {
-    return java.lang.Class.forName(
-        name.replace(
-            "VERSION",
-            serverVersion
-        )
+): CommandSpec.Builder {
+    mcCoroutine.getCoroutineSession(plugin).commandService.registerSuspendCommandExecutor(
+        this,
+        suspendingCommandExecutor
     )
+    return this
 }
