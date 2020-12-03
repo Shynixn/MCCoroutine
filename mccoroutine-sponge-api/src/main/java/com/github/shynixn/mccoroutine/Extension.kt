@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
  */
 private val mcCoroutine: MCCoroutine by lazy {
     try {
-        Class.forName("com.github.shynixn.mccoroutine.impl.MCCoroutineImpl")
+        Class.forName("com.github.shynixn.mccoroutine.sponge.impl.MCCoroutineImpl")
             .newInstance() as MCCoroutine
     } catch (e: Exception) {
         throw RuntimeException(

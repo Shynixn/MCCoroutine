@@ -1,10 +1,10 @@
-package com.github.shynixn.mccoroutine.service
+package com.github.shynixn.mccoroutine.sponge.service
 
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
-import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
-import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
+import com.github.shynixn.mccoroutine.sponge.dispatcher.AsyncCoroutineDispatcher
+import com.github.shynixn.mccoroutine.sponge.dispatcher.MinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.minecraftDispatcher
 import kotlinx.coroutines.*
 import org.spongepowered.api.plugin.PluginContainer

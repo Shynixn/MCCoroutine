@@ -1,4 +1,4 @@
-package com.github.shynixn.mccoroutine.extension
+package com.github.shynixn.mccoroutine.sponge.extension
 
 import java.lang.reflect.Method
 

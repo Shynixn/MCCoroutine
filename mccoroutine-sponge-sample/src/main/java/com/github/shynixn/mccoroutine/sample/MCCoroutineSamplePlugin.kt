@@ -36,7 +36,8 @@ class MCCoroutineSamplePlugin {
 
         // Extension to traditional registration.
         Sponge.getEventManager().registerSuspendingListeners(plugin, PlayerConnectListener(plugin, cache))
-        CommandSpec.builder()
+        Sponge.getEventManager().registerSuspendingListeners(plugin, EntityInteractListener(cache))
+        val commandSpec = CommandSpec.builder()
             .description(Text.of("Command for operations."))
             .permission("mccoroutine.sample")
             .arguments(
@@ -44,5 +45,6 @@ class MCCoroutineSamplePlugin {
                 GenericArguments.onlyOne(GenericArguments.integer(Text.of("kills")))
             )
             .suspendingExecutor(plugin, AdminCommandExecutor(cache))
+        Sponge.getCommandManager().register(plugin, commandSpec.build(), listOf("mccor"))
     }
 }

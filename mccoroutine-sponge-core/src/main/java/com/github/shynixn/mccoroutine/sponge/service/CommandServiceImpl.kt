@@ -1,4 +1,4 @@
-package com.github.shynixn.mccoroutine.service
+package com.github.shynixn.mccoroutine.sponge.service
 
 import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
 import com.github.shynixn.mccoroutine.contract.CommandService

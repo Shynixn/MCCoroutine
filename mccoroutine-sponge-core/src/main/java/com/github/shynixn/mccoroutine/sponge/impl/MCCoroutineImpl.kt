@@ -1,10 +1,8 @@
-package com.github.shynixn.mccoroutine.impl
+package com.github.shynixn.mccoroutine.sponge.impl
 
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
-import com.github.shynixn.mccoroutine.service.CoroutineSessionImpl
-import org.slf4j.Logger
-import org.spongepowered.api.Sponge
+import com.github.shynixn.mccoroutine.sponge.service.CoroutineSessionImpl
 import org.spongepowered.api.plugin.PluginContainer
 
 class MCCoroutineImpl : MCCoroutine {
