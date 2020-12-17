@@ -9,7 +9,7 @@ JavaDocs: https://shynixn.github.io/MCCoroutine/apidocs/
 
 You can find the original article of the repository [here](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md).
 
-If you are looking for examples using the Sponge Api, you can find them here](https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md).
+If you are looking for examples using the Sponge Api, you can find them [here](https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md).
 
 **A short listener example:**
 
