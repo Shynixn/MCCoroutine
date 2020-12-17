@@ -2,13 +2,14 @@
 [![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api/badge.svg?style=flat-square
 )](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api) [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/MCCoroutine/master/LICENSE)
 
-
-MCCoroutine is an extension to bukkit server implementations (Spigot, Paper, etc.) to use Kotlin Coroutines (also called async/await) pattern for
+MCCoroutine is an extension to bukkit and sponge server implementations (Spigot, Paper, SpongeVanilla, SpongeForge etc.) to use Kotlin Coroutines (also called async/await) pattern for
 all common operations.
 
 JavaDocs: https://shynixn.github.io/MCCoroutine/apidocs/
 
 You can find the original article of the repository [here](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md).
+
+If you are looking for examples using the Sponge Api, you can find them [here](https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md).
 
 **A short listener example:**
 
@@ -20,7 +21,7 @@ server.pluginManager.registerSuspendingEvents(PlayerConnectListener(), plugin)
 ```kotlin
 @EventHandler
 suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
-    val player = player
+    val player = event.player
     // Long running operation to database is automatically suspended and continued.
     val userData = database.getUserDataFromPlayer(player)
     // Userdata was loaded asynchronous from the database and is now ready.
@@ -47,7 +48,7 @@ Include the dependency to MCCoroutine
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-api</artifactId>
-     <version>0.0.5</version>
+     <version>0.0.6</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -55,7 +56,7 @@ Include the dependency to MCCoroutine
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.5")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.6")
 }
 ```
 
@@ -489,7 +490,7 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-core</artifactId>
-     <version>0.0.5</version>
+     <version>0.0.6</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -515,7 +516,7 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.5")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
