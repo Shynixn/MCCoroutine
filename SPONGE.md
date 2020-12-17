@@ -94,7 +94,7 @@ database results is an essential component of both and a cache miss should not b
 * Create an ordinary listener and simple prepend ``suspend`` to all functions where you are going to perform async operations. If you do not perform async operations, you do not need to append it.
 
 ```kotlin
-class PlayerConnectListener : Listener {
+class PlayerConnectListener {
     @Listener
     suspend fun onPlayerJoinEvent(playerJoinEvent: ClientConnectionEvent.Join) {
     }
