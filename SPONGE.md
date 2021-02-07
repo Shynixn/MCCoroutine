@@ -255,6 +255,12 @@ val scope = plugin.scope
 ```xml
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
+     <artifactId>mccoroutine-sponge-api</artifactId>
+     <version>0.0.6</version>
+     <scope>compile</scope>
+</dependency>
+<dependency>
+     <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-core</artifactId>
      <version>0.0.6</version>
      <scope>compile</scope>
@@ -282,6 +288,7 @@ val scope = plugin.scope
 
 ```xml
 dependencies {
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.6")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:0.0.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")

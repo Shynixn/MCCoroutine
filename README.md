@@ -511,6 +511,12 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 ```xml
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
+     <artifactId>mccoroutine-bukkit-api</artifactId>
+     <version>0.0.6</version>
+     <scope>compile</scope>
+</dependency>
+<dependency>
+     <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-core</artifactId>
      <version>0.0.6</version>
      <scope>compile</scope>
@@ -538,6 +544,7 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 
 ```xml
 dependencies {
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.6")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
