@@ -52,7 +52,7 @@ For shipping this library with your plugin, please see ``Shipping and Running`` 
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-api</artifactId>
-     <version>0.0.6</version>
+     <version>0.0.7</version>
      <scope>compile</scope>
 </dependency>
 ```
@@ -60,7 +60,7 @@ For shipping this library with your plugin, please see ``Shipping and Running`` 
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.6")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.7")
 }
 ```
 
@@ -256,13 +256,13 @@ val scope = plugin.scope
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-api</artifactId>
-     <version>0.0.6</version>
+     <version>0.0.7</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-core</artifactId>
-     <version>0.0.6</version>
+     <version>0.0.7</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -288,8 +288,8 @@ val scope = plugin.scope
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.6")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:0.0.6")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.7")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:0.0.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
