@@ -136,6 +136,26 @@ String commandName
 plugin.getCommand(commandName)!!.setSuspendingExecutor(AdminCommandExecutor())
 ```
 
+* Add tab completion for this command
+
+```kotlin
+import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
+
+class AdminCommandTabCompleter: SuspendingTabCompleter  {
+     override suspend fun onTabComplete(sender: CommandSender, command: Command, alias: String, args: Array<out String> ): List<String> {
+        return listOf("foo", "bar")
+     }
+}
+```
+
+```kotlin
+import com.github.shynixn.mccoroutine.setSuspendingExecutor
+
+Plugin plugin
+String commandName
+plugin.getCommand(commandName)!!.setSuspendingTabCompleter(tabcompleter)
+```
+
 ##### Schedulers
 
 * Launching a sync (Bukkit Thread) scheduler.
