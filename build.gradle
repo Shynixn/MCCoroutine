@@ -39,6 +39,10 @@ allprojects {
     apply plugin: 'jacoco'
 }
 
+tasks.register("printVersion") {
+    println(this.subprojects.getAt(0).version)
+}
+
 subprojects {
     group 'com.github.shynixn.mccoroutine'
     version '0.0.7'
@@ -191,5 +195,7 @@ task generateJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'javadoc'
     outputDirectory = "docs/apidocs"
     sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bukkit-api/src/main/java')
-            , new File(this.projectDir as File, '/mccoroutine-bukkit-core/src/main/java'))
+            , new File(this.projectDir as File, '/mccoroutine-bukkit-core/src/main/java')
+            , new File(this.projectDir as File, '/mccoroutine-sponge-api/src/main/java')
+            , new File(this.projectDir as File, '/mccoroutine-sponge-core/src/main/java'))
 }
