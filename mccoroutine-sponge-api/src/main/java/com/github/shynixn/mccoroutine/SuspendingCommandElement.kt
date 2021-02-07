@@ -9,7 +9,7 @@ import org.spongepowered.api.plugin.PluginContainer
 import org.spongepowered.api.text.Text
 
 abstract class SuspendingCommandElement(pluginContainer: PluginContainer, text: Text) {
-    internal val commandElement = object : CommandElement(text) {
+    private val commandElement = object : CommandElement(text) {
         /**
          * Attempt to extract a value for this element from the given arguments.
          * This method is expected to have no side-effects for the source, meaning
@@ -23,9 +23,20 @@ abstract class SuspendingCommandElement(pluginContainer: PluginContainer, text: 
          */
         override fun parseValue(source: CommandSource, args: CommandArgs): Any? {
             var parsedValue: Any? = null
+            // Sponge uses Exceptions for StateHandling which is a terrible thing to do.
+            // Therefore, we need to manually move the exception from the coroutine scope to the caller scope.
+            var exception: Throwable? = null
 
             pluginContainer.launch {
-                parsedValue = this@SuspendingCommandElement.parseValue(source, args)
+                try {
+                    parsedValue = this@SuspendingCommandElement.parseValue(source, args)
+                } catch (e: Throwable) {
+                    exception = e
+                }
+            }
+
+            if (exception != null) {
+                throw exception!!
             }
 
             return parsedValue
@@ -41,13 +52,31 @@ abstract class SuspendingCommandElement(pluginContainer: PluginContainer, text: 
          */
         override fun complete(src: CommandSource, args: CommandArgs, context: CommandContext): List<String?>? {
             var parsedValue: List<String?>? = null
+            // Sponge uses Exceptions for StateHandling which is a terrible thing to do.
+            // Therefore, we need to manually move the exception from the coroutine scope to the caller scope.
+            var exception: Throwable? = null
 
             pluginContainer.launch {
-                parsedValue = this@SuspendingCommandElement.complete(src, args, context)
+                try {
+                    parsedValue = this@SuspendingCommandElement.complete(src, args, context)
+                } catch (e: Throwable) {
+                    exception = e
+                }
+            }
+
+            if (exception != null) {
+                throw exception!!
             }
 
             return parsedValue
         }
+    }
+
+    /**
+     * Converts this [SuspendingCommandElement] to a Sponge-Api compatible [CommandElement].
+     */
+    fun toCommandElement(): CommandElement {
+        return commandElement
     }
 
     /**
@@ -101,7 +130,7 @@ abstract class SuspendingCommandElement(pluginContainer: PluginContainer, text: 
      * @throws ArgumentParseException if unable to extract a value
      */
     @Throws(ArgumentParseException::class)
-    protected abstract suspend fun parseValue(source: CommandSource?, args: CommandArgs?): Any?
+    protected abstract suspend fun parseValue(source: CommandSource, args: CommandArgs): Any?
 
     /**
      * Fetch completions for command arguments.
@@ -111,7 +140,7 @@ abstract class SuspendingCommandElement(pluginContainer: PluginContainer, text: 
      * @param context The context to store state in
      * @return Any relevant completions
      */
-    abstract suspend fun complete(src: CommandSource?, args: CommandArgs?, context: CommandContext?): List<String?>?
+    abstract suspend fun complete(src: CommandSource, args: CommandArgs, context: CommandContext): List<String?>?
 
     /**
      * Return a usage message for this specific argument.

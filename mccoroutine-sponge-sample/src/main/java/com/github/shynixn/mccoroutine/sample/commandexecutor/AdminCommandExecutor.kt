@@ -6,6 +6,7 @@ import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
+import org.spongepowered.api.command.args.ArgumentParseException
 import org.spongepowered.api.command.args.CommandArgs
 import org.spongepowered.api.command.args.CommandContext
 import org.spongepowered.api.entity.living.player.Player
@@ -46,7 +47,14 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache) : Suspendin
          * @return The extracted value
          * @throws ArgumentParseException if unable to extract a value
          */
-        override suspend fun parseValue(source: CommandSource?, args: CommandArgs?): Any? {
+        override suspend fun parseValue(source: CommandSource, args: CommandArgs): Any? {
+            val value = args.next()
+
+            if (value.equals("set", true)) {
+                return "set"
+            }
+
+            args.createError(Text.of("Input $value is not 'set'."))
             return null
         }
 
@@ -59,15 +67,11 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache) : Suspendin
          * @return Any relevant completions
          */
         override suspend fun complete(
-            src: CommandSource?,
-            args: CommandArgs?,
-            context: CommandContext?
+            src: CommandSource,
+            args: CommandArgs,
+            context: CommandContext
         ): List<String?>? {
-            if (args!!.size() == 1) {
-                return listOf("set")
-            }
-
-            return null
+            return listOf("set")
         }
     }
 }
