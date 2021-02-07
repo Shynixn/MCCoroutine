@@ -43,22 +43,24 @@ suspend fun onPlayerJoinEvent(playerJoinEvent: ClientConnectionEvent.Join) {
 
 ## Installation
 
-Include the dependency to MCCoroutine
+Include the dependency to MCCoroutine.
+
+For shipping this library with your plugin, please see ``Shipping and Running`` section below.
 
 **Maven**
 ```xml
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-api</artifactId>
-     <version>0.0.6</version>
-     <scope>provided</scope>
+     <version>0.0.7</version>
+     <scope>compile</scope>
 </dependency>
 ```
 **Gradle**
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.6")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.7")
 }
 ```
 
@@ -138,6 +140,61 @@ val commandSpec = CommandSpec.builder()
     .suspendingExecutor(plugin, AdminCommandExecutor())
 ```
 
+* Adding tab completion for a custom ``CommandElement``
+
+```kotlin
+class SetCommandElement(pluginContainer: PluginContainer, text: Text) : SuspendingCommandElement(pluginContainer, text) {
+    /**
+     * Attempt to extract a value for this element from the given arguments.
+     * This method is expected to have no side-effects for the source, meaning
+     * that executing it will not change the state of the [CommandSource]
+     * in any way.
+     *
+     * @param source The source to parse for
+     * @param args the arguments
+     * @return The extracted value
+     * @throws ArgumentParseException if unable to extract a value
+     */
+    override suspend fun parseValue(source: CommandSource, args: CommandArgs): Any? {
+        val value = args.next()
+
+        if (value.equals("set", true)) {
+            return "set"
+        }
+
+        args.createError(Text.of("Input $value is not 'set'."))
+        return null
+    }
+
+    /**
+     * Fetch completions for command arguments.
+     *
+     * @param src The source requesting tab completions
+     * @param args The arguments currently provided
+     * @param context The context to store state in
+     * @return Any relevant completions
+     */
+    override suspend fun complete(src: CommandSource,args: CommandArgs,context: CommandContext): List<String?>? {
+        return listOf("set")
+    }
+}
+```
+
+```kotlin
+import com.github.shynixn.mccoroutine.suspendingExecutor
+
+val commandSpec = CommandSpec.builder()
+    .description(Text.of("Description"))
+    .permission("permission.")
+    .arguments(
+        GenericArguments.onlyOne(
+              SetCommandElement(plugin, Text.of("action")).toCommandElement()
+        ),
+        GenericArguments.onlyOne(GenericArguments.integer(Text.of("kills")))
+    )
+    .suspendingExecutor(plugin, AdminCommandExecutor())
+```
+
 ##### Schedulers
 
 * Launching a sync (Sponge Thread) scheduler.
@@ -198,8 +255,14 @@ val scope = plugin.scope
 ```xml
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
+     <artifactId>mccoroutine-sponge-api</artifactId>
+     <version>0.0.7</version>
+     <scope>compile</scope>
+</dependency>
+<dependency>
+     <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-core</artifactId>
-     <version>0.0.6</version>
+     <version>0.0.7</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -225,7 +288,8 @@ val scope = plugin.scope
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:0.0.6")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.7")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:0.0.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")

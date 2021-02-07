@@ -1,12 +1,14 @@
 package com.github.shynixn.mccoroutine.sample.commandexecutor
 
 import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
+import com.github.shynixn.mccoroutine.SuspendingTabCompleter
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 
-class AdminCommandExecutor(private val userDataCache: UserDataCache) : SuspendingCommandExecutor {
+class AdminCommandExecutor(private val userDataCache: UserDataCache) : SuspendingCommandExecutor,
+    SuspendingTabCompleter {
     /**
      * Executes the given command, returning its success.
      * If false is returned, then the "usage" plugin.yml entry for this command (if defined) will be sent to the player.
@@ -36,5 +38,27 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache) : Suspendin
         }
 
         return false
+    }
+
+    /**
+     * Requests a list of possible completions for a command argument.
+     * If the call is suspended during the execution, the returned list will not be shown.
+     * @param sender - Source of the command.
+     * @param command - Command which was executed.
+     * @param alias - Alias of the command which was used.
+     * @param args - Passed command arguments.
+     * @return A list of possible completions for the final argument, or an empty list.
+     */
+    override suspend fun onTabComplete(
+        sender: CommandSender,
+        command: Command,
+        alias: String,
+        args: Array<out String>
+    ): List<String> {
+        if (args.size == 1) {
+            return arrayListOf("set")
+        }
+
+        return emptyList()
     }
 }

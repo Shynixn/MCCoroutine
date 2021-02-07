@@ -1,6 +1,9 @@
-# MCCoroutine 
-[![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api/badge.svg?style=flat-square
-)](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api) [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/MCCoroutine/master/LICENSE)
+# MCCoroutine [![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api) [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/MCCoroutine/master/LICENSE)
+
+| branch        | status        |  version | download |
+| ------------- | ------------- |  --------| ---------| 
+| master        | [![Build Status](https://github.com/Shynixn/MCCoroutine/workflows/CI/badge.svg?branch=master)](https://github.com/Shynixn/MCCoroutine/actions)| ![GitHub license](https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api.svg?style=flat-square)  |[Download latest release](https://repo1.maven.org/maven2/com/github/shynixn/mccoroutine/)|
+| development   | [![Build Status](https://github.com/Shynixn/MCCoroutine/workflows/CI/badge.svg?branch=development)](https://github.com/Shynixn/MCCoroutine/actions) |![GitHub license](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api.svg?style=flat-square) |  [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/mccoroutine/) |
 
 MCCoroutine is an extension to bukkit and sponge server implementations (Spigot, Paper, SpongeVanilla, SpongeForge etc.) to use Kotlin Coroutines (also called async/await) pattern for
 all common operations.
@@ -39,24 +42,26 @@ suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
 * Support for Minecraft 1.7 - Latest
 * Support for Java 8
 
-## Installation
+## QuickStart
 
-Include the dependency to MCCoroutine
+Include the dependency to MCCoroutine.
+
+For shipping this library with your plugin, please see ``Shipping and Running`` section below.
 
 **Maven**
 ```xml
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-api</artifactId>
-     <version>0.0.6</version>
-     <scope>provided</scope>
+     <version>0.0.7</version>
+     <scope>compile</scope>
 </dependency>
 ```
 **Gradle**
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.6")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.7")
 }
 ```
 
@@ -134,6 +139,26 @@ import com.github.shynixn.mccoroutine.setSuspendingExecutor
 Plugin plugin
 String commandName
 plugin.getCommand(commandName)!!.setSuspendingExecutor(AdminCommandExecutor())
+```
+
+* Add tab completion for this command
+
+```kotlin
+import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
+
+class AdminCommandTabCompleter: SuspendingTabCompleter  {
+     override suspend fun onTabComplete(sender: CommandSender, command: Command, alias: String, args: Array<out String> ): List<String> {
+        return listOf("foo", "bar")
+     }
+}
+```
+
+```kotlin
+import com.github.shynixn.mccoroutine.setSuspendingExecutor
+
+Plugin plugin
+String commandName
+plugin.getCommand(commandName)!!.setSuspendingTabCompleter(tabcompleter)
 ```
 
 ##### Schedulers
@@ -489,8 +514,14 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 ```xml
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
+     <artifactId>mccoroutine-bukkit-api</artifactId>
+     <version>0.0.7</version>
+     <scope>compile</scope>
+</dependency>
+<dependency>
+     <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-core</artifactId>
-     <version>0.0.6</version>
+     <version>0.0.7</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -516,7 +547,8 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.6")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.7")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")

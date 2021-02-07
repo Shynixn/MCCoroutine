@@ -133,6 +133,17 @@ fun PluginCommand.setSuspendingExecutor(
 }
 
 /**
+ * Registers a tab completer with suspending function.
+ * Does exactly the same as PluginCommand.setExecutor.
+ */
+fun PluginCommand.setSuspendingTabCompleter(suspendingTabCompleter: SuspendingTabCompleter) {
+    return mcCoroutine.getCoroutineSession(plugin).commandService.registerSuspendTabCompleter(
+        this,
+        suspendingTabCompleter
+    )
+}
+
+/**
  * Finds the version compatible class.
  */
 fun Plugin.findClazz(name: String): Class<*> {

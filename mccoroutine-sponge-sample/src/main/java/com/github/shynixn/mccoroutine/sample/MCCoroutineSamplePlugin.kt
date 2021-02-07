@@ -41,6 +41,9 @@ class MCCoroutineSamplePlugin {
             .description(Text.of("Command for operations."))
             .permission("mccoroutine.sample")
             .arguments(
+                GenericArguments.onlyOne(
+                    AdminCommandExecutor.SetCommandElement(plugin, Text.of("action")).toCommandElement()
+                ),
                 GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
                 GenericArguments.onlyOne(GenericArguments.integer(Text.of("kills")))
             )
