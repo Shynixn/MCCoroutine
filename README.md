@@ -39,9 +39,11 @@ suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
 * Support for Minecraft 1.7 - Latest
 * Support for Java 8
 
-## Installation
+## QuickStart
 
-Include the dependency to MCCoroutine
+Include the dependency to MCCoroutine.
+
+For shipping this library with your plugin, please see ``Shipping and Running`` section below.
 
 **Maven**
 ```xml
@@ -49,14 +51,14 @@ Include the dependency to MCCoroutine
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-api</artifactId>
      <version>0.0.6</version>
-     <scope>provided</scope>
+     <scope>compile</scope>
 </dependency>
 ```
 **Gradle**
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.6")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.6")
 }
 ```
 
