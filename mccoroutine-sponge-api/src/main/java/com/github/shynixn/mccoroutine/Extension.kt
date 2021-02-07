@@ -120,6 +120,21 @@ fun EventManager.registerSuspendingListeners(plugin: PluginContainer, listener: 
 }
 
 /**
+ * Sets the argument specification for this command. Generally, for a
+ * multi-argument command the {@link GenericArguments#seq(CommandElement...)}
+ * method is used to parse a sequence of args.
+ *
+ * @see SuspendingCommandElement
+ * @param args The arguments object to use
+ * @return this.
+ */
+fun CommandSpec.Builder.suspendingArguments(vararg args: SuspendingCommandElement): CommandSpec.Builder {
+    val elements = args.map { e -> e.commandElement }.toTypedArray()
+    arguments(*elements)
+    return this
+}
+
+/**
  * Registers an command executor with suspending function.
  * Does exactly the same as CommandSpec.Builder.executor().
  */

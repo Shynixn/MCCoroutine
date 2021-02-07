@@ -6,6 +6,7 @@ import com.github.shynixn.mccoroutine.sample.impl.FakeDatabase
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
 import com.github.shynixn.mccoroutine.sample.listener.EntityInteractListener
 import com.github.shynixn.mccoroutine.sample.listener.PlayerConnectListener
+import com.github.shynixn.mccoroutine.suspendingArguments
 import com.github.shynixn.mccoroutine.suspendingExecutor
 import com.google.inject.Inject
 import org.spongepowered.api.Sponge
@@ -40,6 +41,7 @@ class MCCoroutineSamplePlugin {
         val commandSpec = CommandSpec.builder()
             .description(Text.of("Command for operations."))
             .permission("mccoroutine.sample")
+            .suspendingArguments(AdminCommandExecutor.SetCommandElement(plugin, Text.of("action")))
             .arguments(
                 GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
                 GenericArguments.onlyOne(GenericArguments.integer(Text.of("kills")))
