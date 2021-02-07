@@ -165,9 +165,9 @@ subprojects {
 
 gradle.taskGraph.whenReady { taskGraph ->
     if (project.findProperty("signing.keyId") == null) {
-        ext."signing.keyId" = System.getenv('SIGNING_KEYID')
-        ext."signing.password" = System.getenv('SIGNING_KEYPASSWORD')
-        ext."signing.secretKeyRingFile" = '/home/travis/build/Shynixn/MCCoroutine/travis_secret_key'
+        ext."signing.keyId" = System.getenv('SIGNING_KEY_ID')
+        ext."signing.password" = System.getenv('SIGNING_KEY_PASSWORD')
+        ext."signing.secretKeyRingFile" = System.getenv('SIGNING_KEY_FILE')
     }
 }
 
