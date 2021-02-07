@@ -1,0 +1,151 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master, development ]
+  pull_request:
+    branches: [ master, development ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  Build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Build Java Application
+        run: |
+          chmod +x gradlew
+          ./gradlew clean build shadowJar
+          
+      - name: Publish Test Report
+        run: |
+          ./gradlew jacocoTestReport
+          bash <(curl -s https://codecov.io/bash)
+
+      - name: Publish Release to Maven Central
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        env:
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_KEY_FILE: ${{ secrets.SIGNING_KEY_FILE }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: |
+          gpg2 --batch --cipher-algo AES256 --passphrase ${{ secrets.SIGNING_KEY_PASSWORD }} travis_secret_key.gpg
+          echo "RELEASE_VERSION=$(./gradlew -q printVersion)" >> $GITHUB_ENV
+          ./gradlew clean publishToNexus
+          ./gradlew closeAndReleaseRepository
+          
+      - name: Create Github Release
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          body: "This release was automatically created by Github Actions. Please wait until the author manually sets the patchnotes for this release."
+          tag_name: ${{ env.RELEASE_VERSION }}
+          release_name: Release ${{ env.RELEASE_VERSION }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Bukkit Api to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bukkit-api/build/libs/mccoroutine-bukkit-api-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Bukkit-Api.jar
+          asset_content_type: application/jar
+
+      - name: Upload Bukkit Core to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bukkit-core/build/libs/mccoroutine-bukkit-core-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Bukkit-Core.jar
+          asset_content_type: application/jar
+
+      - name: Upload Bukkit Sampe Plugin to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bukkit-sample/build/libs/mccoroutine-bukkit-sample-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Bukkit-Plugin-Sample.jar
+          asset_content_type: application/jar
+          
+      - name: Upload Sponge Api to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-sponge-api/build/libs/mccoroutine-sponge-api-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Sponge-Api.jar
+          asset_content_type: application/jar
+          
+      - name: Upload Sponge Core to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-sponge-core/build/libs/mccoroutine-sponge-core-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Sponge-Core.jar
+          asset_content_type: application/jar
+
+      - name: Upload Sponge Sample Plugin to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-sponge-sample/build/libs/mccoroutine-sponge-sample-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Sponge-Plugin-Sample.jar
+          asset_content_type: application/jar
+
+  Documentation:
+    runs-on: ubuntu-latest
+    if: "contains(github.ref, 'master')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Build Documentation
+        run: |
+          git pull
+          git config --global user.email "shynixn@email.com" && git config --global user.name "Shynixn CI Actions"
+          rm -rf docs/apidocs
+          chmod +x gradlew
+          ./gradlew generateJavaDocPages > /dev/null
+          git add docs
+          git commit --message "Automatic CI Documentation."
+          git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/MCCoroutine.git HEAD:master
