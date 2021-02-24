@@ -52,7 +52,7 @@ For shipping this library with your plugin, please see ``Shipping and Running`` 
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-api</artifactId>
-     <version>0.0.7</version>
+     <version>1.1.0</version>
      <scope>compile</scope>
 </dependency>
 ```
@@ -60,7 +60,7 @@ For shipping this library with your plugin, please see ``Shipping and Running`` 
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.7")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.1.0")
 }
 ```
 
@@ -110,6 +110,17 @@ import com.github.shynixn.mccoroutine.registerSuspendingListeners
 
 Plugin plugin
 Sponge.getEventManager().registerSuspendingListeners(plugin, PlayerConnectListener())
+```
+
+* If you send a custom event to a suspending listener, it may complete in the future and it becomes
+  impossible to check for the result. However, the extension function below allows to get a collection of awaitable
+  jobs after firing a single event.
+
+```kotlin
+Plugin plugin
+Event event
+val jobs = Sponge.getEventManager().postSuspending(event, pluginContainer)
+jobs.joinAll()
 ```
 
 ##### Registering a suspending command executor
@@ -256,13 +267,13 @@ val scope = plugin.scope
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-api</artifactId>
-     <version>0.0.7</version>
+     <version>1.1.0</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-sponge-core</artifactId>
-     <version>0.0.7</version>
+     <version>1.1.0</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -277,22 +288,15 @@ val scope = plugin.scope
      <version>1.x.x</version> 
      <scope>compile</scope>
 </dependency>
-<dependency>
-     <groupId>org.jetbrains.kotlin</groupId>
-     <artifactId>kotlin-reflect</artifactId>
-     <version>1.x.x</version> 
-     <scope>compile</scope>
-</dependency>
 ```
 **Gradle**
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:0.0.7")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:0.0.7")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.1.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:1.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
 }
 ```
 
