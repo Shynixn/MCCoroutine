@@ -117,6 +117,17 @@ Plugin plugin
 server.pluginManager.registerSuspendingEvents(PlayerConnectListener(), plugin)
 ```
 
+* If you send a custom event to a suspending listener, it may complete in the future and it becomes 
+impossible to check for the result. However, the extension function below allows to get a collection of awaitable 
+  jobs after fireing a single event.
+
+```kotlin
+Plugin plugin
+val event = PlayerQuitEvent(sender, null)
+val jobs = Bukkit.getPluginManager().callSuspendingEvent(event, plugin)
+jobs.joinAll()
+```
+
 ##### Registering a suspending command executor
 
 * If you need to perform async operations, implement the SuspendingCommandExecutor instead of the standard command executor.
