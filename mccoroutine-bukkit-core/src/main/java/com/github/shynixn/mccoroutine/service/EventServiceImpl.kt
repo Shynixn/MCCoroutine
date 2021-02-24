@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import org.bukkit.Warning
 import org.bukkit.event.*
 import org.bukkit.plugin.*
@@ -11,6 +12,7 @@ import java.lang.Deprecated
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.logging.Level
+import kotlin.Boolean
 import kotlin.IllegalArgumentException
 import kotlin.String
 import kotlin.Throwable
@@ -32,6 +34,36 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
             val handlerList = method.invoke(plugin.server.pluginManager, clazz) as HandlerList
             handlerList.registerAll(entry.value as MutableCollection<RegisteredListener>)
         }
+    }
+
+    /**
+     * Fires a suspending event.
+     */
+    override fun fireSuspendingEvent(event: Event): Collection<Job> {
+        val listeners = event.handlers.registeredListeners
+        val jobs = ArrayList<Job>()
+
+        for (registration in listeners) {
+            if (!registration.plugin.isEnabled) {
+                continue
+            }
+
+            try {
+                if (registration is SuspendingRegisteredListener) {
+                    val job = registration.callSuspendingEvent(event)
+                    jobs.add(job)
+                } else {
+                    registration.callEvent(event)
+                }
+            } catch (e: Throwable) {
+                plugin.logger.log(
+                    Level.SEVERE,
+                    "Could not pass event " + event.eventName + " to " + registration.plugin.description.fullName, e
+                )
+            }
+        }
+
+        return jobs
     }
 
     /**
@@ -99,9 +131,9 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
                 )
             }
 
-            val executor = createEventExecutor(eventClass, method)
+            val executor = SuspendingEventExecutor(eventClass, method, coroutineSession)
             result[eventClass]!!.add(
-                RegisteredListener(
+                SuspendingRegisteredListener(
                     listener,
                     executor,
                     annotation.priority,
@@ -114,14 +146,20 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
         return result
     }
 
-    /**
-     * Creates a single event executor.
-     */
-    private fun createEventExecutor(
-        eventClass: Class<*>,
-        method: Method
-    ): EventExecutor {
-        return EventExecutor { listener, event ->
+    class SuspendingEventExecutor(
+        private val eventClass: Class<*>,
+        private val method: Method,
+        private val coroutineSession: CoroutineSession
+    ) : EventExecutor {
+        fun executeSuspend(listener: Listener, event: Event): Job {
+            return executeEvent(listener, event)
+        }
+
+        override fun execute(listener: Listener, event: Event) {
+            executeEvent(listener, event)
+        }
+
+        private fun executeEvent(listener: Listener, event: Event): Job {
             try {
                 if (eventClass.isAssignableFrom(event.javaClass)) {
                     val isAsync = event.isAsynchronous
@@ -133,7 +171,7 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
                         coroutineSession.dispatcherMinecraft
                     }
 
-                    coroutineSession.launch(dispatcher) {
+                    return coroutineSession.launch(dispatcher) {
                         try {
                             // Try as suspension function.
                             method.invokeSuspend(listener, event)
@@ -147,6 +185,30 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
                 throw EventException(var4.cause)
             } catch (var5: Throwable) {
                 throw EventException(var5)
+            }
+            return Job()
+        }
+    }
+
+    class SuspendingRegisteredListener(
+        lister: Listener,
+        private val executor: EventExecutor,
+        priority: EventPriority,
+        plugin: Plugin,
+        ignoreCancelled: Boolean
+    ) : RegisteredListener(lister, executor, priority, plugin, ignoreCancelled) {
+        fun callSuspendingEvent(event: Event): Job {
+            if (event is Cancellable) {
+                if ((event as Cancellable).isCancelled && isIgnoringCancelled) {
+                    return Job()
+                }
+            }
+
+            return if (executor is SuspendingEventExecutor) {
+                executor.executeSuspend(listener, event)
+            } else {
+                executor.execute(listener, event)
+                Job()
             }
         }
     }

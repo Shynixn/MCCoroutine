@@ -2,12 +2,18 @@ package com.github.shynixn.mccoroutine.sample.commandexecutor
 
 import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
 import com.github.shynixn.mccoroutine.SuspendingTabCompleter
+import com.github.shynixn.mccoroutine.callSuspendingEvent
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
+import kotlinx.coroutines.joinAll
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.plugin.Plugin
 
-class AdminCommandExecutor(private val userDataCache: UserDataCache) : SuspendingCommandExecutor,
+class AdminCommandExecutor(private val userDataCache: UserDataCache, private val plugin: Plugin) :
+    SuspendingCommandExecutor,
     SuspendingTabCompleter {
     /**
      * Executes the given command, returning its success.
@@ -32,8 +38,16 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache) : Suspendin
             return true
         }
 
+        if (args.size == 1 && args[0].equals("leave", true) && sender is Player) {
+            println("[AdminCommandExecutor] Is starting on Primary Thread: " + Bukkit.isPrimaryThread())
+            val event = PlayerQuitEvent(sender, null)
+            Bukkit.getPluginManager().callSuspendingEvent(event, plugin).joinAll()
+            println("[AdminCommandExecutor] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())
+        }
+
         if (args.isEmpty()) {
             sender.sendMessage("/mccor set <player> <kill>")
+            sender.sendMessage("/mccor leave")
             return true
         }
 

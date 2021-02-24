@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import org.bukkit.command.PluginCommand
+import org.bukkit.event.Event
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
@@ -117,6 +118,20 @@ fun Plugin.launchAsync(f: suspend CoroutineScope.() -> Unit): Job {
  */
 fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
     return mcCoroutine.getCoroutineSession(plugin).eventService.registerSuspendListener(listener)
+}
+
+/**
+ * Calls an event with the given details.
+ * Allows to await the completion of suspending event listeners.
+ *
+ * @param event Event details.
+ * @param plugin Plugin plugin.
+ * @return Collection of awaitable jobs. This job list may be empty if no suspending listener
+ * was called. Each job instance represents an awaitable job for each method being called in each suspending listener.
+ * For awaiting use callSuspendingEvent(..).joinAll().
+ */
+fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin): Collection<Job> {
+    return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event)
 }
 
 /**
