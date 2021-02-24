@@ -536,12 +536,6 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
      <version>1.x.x</version> 
      <scope>compile</scope>
 </dependency>
-<dependency>
-     <groupId>org.jetbrains.kotlin</groupId>
-     <artifactId>kotlin-reflect</artifactId>
-     <version>1.x.x</version> 
-     <scope>compile</scope>
-</dependency>
 ```
 **Gradle**
 
@@ -551,7 +545,6 @@ dependencies {
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:0.0.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.x.x")
 }
 ```
 
