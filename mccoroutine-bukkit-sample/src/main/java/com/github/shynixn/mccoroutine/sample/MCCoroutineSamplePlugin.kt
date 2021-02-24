@@ -23,7 +23,7 @@ class MCCoroutineSamplePlugin : JavaPlugin() {
         server.pluginManager.registerSuspendingEvents(PlayerConnectListener(this, cache), this)
         server.pluginManager.registerSuspendingEvents(EntityInteractListener(cache), this);
 
-        val commandExecutor = AdminCommandExecutor(cache)
+        val commandExecutor = AdminCommandExecutor(cache, this)
         this.getCommand("mccor")!!.setSuspendingExecutor(commandExecutor)
         this.getCommand("mccor")!!.setSuspendingTabCompleter(commandExecutor)
     }

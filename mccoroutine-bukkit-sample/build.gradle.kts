@@ -15,7 +15,7 @@ tasks.withType<ShadowJar> {
     archiveName = "$baseName-$version.$extension"
 
     // Change the output folder of the plugin.
-    // destinationDir = File("D:\\Benutzer\\Temp\\plugins")
+    // destinationDir = File("C:\\temp\\plugins\\")
 }
 
 repositories {
@@ -31,7 +31,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
 
     compileOnly("org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT")
     testCompile("org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT")

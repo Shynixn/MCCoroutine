@@ -2,7 +2,9 @@ package com.github.shynixn.mccoroutine.sample.commandexecutor
 
 import com.github.shynixn.mccoroutine.SuspendingCommandElement
 import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
+import com.github.shynixn.mccoroutine.postSuspending
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
+import kotlinx.coroutines.joinAll
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.CommandResult
 import org.spongepowered.api.command.CommandSource
@@ -10,10 +12,13 @@ import org.spongepowered.api.command.args.ArgumentParseException
 import org.spongepowered.api.command.args.CommandArgs
 import org.spongepowered.api.command.args.CommandContext
 import org.spongepowered.api.entity.living.player.Player
+import org.spongepowered.api.event.cause.Cause
+import org.spongepowered.api.event.impl.AbstractEvent
 import org.spongepowered.api.plugin.PluginContainer
 import org.spongepowered.api.text.Text
 
-class AdminCommandExecutor(private val userDataCache: UserDataCache) : SuspendingCommandExecutor {
+class AdminCommandExecutor(private val userDataCache: UserDataCache, private val pluginContainer: PluginContainer) :
+    SuspendingCommandExecutor {
     /**
      * Callback for the execution of a command.
      *
@@ -31,7 +36,23 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache) : Suspendin
         userDataCache.saveUserData(player)
         println("[AdminCommandExecutor] Is ending on Primary Thread: " + Sponge.getServer().isMainThread)
 
+        println("[AdminCommandExecutor] Is starting on Primary Thread: " + Sponge.getServer().isMainThread)
+        val event = MCCoroutineEvent()
+        Sponge.getEventManager().postSuspending(event, pluginContainer).joinAll()
+        println("[AdminCommandExecutor] Is ending on Primary Thread: " + Sponge.getServer().isMainThread)
+
         return CommandResult.success()
+    }
+
+    class MCCoroutineEvent : AbstractEvent() {
+        /**
+         * Gets the cause for the event.
+         *
+         * @return The cause
+         */
+        override fun getCause(): Cause? {
+            return null
+        }
     }
 
     class SetCommandElement(pluginContainer: PluginContainer, text: Text) :

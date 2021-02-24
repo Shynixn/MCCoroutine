@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import org.spongepowered.api.command.spec.CommandSpec
+import org.spongepowered.api.event.Event
 import org.spongepowered.api.event.EventManager
 import org.spongepowered.api.plugin.PluginContainer
 import kotlin.coroutines.CoroutineContext
@@ -117,6 +118,20 @@ fun PluginContainer.launchAsync(f: suspend CoroutineScope.() -> Unit): Job {
  */
 fun EventManager.registerSuspendingListeners(plugin: PluginContainer, listener: Any) {
     return mcCoroutine.getCoroutineSession(plugin).eventService.registerSuspendListener(listener)
+}
+
+/**
+ * Calls an event with the given details.
+ * Allows to await the completion of suspending event listeners.
+ *
+ * @param event Event details.
+ * @param plugin Plugin plugin.
+ * @return Collection of awaitable jobs. This job list may be empty if no suspending listener
+ * was called. Each job instance represents an awaitable job for each method being called in each suspending listener.
+ * For awaiting use postEvent(..).joinAll().
+ */
+fun EventManager.postSuspending(event: Event, plugin: PluginContainer): Collection<Job> {
+    return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event)
 }
 
 /**

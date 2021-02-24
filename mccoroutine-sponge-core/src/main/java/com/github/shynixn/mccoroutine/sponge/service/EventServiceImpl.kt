@@ -5,6 +5,7 @@ import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.sponge.extension.invokeSuspend
 import com.google.common.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.event.Event
 import org.spongepowered.api.event.EventListener
@@ -95,12 +96,62 @@ internal class EventServiceImpl(private val plugin: PluginContainer, private val
         registerHandleMethod.invoke(Sponge.getEventManager(), handlers)
     }
 
+    /**
+     * Fires a suspending event.
+     */
+    override fun fireSuspendingEvent(event: Event): Collection<Job> {
+        val spongeEventManagerClazz = Class.forName("org.spongepowered.common.event.SpongeEventManager")
+        val method = spongeEventManagerClazz.getDeclaredMethod("getHandlerCache", Event::class.java)
+        method.isAccessible = true
+        val listenerCache = method.invoke(Sponge.getEventManager(), event)
+
+        val cacheAccess = Class.forName("org.spongepowered.common.event.RegisteredListener\$Cache")
+        val listeners = cacheAccess.getDeclaredMethod("getListeners").invoke(listenerCache) as List<Any>
+
+        val jobs = ArrayList<Job>()
+
+        val listerClazz = Class.forName("org.spongepowered.common.event.RegisteredListener")
+        val listenerField = listerClazz.getDeclaredField("listener")
+        listenerField.isAccessible = true
+
+        for (listener in listeners) {
+            val eventListener = listenerField.get(listener) as EventListener<Event>
+
+            try {
+                if (eventListener is MCCoroutineEventListener) {
+                    val job = eventListener.handleSuspend(event)
+                    jobs.add(job)
+                } else {
+                    eventListener.handle(event)
+                }
+            } catch (e: Throwable) {
+                this.logger.log(
+                    Level.SEVERE,
+                    "Could not pass {${event.javaClass.simpleName}} to {${plugin.name}}.", e
+                )
+            }
+        }
+
+        return jobs
+    }
+
     private class MCCoroutineEventListener(
         private val listener: Any,
         private val method: Method,
         private val coroutineSession: CoroutineSession
     ) :
         EventListener<Event> {
+
+        /**
+         * Called when a [Event] registered to this listener is called.
+         *
+         * @param event The called event
+         * @throws Exception If an error occurs
+         */
+        fun handleSuspend(event: Event): Job {
+            return handleEvent(event)
+        }
+
         /**
          * Called when a [Event] registered to this listener is called.
          *
@@ -108,6 +159,16 @@ internal class EventServiceImpl(private val plugin: PluginContainer, private val
          * @throws Exception If an error occurs
          */
         override fun handle(event: Event) {
+            handleEvent(event)
+        }
+
+        /**
+         * Called when a [Event] registered to this listener is called.
+         *
+         * @param event The called event
+         * @throws Exception If an error occurs
+         */
+        private fun handleEvent(event: Event): Job {
             val dispatcher = if (!Sponge.getServer().isMainThread) {
                 // Unconfined because async events should be supported too.
                 Dispatchers.Unconfined
@@ -115,7 +176,7 @@ internal class EventServiceImpl(private val plugin: PluginContainer, private val
                 coroutineSession.dispatcherMinecraft
             }
 
-            coroutineSession.launch(dispatcher) {
+            return coroutineSession.launch(dispatcher) {
                 try {
                     // Try as suspension function.
                     method.invokeSuspend(listener, event)

@@ -47,7 +47,7 @@ class MCCoroutineSamplePlugin {
                 GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
                 GenericArguments.onlyOne(GenericArguments.integer(Text.of("kills")))
             )
-            .suspendingExecutor(plugin, AdminCommandExecutor(cache))
+            .suspendingExecutor(plugin, AdminCommandExecutor(cache, plugin))
         Sponge.getCommandManager().register(plugin, commandSpec.build(), listOf("mccor"))
     }
 }

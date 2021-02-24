@@ -1,6 +1,7 @@
 package com.github.shynixn.mccoroutine.sample.listener
 
 import com.github.shynixn.mccoroutine.asyncDispatcher
+import com.github.shynixn.mccoroutine.sample.commandexecutor.AdminCommandExecutor
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
 import kotlinx.coroutines.withContext
 import org.spongepowered.api.Sponge
@@ -37,5 +38,21 @@ class PlayerConnectListener(private val plugin: PluginContainer, private val use
         userDataCache.clearCache(playerQuitEvent.targetEntity)
         println("[PlayerConnectListener-Quit] " + playerQuitEvent.targetEntity.name + " left the server. Don't forget your " + apple + ".")
         println("[PlayerConnectListener-Quit] Is ending on Primary Thread: " + Sponge.getServer().isMainThread)
+    }
+
+    /**
+     * Gets called on custom event.
+     */
+    @Listener
+    suspend fun onMCCoroutineEvent(event: AdminCommandExecutor.MCCoroutineEvent) {
+        println("[PlayerConnectListener-Coroutine] Is starting on Primary Thread: " + Sponge.getServer().isMainThread)
+
+        val apple = withContext(plugin.asyncDispatcher) {
+            Thread.sleep(500)
+            ItemStack.builder().itemType(ItemTypes.APPLE).build()
+        }
+
+        println("[PlayerConnectListener-Coroutine] Don't forget your " + apple + ".")
+        println("[PlayerConnectListener-Coroutine] Is ending on Primary Thread: " + Sponge.getServer().isMainThread)
     }
 }
