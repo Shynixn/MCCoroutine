@@ -45,7 +45,7 @@ tasks.register("printVersion") {
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '1.1.1'
+    version '1.1.2'
 
     sourceCompatibility = 1.8
 
@@ -197,6 +197,7 @@ task generateBukkitJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
     sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bukkit-api/src/main/java'))
     externalDocumentationLink {
         url = new URL("https://hub.spigotmc.org/javadocs/spigot/")
+        packageListUrl = new URL("https://hub.spigotmc.org/javadocs/spigot/element-list")
     }
 }
 

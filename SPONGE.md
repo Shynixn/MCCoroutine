@@ -12,7 +12,7 @@ to use Kotlin Coroutines (also called async/await) pattern for all common operat
 * [MCCoroutine JavaDocs for the Bukkit-API](https://shynixn.github.io/MCCoroutine/apidocs/bukkit)
 * MCCoroutine for the Sponge-API (this page)
 * [MCCoroutine JavaDocs for the Sponge-API](https://shynixn.github.io/MCCoroutine/apidocs/sponge)
-* [Article on how to implement Coroutines for custom frameworks]((https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md))
+* [Article on how to implement Coroutines for custom frameworks](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md)
 
 **A short listener example:**
 
