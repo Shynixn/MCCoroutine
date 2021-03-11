@@ -208,6 +208,5 @@ task generateSpongeJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
 
     externalDocumentationLink {
         url = new URL("https://jd.spongepowered.org/7.3.0/")
-        packageListUrl = new URL("https://jd.spongepowered.org/7.3.0/package-list")
     }
 }
