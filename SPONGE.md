@@ -289,22 +289,22 @@ val scope = plugin.scope
     <scope>compile</scope>
 </dependency>
 <dependency>
-<groupId>com.github.shynixn.mccoroutine</groupId>
-<artifactId>mccoroutine-sponge-core</artifactId>
-<version>1.2.0</version>
-<scope>compile</scope>
+  <groupId>com.github.shynixn.mccoroutine</groupId>
+  <artifactId>mccoroutine-sponge-core</artifactId>
+  <version>1.2.0</version>
+  <scope>compile</scope>
 </dependency>
 <dependency>
-<groupId>org.jetbrains.kotlinx</groupId>
-<artifactId>kotlinx-coroutines-core</artifactId>
-<version>1.x.x</version>
-<scope>compile</scope>
+  <groupId>org.jetbrains.kotlinx</groupId>
+  <artifactId>kotlinx-coroutines-core</artifactId>
+  <version>1.x.x</version>
+  <scope>compile</scope>
 </dependency>
 <dependency>
-<groupId>org.jetbrains.kotlinx</groupId>
-<artifactId>kotlinx-coroutines-jdk8</artifactId>
-<version>1.x.x</version>
-<scope>compile</scope>
+  <groupId>org.jetbrains.kotlinx</groupId>
+  <artifactId>kotlinx-coroutines-jdk8</artifactId>
+  <version>1.x.x</version>
+  <scope>compile</scope>
 </dependency>
 ```
 
@@ -312,11 +312,11 @@ val scope = plugin.scope
 
 ```xml
 dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.2.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:1.2.0")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
-        }
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.2.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:1.2.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
+}
 ```
 
 ## Contributing
