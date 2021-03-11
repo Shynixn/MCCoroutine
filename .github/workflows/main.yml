@@ -145,7 +145,8 @@ jobs:
           git config --global user.email "shynixn@email.com" && git config --global user.name "Shynixn CI Actions"
           rm -rf docs/apidocs
           chmod +x gradlew
-          ./gradlew generateJavaDocPages > /dev/null
+          ./gradlew generateBukkitJavaDocPages > /dev/null
+          ./gradlew generateSpongeJavaDocPages > /dev/null
           git add docs
           git commit --message "Automatic CI Documentation."
           git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/MCCoroutine.git HEAD:master
