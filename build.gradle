@@ -45,7 +45,7 @@ tasks.register("printVersion") {
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '1.1.0'
+    version '1.1.1'
 
     sourceCompatibility = 1.8
 
@@ -85,18 +85,18 @@ subprojects {
     }
 
     task sourcesJar(type: Jar) {
-        from sourceSets.main.allJava
+        from sourceSets.main.allSource
         classifier = 'sources'
     }
 
     task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
         outputFormat = 'javadoc'
-        outputDirectory = "$buildDir/javadoc"
+        outputDirectory = javadoc.destinationDir
     }
 
     task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-        from javadoc
         classifier = 'javadoc'
+        from javadoc.destinationDir
     }
 
     publishing {
@@ -191,11 +191,17 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     }
 }
 
-task generateJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
+task generateBukkitJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'javadoc'
-    outputDirectory = "docs/apidocs"
-    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bukkit-api/src/main/java')
-            , new File(this.projectDir as File, '/mccoroutine-bukkit-core/src/main/java')
-            , new File(this.projectDir as File, '/mccoroutine-sponge-api/src/main/java')
-            , new File(this.projectDir as File, '/mccoroutine-sponge-core/src/main/java'))
+    outputDirectory = "docs/apidocs/bukkit"
+    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bukkit-api/src/main/java'))
+    externalDocumentationLink {
+        url = new URL("https://hub.spigotmc.org/javadocs/spigot/")
+    }
+}
+
+task generateSpongeJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "docs/apidocs/sponge"
+    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-sponge-api/src/main/java'))
 }

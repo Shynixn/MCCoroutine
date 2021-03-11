@@ -8,11 +8,13 @@
 MCCoroutine is an extension to bukkit and sponge server implementations (Spigot, Paper, SpongeVanilla, SpongeForge etc.) to use Kotlin Coroutines (also called async/await) pattern for
 all common operations.
 
-JavaDocs: https://shynixn.github.io/MCCoroutine/apidocs/
+### Table of contents
 
-You can find the original article of the repository [here](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md).
-
-If you are looking for examples using the Sponge Api, you can find them [here](https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md).
+* MCCoroutine for the Bukkit-API (this page)
+* [MCCoroutine JavaDocs for the Bukkit-API](https://shynixn.github.io/MCCoroutine/apidocs/bukkit)
+* [MCCoroutine for the Sponge-API](https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md)
+* [MCCoroutine JavaDocs for the Sponge-API](https://shynixn.github.io/MCCoroutine/apidocs/sponge)
+* [Article on how to implement Coroutines for custom frameworks]((https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md))
 
 **A short listener example:**
 
@@ -53,7 +55,7 @@ For shipping this library with your plugin, please see ``Shipping and Running`` 
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-api</artifactId>
-     <version>1.1.0</version>
+     <version>1.2.0</version>
      <scope>compile</scope>
 </dependency>
 ```
@@ -61,7 +63,7 @@ For shipping this library with your plugin, please see ``Shipping and Running`` 
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.1.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.2.0")
 }
 ```
 
@@ -526,13 +528,13 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-api</artifactId>
-     <version>1.1.0</version>
+     <version>1.2.0</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
      <groupId>com.github.shynixn.mccoroutine</groupId>
      <artifactId>mccoroutine-bukkit-core</artifactId>
-     <version>1.1.0</version>
+     <version>1.2.0</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
@@ -552,8 +554,8 @@ class PlaceHolderApiConnector(private val cache : UserDataCache) {
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.1.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.1.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.2.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
 }
