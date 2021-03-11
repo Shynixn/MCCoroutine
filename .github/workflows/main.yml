@@ -131,7 +131,7 @@ jobs:
 
   Documentation:
     runs-on: ubuntu-latest
-    if: "contains(github.ref, 'master')"
+  #  if: "contains(github.ref, 'master')"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
