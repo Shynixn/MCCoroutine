@@ -45,7 +45,7 @@ tasks.register("printVersion") {
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '1.1.1'
+    version '1.1.2'
 
     sourceCompatibility = 1.8
 
@@ -205,8 +205,4 @@ task generateSpongeJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'javadoc'
     outputDirectory = "docs/apidocs/sponge"
     sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-sponge-api/src/main/java'))
-
-    externalDocumentationLink {
-        url = new URL("https://jd.spongepowered.org/7.2.0/")
-    }
 }
