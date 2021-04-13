@@ -3,6 +3,7 @@ package com.github.shynixn.mccoroutine.service
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
+import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
 import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
 import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.minecraftDispatcher
@@ -36,17 +37,24 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     }
 
     /**
+     * Gets the wakeup service.
+     */
+    override val wakeUpBlockService: WakeUpBlockService by lazy {
+        WakeUpBlockServiceImpl(plugin)
+    }
+
+    /**
      * Gets the minecraft dispatcher.
      */
     override val dispatcherMinecraft: CoroutineContext by lazy {
-        MinecraftCoroutineDispatcher(plugin)
+        MinecraftCoroutineDispatcher(plugin, wakeUpBlockService)
     }
 
     /**
      * Gets the async dispatcher.
      */
     override val dispatcherAsync: CoroutineContext by lazy {
-        AsyncCoroutineDispatcher(plugin)
+        AsyncCoroutineDispatcher(plugin, wakeUpBlockService)
     }
 
     /**
@@ -55,12 +63,13 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     override fun dispose() {
         disposed = true
         scope.coroutineContext.cancelChildren()
+        wakeUpBlockService.dispose()
     }
 
     /**
      * Launches the given function on the plugin coroutine scope.
      */
-    override fun launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit) : Job {
+    override fun launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit): Job {
         if (disposed) {
             return Job()
         }
@@ -80,7 +89,7 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
         dispatcher: CoroutineContext,
         coroutineStart: CoroutineStart,
         f: suspend CoroutineScope.() -> Unit
-    )  : Job {
+    ): Job {
         // Launch a new coroutine on the current thread thread on the plugin scope.
         return scope.launch(dispatcher, coroutineStart) {
             try {
