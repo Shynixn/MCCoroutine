@@ -11,12 +11,11 @@ Examples for supported frameworks:
 * SpongeForge
 
 !!! note "Kotlin Coroutines Description"
-Asynchronous or non-blocking programming is the new reality. Whether we're creating server-side, desktop or mobile applications, 
-it's important that we provide an experience that is not only fluid from the user's perspective, but scalable when needed.
-There are many approaches to this problem, and in Kotlin we take a very flexible one by providing Coroutine support at the language level 
-and delegating most of the functionality to libraries, much in line with Kotlin's philosophy.
-
-Source: (https://github.com/JetBrains/kotlin-web-site/blob/master/pages/docs/reference/coroutines-overview.md, Date: [09/11/2018], Licence copied to LICENCE).
+    Asynchronous or non-blocking programming is the new reality. Whether we're creating server-side, desktop or mobile applications, 
+    it's important that we provide an experience that is not only fluid from the user's perspective, but scalable when needed.
+    There are many approaches to this problem, and in Kotlin we take a very flexible one by providing Coroutine support at the language level 
+    and delegating most of the functionality to libraries, much in line with Kotlin's philosophy.
+    Source: (https://github.com/JetBrains/kotlin-web-site/blob/master/pages/docs/reference/coroutines-overview.md, Date: [09/11/2018], Licence copied to LICENCE).
 
 ## Features
 
@@ -52,7 +51,7 @@ class AdminCommandExecutor: SuspendingCommandExecutor {
 }
 ```
 
-* Provides its own Plugin Coroutine Scope where you can switch to using extension functions of your plugin instance.
+* Provides its own Plugin Coroutine Scope which you can enter using new extension functions.
 
 ```kotlin
 plugin.launch {
@@ -91,8 +90,8 @@ dependencies {
 2. Add the MCCoroutine libraries 
 
 !!! warning
-Below you can find the dependency for the **Bukkit-API**. See the following link for
-the **Sponge-API**.
+    Below you can find the dependency for the **Bukkit-API**. See the following link for
+    the **Sponge-API**.
 
 **Maven**
 ```xml
