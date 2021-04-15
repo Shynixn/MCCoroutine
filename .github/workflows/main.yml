@@ -134,9 +134,10 @@ jobs:
     if: "contains(github.ref, 'master')"
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-python@v2
         with:
-          node-version: '10'
+          python-version: '3.x'
+          architecture: 'x64'
 
       - name: Build Documentation
         run: |
@@ -145,10 +146,10 @@ jobs:
           rm -rf docs/apidocs
           rm -rf docs/wiki/html
           chmod +x gradlew
-          sudo npm install -g gitbook-cli
-          cd docs/wiki
-          gitbook build   
-          mv _book html
+          sudo apt-get install -y mkdocs
+          pip install mkdocs-material
+          cd docs/wiki          
+          mkdocs build
           cd ..
           cd ..
           git add docs
