@@ -143,10 +143,10 @@ jobs:
           git pull
           git config --global user.email "shynixn@email.com" && git config --global user.name "Shynixn CI Actions"
           rm -rf docs/apidocs
+          rm -rf docs/wiki/html
           chmod +x gradlew
           sudo npm install -g gitbook-cli
           mkdir docs/wiki
-          cd docs/wiki/
           gitbook build   
           cd ..
           cd ..
