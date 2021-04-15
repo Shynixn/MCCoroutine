@@ -144,8 +144,6 @@ jobs:
           git config --global user.email "shynixn@email.com" && git config --global user.name "Shynixn CI Actions"
           rm -rf docs/apidocs
           chmod +x gradlew
-          ./gradlew generateBukkitJavaDocPages > /dev/null
-          ./gradlew generateSpongeJavaDocPages > /dev/null
           sudo npm install -g gitbook-cli
           mkdir docs/wiki
           cd docs/wiki/
