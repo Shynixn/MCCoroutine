@@ -177,9 +177,58 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Home
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         Home
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-add-the-coroutine-libraries-from-jetbrains-replace-1xx-with-your-kotlin-version" class="md-nav__link">
+    1. Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-add-the-mccoroutine-libraries" class="md-nav__link">
+    2. Add the MCCoroutine libraries
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -203,6 +252,41 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-add-the-coroutine-libraries-from-jetbrains-replace-1xx-with-your-kotlin-version" class="md-nav__link">
+    1. Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-add-the-mccoroutine-libraries" class="md-nav__link">
+    2. Add the MCCoroutine libraries
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -215,17 +299,60 @@
                 
                 
                 <h1 id="introduction">Introduction</h1>
-<div class="highlight"><pre><span></span><code><span class="c1">// A new extension function </span>
-<span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerConnectListener</span><span class="p">(),</span> <span class="n">plugin</span><span class="p">)</span>
+<p>MCCoroutine is library which adds extensive support for Kotlin Coroutines on Minecraft Server implementing the <strong>Bukkit-API</strong> or <strong>Sponge-API</strong>.</p>
+<p>Examples for supported frameworks:</p>
+<ul>
+<li>Spigot</li>
+<li>Paper</li>
+<li>CraftBukkit</li>
+<li>SpongeVanilla</li>
+<li>SpongeForge</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h4 id="1-add-the-coroutine-libraries-from-jetbrains-replace-1xx-with-your-kotlin-version">1. Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)</h4>
+<p><strong>Maven</strong>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
+     <span class="nt">&lt;groupId&gt;</span>org.jetbrains.kotlinx<span class="nt">&lt;/groupId&gt;</span>
+     <span class="nt">&lt;artifactId&gt;</span>kotlinx-coroutines-core<span class="nt">&lt;/artifactId&gt;</span>
+     <span class="nt">&lt;version&gt;</span>1.x.x<span class="nt">&lt;/version&gt;</span> 
+     <span class="nt">&lt;scope&gt;</span>compile<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+     <span class="nt">&lt;groupId&gt;</span>org.jetbrains.kotlinx<span class="nt">&lt;/groupId&gt;</span>
+     <span class="nt">&lt;artifactId&gt;</span>kotlinx-coroutines-jdk8<span class="nt">&lt;/artifactId&gt;</span>
+     <span class="nt">&lt;version&gt;</span>1.x.x<span class="nt">&lt;/version&gt;</span> 
+     <span class="nt">&lt;scope&gt;</span>compile<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="nd">@EventHandler</span>
-<span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span> <span class="n">PlayerJoinEvent</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">val</span> <span class="nv">player</span> <span class="o">=</span> <span class="n">event</span><span class="p">.</span><span class="na">player</span>
-    <span class="c1">// Long running operation to database is automatically suspended and continued.</span>
-    <span class="kd">val</span> <span class="nv">userData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getUserDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-    <span class="c1">// Userdata was loaded asynchronous from the database and is now ready.</span>
-    <span class="n">println</span><span class="p">(</span><span class="n">userData</span><span class="p">.</span><span class="na">killCount</span><span class="p">)</span>
-<span class="p">}</span>
+<strong>Gradle</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x&quot;</span><span class="o">)</span>
+    <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x&quot;</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+<h4 id="2-add-the-mccoroutine-libraries">2. Add the MCCoroutine libraries</h4>
+<p>!!! warning
+Below you can find the dependency for the <strong>Bukkit-API</strong>. See the following link for
+the <strong>Sponge-API</strong>.</p>
+<p><strong>Maven</strong>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.github.shynixn.mccoroutine<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>mccoroutine-bukkit-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.2.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>compile<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.github.shynixn.mccoroutine<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>mccoroutine-bukkit-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.2.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>compile<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<strong>Gradle</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.2.0&quot;</span><span class="o">)</span>
+    <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.2.0&quot;</span><span class="o">)</span>
+<span class="o">}</span>
 </code></pre></div>
                 
               
