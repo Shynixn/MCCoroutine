@@ -1,5 +1,6 @@
 package unittest
 
+import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
 import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
 import helper.any
 import org.bukkit.Server
@@ -116,6 +117,6 @@ class MinecraftCoroutineDispatcherTest {
     }
 
     private fun createWithDependencies(plugin: Plugin): MinecraftCoroutineDispatcher {
-        return MinecraftCoroutineDispatcher(plugin)
+        return MinecraftCoroutineDispatcher(plugin, Mockito.mock(WakeUpBlockService::class.java))
     }
 }

@@ -1,5 +1,6 @@
 package unittest
 
+import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
 import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
 import helper.any
 import org.bukkit.Server
@@ -7,6 +8,7 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitScheduler
 import org.bukkit.scheduler.BukkitTask
 import org.junit.jupiter.api.Test
+import org.mockito.Mock
 import org.mockito.Mockito
 import kotlin.coroutines.CoroutineContext
 import kotlin.test.assertFalse
@@ -116,6 +118,6 @@ class AsyncCoroutineDispatcherTest {
     }
 
     private fun createWithDependencies(plugin: Plugin): AsyncCoroutineDispatcher {
-        return AsyncCoroutineDispatcher(plugin)
+        return AsyncCoroutineDispatcher(plugin, Mockito.mock(WakeUpBlockService::class.java))
     }
 }
