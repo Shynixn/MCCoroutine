@@ -148,6 +148,7 @@ jobs:
           chmod +x gradlew
           sudo apt-get install -y mkdocs
           pip install mkdocs-material
+          pip install Pygments
           cd docs/wiki          
           mkdocs build
           cd ..
