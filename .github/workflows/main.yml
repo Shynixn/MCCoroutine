@@ -146,10 +146,11 @@ jobs:
           rm -rf docs/wiki/html
           chmod +x gradlew
           sudo npm install -g gitbook-cli
+          cd docs/wiki
           gitbook build   
           mv _book html
           cd ..
-          ls
+          cd ..
           git add docs
           git commit --message "Automatic CI Documentation."
           git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/MCCoroutine.git HEAD:master
