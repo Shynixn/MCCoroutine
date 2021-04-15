@@ -2,3 +2,6 @@ site_name: MCCoroutine
 nav:
     - Home: README.md
 theme: material
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
