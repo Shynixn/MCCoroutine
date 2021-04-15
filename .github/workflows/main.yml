@@ -144,7 +144,7 @@ jobs:
           git pull
           git config --global user.email "shynixn@email.com" && git config --global user.name "Shynixn CI Actions"
           rm -rf docs/apidocs
-          rm -rf docs/wiki/html
+          rm -rf docs/wiki/site
           chmod +x gradlew
           sudo apt-get install -y mkdocs
           pip install mkdocs-material
