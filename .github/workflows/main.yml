@@ -147,10 +147,10 @@ jobs:
           sudo npm install -g gitbook-cli
           mkdir docs/wiki
           cd docs/wiki/
-          gitbook init
           gitbook build   
           cd ..
           cd ..
+          mv docs/wiki/_book docs/wiki/html
           git add docs
           git commit --message "Automatic CI Documentation."
           git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/MCCoroutine.git HEAD:master
