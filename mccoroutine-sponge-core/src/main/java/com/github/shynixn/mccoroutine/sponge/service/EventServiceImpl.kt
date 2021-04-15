@@ -11,6 +11,8 @@ import org.spongepowered.api.event.Event
 import org.spongepowered.api.event.EventListener
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.plugin.PluginContainer
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.lang.reflect.Method
 import java.lang.reflect.Type
 import java.util.logging.Level
@@ -30,12 +32,25 @@ internal class EventServiceImpl(private val plugin: PluginContainer, private val
         val registeredListeners = registeredListenersField.get(Sponge.getEventManager()) as MutableSet<Any>
 
         if (registeredListeners.contains(listener)) {
-            this.logger.log(
-                Level.SEVERE,
-                "Plugin ${plugin.id} attempted to register an already registered listener ({${listener::class.java.name}})"
-            )
-            Thread.dumpStack()
-            return
+            try {
+                throw Exception("Stack trace")
+            } catch (e: Exception) {
+                val writer = StringWriter()
+                e.printStackTrace(PrintWriter(writer))
+                val data = writer.toString()
+                // When using the suspending PluginContainer a false positiv event might be thrown. We can safely ignore that.
+                if (!data.contains("com.github.shynixn.mccoroutine.SuspendingPluginContainer.onGameInitializeEvent")) {
+                    this.logger.log(
+                        Level.SEVERE,
+                        "Plugin ${plugin.id} attempted to register an already registered listener ({${listener::class.java.name}})"
+                    )
+
+                    Thread.dumpStack()
+                    return
+                }
+
+                registeredListeners.remove(listener)
+            }
         }
 
         var typeToken = false
