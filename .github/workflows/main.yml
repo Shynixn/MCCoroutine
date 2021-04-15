@@ -134,10 +134,9 @@ jobs:
     if: "contains(github.ref, 'master')"
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-node@v2
         with:
-          python-version: '3.x'
-          architecture: 'x64'
+          node-version: '14'
 
       - name: Build Documentation
         run: |
@@ -147,6 +146,11 @@ jobs:
           chmod +x gradlew
           ./gradlew generateBukkitJavaDocPages > /dev/null
           ./gradlew generateSpongeJavaDocPages > /dev/null
+          sudo npm install -g gitbook-cli
+          mkdir docs/wiki
+          cd docs/wiki/
+          gitbook init
+          gitbook build     
           git add docs
           git commit --message "Automatic CI Documentation."
           git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/MCCoroutine.git HEAD:master
