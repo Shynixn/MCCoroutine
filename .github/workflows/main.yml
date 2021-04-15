@@ -148,7 +148,9 @@ jobs:
           mkdir docs/wiki
           cd docs/wiki/
           gitbook init
-          gitbook build     
+          gitbook build   
+          cd ..
+          cd ..
           git add docs
           git commit --message "Automatic CI Documentation."
           git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/MCCoroutine.git HEAD:master
