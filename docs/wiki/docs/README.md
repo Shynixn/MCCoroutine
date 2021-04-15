@@ -10,9 +10,59 @@ Examples for supported frameworks:
 * SpongeVanilla
 * SpongeForge
 
+!!! note "Kotlin Coroutines Description"
+Asynchronous or non-blocking programming is the new reality. Whether we're creating server-side, desktop or mobile applications, 
+it's important that we provide an experience that is not only fluid from the user's perspective, but scalable when needed.
+There are many approaches to this problem, and in Kotlin we take a very flexible one by providing Coroutine support at the language level 
+and delegating most of the functionality to libraries, much in line with Kotlin's philosophy.
+
+Source: (https://github.com/JetBrains/kotlin-web-site/blob/master/pages/docs/reference/coroutines-overview.md, Date: [09/11/2018], Licence copied to LICENCE).
+
+## Features
+
+* Full implementation of Kotlin Coroutines for Minecraft Server
+* Extension functions for already established functions
+* Connection to events, commands, schedulers
+* Coroutine LifeCycle scope for plugins (supports plugin reloading)
+* No NMS
+* Support for Minecraft 1.7 - Latest
+* Support for Java 8 - Latest
+
+## Examples
+
+* Allows appending suspend to every listener by bridging the event api with Coroutines
+
+```kotlin
+@EventHandler
+suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
+    val userData = withContext(plugin.asyncDispatcher) {
+        Thread.sleep(500) // Simulate a database call 
+        UserData()
+    }
+}
+```
+
+* Adds a new suspendable command executor by bridging the command api with Coroutines
+
+```kotlin
+class AdminCommandExecutor: SuspendingCommandExecutor {
+    override suspend fun onCommand(sender: CommandSender,command: Command,label: String,args: Array<out String>): Boolean {
+        return false
+    }
+}
+```
+
+* Provides its own Plugin Coroutine Scope where you can switch to using extension functions of your plugin instance.
+
+```kotlin
+plugin.launch {
+    // Coroutine Context
+}
+```
+
 ## Installation 
 
-#### 1. Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)
+1. Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)
 
 **Maven**
 ```xml
@@ -38,7 +88,7 @@ dependencies {
 }
 ```
 
-#### 2. Add the MCCoroutine libraries 
+2. Add the MCCoroutine libraries 
 
 !!! warning
 Below you can find the dependency for the **Bukkit-API**. See the following link for

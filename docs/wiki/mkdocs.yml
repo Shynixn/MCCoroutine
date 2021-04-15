@@ -5,3 +5,6 @@ theme: material
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
