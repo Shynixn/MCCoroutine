@@ -149,7 +149,6 @@ jobs:
           gitbook build   
           mv _book html
           cd ..
-          cd ..
           ls
           git add docs
           git commit --message "Automatic CI Documentation."
