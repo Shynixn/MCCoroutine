@@ -200,29 +200,23 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    Features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     Installation
   </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-add-the-coroutine-libraries-from-jetbrains-replace-1xx-with-your-kotlin-version" class="md-nav__link">
-    1. Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-add-the-mccoroutine-libraries" class="md-nav__link">
-    2. Add the MCCoroutine libraries
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -259,29 +253,23 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    Features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     Installation
   </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-add-the-coroutine-libraries-from-jetbrains-replace-1xx-with-your-kotlin-version" class="md-nav__link">
-    1. Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-add-the-mccoroutine-libraries" class="md-nav__link">
-    2. Add the MCCoroutine libraries
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -308,8 +296,56 @@
 <li>SpongeVanilla</li>
 <li>SpongeForge</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Kotlin Coroutines Description</p>
+</div>
+<p>Asynchronous or non-blocking programming is the new reality. Whether we're creating server-side, desktop or mobile applications, 
+it's important that we provide an experience that is not only fluid from the user's perspective, but scalable when needed.
+There are many approaches to this problem, and in Kotlin we take a very flexible one by providing Coroutine support at the language level 
+and delegating most of the functionality to libraries, much in line with Kotlin's philosophy.</p>
+<p>Source: (https://github.com/JetBrains/kotlin-web-site/blob/master/pages/docs/reference/coroutines-overview.md, Date: [09/11/2018], Licence copied to LICENCE).</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Full implementation of Kotlin Coroutines for Minecraft Server</li>
+<li>Extension functions for already established functions</li>
+<li>Connection to events, commands, schedulers</li>
+<li>Coroutine LifeCycle scope for plugins (supports plugin reloading)</li>
+<li>No NMS</li>
+<li>Support for Minecraft 1.7 - Latest</li>
+<li>Support for Java 8 - Latest</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<ul>
+<li>Allows appending suspend to every listener by bridging the event api with Coroutines</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nd">@EventHandler</span>
+<span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span> <span class="n">PlayerJoinEvent</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="nv">userData</span> <span class="o">=</span> <span class="n">withContext</span><span class="p">(</span><span class="n">plugin</span><span class="p">.</span><span class="na">asyncDispatcher</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span> <span class="c1">// Simulate a database call </span>
+        <span class="n">UserData</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Adds a new suspendable command executor by bridging the command api with Coroutines</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">AdminCommandExecutor</span><span class="p">:</span> <span class="n">SuspendingCommandExecutor</span> <span class="p">{</span>
+    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onCommand</span><span class="p">(</span><span class="n">sender</span><span class="p">:</span> <span class="n">CommandSender</span><span class="p">,</span><span class="n">command</span><span class="p">:</span> <span class="n">Command</span><span class="p">,</span><span class="n">label</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="o">&lt;</span><span class="k">out</span> <span class="kt">String</span><span class="o">&gt;</span><span class="p">):</span> <span class="kt">Boolean</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Provides its own Plugin Coroutine Scope where you can switch to using extension functions of your plugin instance.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span> <span class="p">{</span>
+    <span class="c1">// Coroutine Context</span>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="installation">Installation</h2>
-<h4 id="1-add-the-coroutine-libraries-from-jetbrains-replace-1xx-with-your-kotlin-version">1. Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)</h4>
+<ol>
+<li>Add the Coroutine libraries from Jetbrains (replace 1.x.x with your Kotlin version)</li>
+</ol>
 <p><strong>Maven</strong>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
      <span class="nt">&lt;groupId&gt;</span>org.jetbrains.kotlinx<span class="nt">&lt;/groupId&gt;</span>
@@ -330,9 +366,13 @@
     <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
-<h4 id="2-add-the-mccoroutine-libraries">2. Add the MCCoroutine libraries</h4>
-<p>!!! warning
-Below you can find the dependency for the <strong>Bukkit-API</strong>. See the following link for
+<ol>
+<li>Add the MCCoroutine libraries </li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+</div>
+<p>Below you can find the dependency for the <strong>Bukkit-API</strong>. See the following link for
 the <strong>Sponge-API</strong>.</p>
 <p><strong>Maven</strong>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
