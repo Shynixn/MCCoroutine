@@ -215,18 +215,18 @@
                 
                 
                 <h1 id="introduction">Introduction</h1>
-<pre><code class="language-kotlin">// A new extension function 
-server.pluginManager.registerSuspendingEvents(PlayerConnectListener(), plugin)
-</code></pre>
-<pre><code class="language-kotlin">@EventHandler
-suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
-    val player = event.player
-    // Long running operation to database is automatically suspended and continued.
-    val userData = database.getUserDataFromPlayer(player)
-    // Userdata was loaded asynchronous from the database and is now ready.
-    println(userData.killCount)
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="c1">// A new extension function </span>
+<span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerConnectListener</span><span class="p">(),</span> <span class="n">plugin</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nd">@EventHandler</span>
+<span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span> <span class="n">PlayerJoinEvent</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="nv">player</span> <span class="o">=</span> <span class="n">event</span><span class="p">.</span><span class="na">player</span>
+    <span class="c1">// Long running operation to database is automatically suspended and continued.</span>
+    <span class="kd">val</span> <span class="nv">userData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getUserDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="c1">// Userdata was loaded asynchronous from the database and is now ready.</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">userData</span><span class="p">.</span><span class="na">killCount</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
                 
               
               
