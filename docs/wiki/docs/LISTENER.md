@@ -2,7 +2,7 @@
 
 This guide continues the guide 'Creating a new Plugin' and describes how listeners can be used to load and save player data.
 
-### 1. Create the listener class
+### 1. Create the Listener class
 
 Create a traditional listener and add suspend to all functions where you perform suspendable operations (e.g. calling other
 suspend functions). You can mix suspendable and non suspendable functions in listeners.
@@ -30,7 +30,7 @@ class PlayerDataListener(private val database : Database) : Listener {
 
 ### 2. Connect JavaPlugin and PlayerDataListener
 
-Instead of using ``registerEvents``, use the provided extension method registerSuspendingEvents to allow
+Instead of using ``registerEvents``, use the provided extension method ``registerSuspendingEvents`` to allow
 suspendable functions in your listener. Please consider, that timing measurements are no longer accurate for suspendable functions.
 
 ````kotlin
