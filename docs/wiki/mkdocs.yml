@@ -1,6 +1,9 @@
 site_name: MCCoroutine
 nav:
     - Home: README.md
+    - 'Getting Started': STARTED.md
+    - 'Creating a new plugin': NEWPLUGIN.md
+    - 'Suspending Listeners': LISTENER.md
 theme: material
 markdown_extensions:
   - pymdownx.highlight
