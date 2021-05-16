@@ -13,6 +13,7 @@ Bukkit-API based server.
 UUID
 Player Name
 Last Join Date
+Last Quit Date
 ````
 
 ### 2. Include MCCoroutine and Kotlin Coroutines
@@ -64,7 +65,7 @@ following way:
 ### 3. Create Database and Player data class
 
 ````kotlin
-class PlayerData(var uuid: UUID, var name: String, var lastJoinDate: Date) {
+class PlayerData(var uuid: UUID, var name: String, var lastJoinDate: Date, var lastQuitDate : Date) {
 }
 ````
 
@@ -81,7 +82,7 @@ class Database {
 
     suspend fun PlayerData getDataFromPlayer(player : Player) {
         val playerData = withContext(Dispatchers.IO) {
-            // ... get from database by player uuid
+            // ... get from database by player uuid or create new playerData instance.
             PlayerData(uuid, name, lastJoinDate)
         }
     
@@ -98,11 +99,11 @@ class Database {
 
 ### 4. Connect JavaPlugin and Database
 
-Test if the database is created on plugin startup and then continue on the next page.
+Create a new instance of the database and call it in the onEnable function.
 
 ````kotlin
 class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
-    private val database = DataBase()
+    private val database = Database()
   
     override suspend fun onEnableAsync() {
         database.createDbIfNotExist()
@@ -112,3 +113,9 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
     }
 }
 ````
+
+### 5. Test the Java Plugin
+
+Start your server to observe changes on your database.
+
+The next page continuous by adding listeners to the plugin.

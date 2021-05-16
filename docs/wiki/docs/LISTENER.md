@@ -1,7 +1,54 @@
-# Adding suspending listeners
+# Adding Suspending Listeners
 
-This guide deals with an example where a new plugin is developed from scratch using MCCoroutine to handle asynchronous
-and synchronous code. MCCoroutine can be easily integrated into existing plugins but this page only deals with a new
-plugin.
+This guide continues the guide 'Creating a new Plugin' and describes how listeners can be used to load and save player data.
 
+### 1. Create the listener class
 
+Create a traditional listener and add suspend to all functions where you perform suspendable operations (e.g. calling other
+suspend functions). You can mix suspendable and non suspendable functions in listeners.
+
+````kotlin
+
+class PlayerDataListener(private val database : Database) : Listener {
+    @EventHandler
+    suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
+       val playerData = database.getDataFromPlayer(playerJoinEvent.player)
+       playerData.name = player.name 
+       playerData.lastJoinDate = Date()
+       database.saveData(player, playerData)
+    }
+    
+    @EventHandler
+    suspend fun onPlayerQuitEvent(playerQuitEvent: PlayerQuitEvent) {
+        val playerData = database.getDataFromPlayer(playerQuitEvent.player)
+        playerData.name = player.name
+        playerData.lastQuitDate = Date()
+        database.saveData(player, playerData)
+    }
+}
+````
+
+### 2. Connect JavaPlugin and PlayerDataListener
+
+Instead of using ``registerEvents``, use the provided extension method registerSuspendingEvents to allow
+suspendable functions in your listener. Please consider, that timing measurements are no longer accurate for suspendable functions.
+
+````kotlin
+class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
+    private val database = Database()
+
+    override suspend fun onEnableAsync() {
+        database.createDbIfNotExist()
+        server.pluginManager.registerSuspendingEvents(PlayerDataListener(database), plugin)
+    }
+
+    override suspend fun onDisableAsync() {
+    }
+}
+````
+
+### 3. Test the Listener
+
+Join and leave your server to observe changes on your database. 
+
+The next page continuous by adding command executors to the plugin.
