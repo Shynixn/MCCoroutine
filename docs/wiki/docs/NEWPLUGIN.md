@@ -80,7 +80,7 @@ class Database {
         }       
     }
 
-    suspend fun PlayerData getDataFromPlayer(player : Player) {
+    suspend fun getDataFromPlayer(player : Player) : PlayerData {
         val playerData = withContext(Dispatchers.IO) {
             // ... get from database by player uuid or create new playerData instance.
             PlayerData(uuid, name, lastJoinDate)
