@@ -136,6 +136,6 @@ class PlayerDataListener(private val database : DatabaseCache) : Listener {
 }
 ````
 
-### 4. Test the Foo class
+### 4. Test the Cache
 
 Join and leave your server to observe changes on your database.

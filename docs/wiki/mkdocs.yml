@@ -2,8 +2,12 @@ site_name: MCCoroutine
 nav:
     - Home: README.md
     - 'Getting Started': STARTED.md
-    - 'Creating a new plugin': NEWPLUGIN.md
+    - 'Creating a new Plugin': NEWPLUGIN.md
     - 'Suspending Listeners': LISTENER.md
+    - 'Suspending CommandExecutors' : COMMANDEXECUTORS.md
+    - 'Suspending Delayed, Repeating Tasks' : REPEATINGTASK.md
+    - 'Bridging non-suspendable functions to suspendable functions' : CACHING.md
+    - 'Caching Database Results' : CACHING.md
 theme: material
 markdown_extensions:
   - pymdownx.highlight

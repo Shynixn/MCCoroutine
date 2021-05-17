@@ -1,4 +1,4 @@
-# Switch from non suspendable functions to suspenable functions
+# Bridging non-suspendable functions to suspendable functions
 
 This guide continues the guide 'Creating a new Plugin' and describes how to bridge non suspendable code with suspendable implementations.
 

@@ -53,7 +53,7 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
 }
 ````
 
-### 3. Test the Listener
+### 3. Test the CommandExecutor
 
 Join your server and enter the playerData command to edit your player data.
 
