@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Static session.
  */
-private val mcCoroutine: MCCoroutine by lazy {
+internal val mcCoroutine: MCCoroutine by lazy {
     try {
         Class.forName("com.github.shynixn.mccoroutine.impl.MCCoroutineImpl")
             .newInstance() as MCCoroutine

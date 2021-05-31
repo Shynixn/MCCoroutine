@@ -8,11 +8,17 @@ Create a traditional listener and add suspend to all functions where you perform
 suspend functions). You can mix suspendable and non suspendable functions in listeners.
 
 ````kotlin
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import java.util.*
 
 class PlayerDataListener(private val database : Database) : Listener {
     @EventHandler
     suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
-       val playerData = database.getDataFromPlayer(playerJoinEvent.player)
+       val player = playerJoinEvent.player
+       val playerData = database.getDataFromPlayer(player)
        playerData.name = player.name 
        playerData.lastJoinDate = Date()
        database.saveData(player, playerData)
@@ -20,7 +26,8 @@ class PlayerDataListener(private val database : Database) : Listener {
     
     @EventHandler
     suspend fun onPlayerQuitEvent(playerQuitEvent: PlayerQuitEvent) {
-        val playerData = database.getDataFromPlayer(playerQuitEvent.player)
+        val player = playerQuitEvent.player
+        val playerData = database.getDataFromPlayer(player)
         playerData.name = player.name
         playerData.lastQuitDate = Date()
         database.saveData(player, playerData)
@@ -34,12 +41,15 @@ Instead of using ``registerEvents``, use the provided extension method ``registe
 suspendable functions in your listener. Please consider, that timing measurements are no longer accurate for suspendable functions.
 
 ````kotlin
+import com.github.shynixn.mccoroutine.SuspendingJavaPlugin
+import com.github.shynixn.mccoroutine.registerSuspendingEvents
+
 class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
     private val database = Database()
 
     override suspend fun onEnableAsync() {
         database.createDbIfNotExist()
-        server.pluginManager.registerSuspendingEvents(PlayerDataListener(database), plugin)
+        server.pluginManager.registerSuspendingEvents(PlayerDataListener(database), this)
     }
 
     override suspend fun onDisableAsync() {

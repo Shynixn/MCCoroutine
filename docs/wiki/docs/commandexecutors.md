@@ -9,6 +9,11 @@ Create a traditional CommandExecutor but implement ``SuspendingCommandExecutor``
 consider that the return value ``true`` is automatically assumed if the function is suspended in one branch.
 
 ````kotlin
+import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+
 class PlayerDataCommandExecutor(private val database: Database) : SuspendingCommandExecutor {
     override suspend fun onCommand(
         sender: CommandSender,
@@ -24,7 +29,7 @@ class PlayerDataCommandExecutor(private val database: Database) : SuspendingComm
             val name = args[1]
             val playerData = database.getDataFromPlayer(sender)
             playerData.name = name
-            database.saveData(player, playerData)
+            database.saveData(sender, playerData)
             return true
         }
 
@@ -38,7 +43,14 @@ class PlayerDataCommandExecutor(private val database: Database) : SuspendingComm
 Instead of using ``setExecutor``, use the provided extension method ``setSuspendingExecutor`` to allow to register a
 suspendable command executor.
 
+!!! note "Important"
+    Do not forget to declare the ``playerdata`` command in your plugin.yml.
+
 ````kotlin
+import com.github.shynixn.mccoroutine.SuspendingJavaPlugin
+import com.github.shynixn.mccoroutine.registerSuspendingEvents
+import com.github.shynixn.mccoroutine.setSuspendingExecutor
+
 class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
     private val database = Database()
 

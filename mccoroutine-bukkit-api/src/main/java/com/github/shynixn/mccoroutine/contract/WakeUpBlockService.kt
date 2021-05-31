@@ -2,6 +2,11 @@ package com.github.shynixn.mccoroutine.contract
 
 interface WakeUpBlockService {
     /**
+     * Enables or disables the server heartbeat hack.
+     */
+    var isManipulatedServerHeartBeatEnabled: Boolean
+
+    /**
      * Reference to the primary server thread.
      */
     var primaryThread: Thread?
