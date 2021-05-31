@@ -1,4 +1,4 @@
-# Creating a new Plugin
+# Creating a new plugin
 
 This guide deals with an example where a new plugin is developed from scratch using MCCoroutine to handle asynchronous
 and synchronous code. MCCoroutine can be easily integrated into existing plugins but this guide only deals with a new
@@ -22,7 +22,7 @@ This example plugin uses gradle as a build system. For more details see the ``St
 
 **Gradle**
 
-!!! note "Kotlin Coroutines Description"
+!!! note "Important"
     Please use your own Kotlin version and the latest mccoroutine version instead. This is just a working example.
 
 ```groovy

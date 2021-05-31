@@ -1,4 +1,4 @@
-# Adding Suspending Listeners
+# Adding suspending listeners
 
 This guide continues the guide 'Creating a new Plugin' and describes how listeners can be used to load and save player data.
 

@@ -1,4 +1,4 @@
-# Adding Suspending CommandExecutors
+# Adding suspending commandExecutors
 
 This guide continues the guide 'Creating a new Plugin' and describes how command executors can be used to edit player
 data.

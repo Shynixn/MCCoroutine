@@ -28,6 +28,12 @@ Using ``delay()`` we can delay the current context (Bukkit primary thread) by 10
 countdown without blocking the server. ``delay()`` essentially suspends the current context and continuous after the
 given time.
 
+!!! note "Difference between delay() and Thread.sleep()"
+    There is a big difference with ``delay()`` and ``Thread.sleep()``. Consult the official Kotlin Coroutines
+    documentation for details, however essentially ``Thread.sleep()`` blocks the thread for a given time and 
+    ``delay()`` suspends the thread for a given time. When a thread is suspended, it can do other work (e.g. server handles
+    other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g. server appears frozen).   
+
 ````kotlin
 class MiniGame {
     private var isStarted = false;
@@ -48,6 +54,7 @@ class MiniGame {
 
         isStarted = true
 
+        // This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.
         for (i in 0 until 20) {
             sendMessageToPlayers("Game is starting in ${20 - i} seconds.")
             delay(1000)
@@ -81,6 +88,7 @@ class MiniGame {
 
         isStarted = true
 
+        // This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.
         for (i in 0 until 20) {
             sendMessageToPlayers("Game is starting in ${20 - i} seconds.")
             delay(1000)
@@ -168,6 +176,7 @@ class MiniGame {
 
         isStarted = true
 
+        // This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.
         for (i in 0 until 20) {
             sendMessageToPlayers("Game is starting in ${20 - i} seconds.")
             delay(1000)
@@ -242,6 +251,6 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
 
 ### 7. Test the MiniGame
 
-Join your server to observe messages about a MiniGame being sent to you.
+Join your server to observe Minigame messages print to your server log.
 
-The next page continuous by adding caches to the plugin.
+The next page continuous by adding caches using background-delayed-repeating tasks.

@@ -1,4 +1,4 @@
-# Advanced Topic: Caching
+# Adding suspending caches and background tasks
 
 This guide continues the guide 'Creating a new Plugin' and describes how the caching strategy ``lazy loading`` can be
 used together with coroutines.
@@ -6,7 +6,7 @@ used together with coroutines.
 ### 1. Add a simple cache
 
 When taking a look at the ``Database`` implementation from before, we can observe quite a lot of redundant database
-accesses when a player rejoins a server in a very short time.
+accesses when a player rejoins a server in a very short timeframe.
 
 For this, we put a ``lazy-loading`` cache in front of the  ``Database`` implementation.
 
