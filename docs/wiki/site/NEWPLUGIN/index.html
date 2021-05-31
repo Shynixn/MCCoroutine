@@ -14,7 +14,7 @@
     
     
       
-        <title>Creating a new plugin - MCCoroutine</title>
+        <title>Creating a new Plugin - MCCoroutine</title>
       
     
     
@@ -89,7 +89,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Creating a new plugin
+              Creating a new Plugin
             
           </span>
         </div>
@@ -209,12 +209,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Creating a new plugin
+          Creating a new Plugin
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Creating a new plugin
+        Creating a new Plugin
       </a>
       
         
@@ -253,8 +253,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-create-database-and-player-data-class" class="md-nav__link">
-    3. Create Database and Player data class
+  <a href="#3-create-database-and-playerdata-class" class="md-nav__link">
+    3. Create Database and PlayerData class
   </a>
   
 </li>
@@ -291,6 +291,66 @@
     <li class="md-nav__item">
       <a href="../LISTENER/" class="md-nav__link">
         Suspending Listeners
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../COMMANDEXECUTORS/" class="md-nav__link">
+        Suspending CommandExecutors
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../REPEATINGTASK/" class="md-nav__link">
+        Suspending Delayed, Repeating Tasks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CACHING/" class="md-nav__link">
+        Bridging non-suspendable functions to suspendable functions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CACHING/" class="md-nav__link">
+        Caching Database Results
       </a>
     </li>
   
@@ -343,8 +403,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-create-database-and-player-data-class" class="md-nav__link">
-    3. Create Database and Player data class
+  <a href="#3-create-database-and-playerdata-class" class="md-nav__link">
+    3. Create Database and PlayerData class
   </a>
   
 </li>
@@ -378,10 +438,10 @@
                 
                 <h1 id="creating-a-new-plugin">Creating a new Plugin</h1>
 <p>This guide deals with an example where a new plugin is developed from scratch using MCCoroutine to handle asynchronous
-and synchronous code. MCCoroutine can be easily integrated into existing plugins but this page only deals with a new
+and synchronous code. MCCoroutine can be easily integrated into existing plugins but this guide only deals with a new
 plugin.</p>
 <h3 id="1-understanding-the-goal">1. Understanding the goal</h3>
-<p>We want to create a new plugin which stores and retrieves the following user data into a database when a user enters our
+<p>We want to create a new plugin which stores/retrieves the following user data into/from a database when a user enters our
 Bukkit-API based server.</p>
 <div class="highlight"><pre><span></span><code>UUID
 Player Name
@@ -399,7 +459,7 @@ Last Quit Date
 <span class="o">}</span>
 </code></pre></div>
 <h3 id="3-create-the-java-plugin-class">3. Create the Java Plugin class</h3>
-<p>Here the first decision is to decide between extendin <code>JavaPlugin</code> or <code>SuspendingJavaPlugin</code> which is a new base
+<p>Here the first decision is to decide between extending <code>JavaPlugin</code> or <code>SuspendingJavaPlugin</code> which is a new base
 class extending <code>JavaPlugin</code>.</p>
 <p>Here is an easy rule to follow:</p>
 <ul>
@@ -418,16 +478,14 @@ class extending <code>JavaPlugin</code>.</p>
 <p class="admonition-title">How onEnableAsync works</p>
 </div>
 <p>The implementation which calls the <code>onEnableAsync</code> function manipulates the Bukkit Server implementation in the
-following way:</p>
-<ul>
-<li>If a context switch is made, it blocks the entire minecraft-server thread until the context is given back. This means
-  in this method you can switch contexts as you like but the plugin is not considered enabled until the context is given
-  back.</li>
-<li>It allows for a clean startup as the plugin is not considered "enabled" until the context is given back.</li>
-<li>Other plugins which are already enabled, may or may not already perform work in the background.</li>
-<li>Plugins which may get enabled in the future, wait until this plugin is enabled.</li>
-</ul>
-<h3 id="3-create-database-and-player-data-class">3. Create Database and Player data class</h3>
+  following way:
+  * If a context switch is made, it blocks the entire minecraft-server thread until the context is given back. This means
+    in this method you can switch contexts as you like but the plugin is not considered enabled until the context is given
+    back.
+  * It allows for a clean startup as the plugin is not considered "enabled" until the context is given back.
+  * Other plugins which are already enabled, may or may not already perform work in the background.
+  * Plugins which may get enabled in the future, wait until this plugin is enabled.</p>
+<h3 id="3-create-database-and-playerdata-class">3. Create Database and PlayerData class</h3>
 <div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">PlayerData</span><span class="p">(</span><span class="kd">var</span> <span class="nv">uuid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span> <span class="kd">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="kd">var</span> <span class="nv">lastJoinDate</span><span class="p">:</span> <span class="n">Date</span><span class="p">,</span> <span class="kd">var</span> <span class="nv">lastQuitDate</span> <span class="p">:</span> <span class="n">Date</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">}</span>
 </code></pre></div>
