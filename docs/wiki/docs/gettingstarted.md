@@ -1,6 +1,6 @@
 # Getting Started
 
-In order to access the MCCoroutine Kotlin API, you need to include the following libraries to your project.
+In order to access the MCCoroutine Kotlin API, you need to include the following libraries into your project.
 
 !!! note "Kotlin Coroutines Description"
     Please notice that these are the libraries for Bukkit-API based servers. If you are looking for the Sponge-API, simply

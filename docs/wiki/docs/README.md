@@ -1,7 +1,7 @@
 # Introduction
 
 MCCoroutine is library which adds extensive support for Kotlin Coroutines on Minecraft Server implementing the **
-Bukkit-API** or **Sponge-API**.
+Bukkit-API** or **Sponge-API**. 
 
 Examples for supported frameworks:
 

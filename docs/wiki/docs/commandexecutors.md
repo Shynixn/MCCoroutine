@@ -55,6 +55,5 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
 
 ### 3. Test the CommandExecutor
 
-Join your server and enter the playerData command to edit your player data.
-
+Join your server and use the playerData command to observe ``getDataFromPlayer`` and ``saveData`` messages print to your server log.
 The next page continuous by adding repeating and delayed tasks to the plugin.

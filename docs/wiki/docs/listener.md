@@ -49,6 +49,7 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
 
 ### 3. Test the Listener
 
-Join and leave your server to observe changes on your database. 
+Join and leave your server to observe ``getDataFromPlayer`` and ``saveData`` messages print to your server log.
+Extend it with real database operations to get familiar with how it works.
 
 The next page continuous by adding command executors to the plugin.
