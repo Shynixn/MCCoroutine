@@ -3,6 +3,7 @@ package helper
 import com.github.shynixn.mccoroutine.contract.CommandService
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
+import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
 import kotlinx.coroutines.*
 import org.mockito.Mockito
 import kotlin.coroutines.CoroutineContext
@@ -24,6 +25,11 @@ class MockedCoroutineSession : CoroutineSession {
      * Gets the command service.
      */
     override var commandService: CommandService = Mockito.mock(CommandService::class.java)
+
+    /**
+     * Gets the wakeup service.
+     */
+    override val wakeUpBlockService: WakeUpBlockService = Mockito.mock(WakeUpBlockService::class.java)
 
     /**
      * Gets the minecraft dispatcher.

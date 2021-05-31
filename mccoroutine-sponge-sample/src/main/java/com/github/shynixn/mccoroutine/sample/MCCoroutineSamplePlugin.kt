@@ -1,5 +1,7 @@
 package com.github.shynixn.mccoroutine.sample
 
+import com.github.shynixn.mccoroutine.SuspendingPluginContainer
+import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.registerSuspendingListeners
 import com.github.shynixn.mccoroutine.sample.commandexecutor.AdminCommandExecutor
 import com.github.shynixn.mccoroutine.sample.impl.FakeDatabase
@@ -8,6 +10,7 @@ import com.github.shynixn.mccoroutine.sample.listener.EntityInteractListener
 import com.github.shynixn.mccoroutine.sample.listener.PlayerConnectListener
 import com.github.shynixn.mccoroutine.suspendingExecutor
 import com.google.inject.Inject
+import kotlinx.coroutines.withContext
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.args.GenericArguments
 import org.spongepowered.api.command.spec.CommandSpec
@@ -17,6 +20,7 @@ import org.spongepowered.api.plugin.Plugin
 import org.spongepowered.api.plugin.PluginContainer
 import org.spongepowered.api.text.Text
 
+@Suppress("unused")
 @Plugin(
     id = "mccoroutinesample",
     name = "MCCoroutineSample",
@@ -26,13 +30,23 @@ class MCCoroutineSamplePlugin {
     @Inject
     private lateinit var plugin: PluginContainer
 
+    @Inject
+    private lateinit var suspendingPluginContainer: SuspendingPluginContainer
+
     /**
      * OnEnable.
      */
     @Listener
-    fun onEnable(event: GameStartedServerEvent) {
+    suspend fun onEnable(event: GameStartedServerEvent) {
         val database = FakeDatabase()
         val cache = UserDataCache(plugin, database)
+
+        println("[MCCoroutineSamplePlugin] OnEnable on Primary Thread: " + Sponge.getServer().isMainThread)
+
+        withContext(plugin.asyncDispatcher) {
+            println("[MCCoroutineSamplePlugin] Loading some data on async Thread: " + Sponge.getServer().isMainThread)
+            Thread.sleep(500)
+        }
 
         // Extension to traditional registration.
         Sponge.getEventManager().registerSuspendingListeners(plugin, PlayerConnectListener(plugin, cache))

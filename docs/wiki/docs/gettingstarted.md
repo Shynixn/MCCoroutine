@@ -4,8 +4,8 @@ In order to access the MCCoroutine Kotlin API, you need to include the following
 
 !!! note "Further help"
     Please take a look at the sample plugins ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample`` which 
-    can be found on [Github](https://github.com/Shynixn/BlockBall)
-    A real production plugin using MCCoroutine can be found here [Github](https://github.com/Shynixn/BlockBall).
+    can be found on [Github](https://github.com/Shynixn/BlockBall).
+    A real production plugin using MCCoroutine can be found [here](https://github.com/Shynixn/BlockBall).
 
 !!! note "Sponge Documentation"
     Please notice that these are the libraries for Bukkit-API based servers. If you are looking for the Sponge-API, simply
@@ -18,8 +18,8 @@ In order to access the MCCoroutine Kotlin API, you need to include the following
 
 ```groovy
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.2.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.2.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.3.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.3.0")
 }
 ```
 
@@ -30,13 +30,13 @@ dependencies {
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-bukkit-api</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <scope>compile</scope>
 </dependency>
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-bukkit-core</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <scope>compile</scope>
 </dependency>
 ```
