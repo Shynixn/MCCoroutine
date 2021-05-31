@@ -18,8 +18,8 @@ In order to access the MCCoroutine Kotlin API, you need to include the following
 
 ```groovy
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.2.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.2.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.3.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.3.0")
 }
 ```
 
@@ -30,13 +30,13 @@ dependencies {
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-bukkit-api</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <scope>compile</scope>
 </dependency>
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-bukkit-core</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <scope>compile</scope>
 </dependency>
 ```

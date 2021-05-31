@@ -57,7 +57,7 @@ For shipping this library with your plugin, please see ``Shipping and Running`` 
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-sponge-api</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -66,8 +66,8 @@ For shipping this library with your plugin, please see ``Shipping and Running`` 
 
 ```xml
 dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.2.0")
-        }
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.3.0")
+}
 ```
 
 **Jar File**
@@ -123,7 +123,7 @@ class PlayerConnectListener {
 import com.github.shynixn.mccoroutine.registerSuspendingListeners
 
 Plugin plugin
-        Sponge.getEventManager().registerSuspendingListeners(plugin, PlayerConnectListener())
+Sponge.getEventManager().registerSuspendingListeners(plugin, PlayerConnectListener())
 ```
 
 * If you send a custom event to a suspending listener, it may complete in the future and it becomes impossible to check
@@ -132,7 +132,7 @@ Plugin plugin
 
 ```kotlin
 Plugin plugin
-        Event event
+Event event
 val jobs = Sponge.getEventManager().postSuspending(event, pluginContainer)
 jobs.joinAll()
 ```
@@ -285,13 +285,13 @@ val scope = plugin.scope
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-sponge-api</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <scope>compile</scope>
 </dependency>
 <dependency>
   <groupId>com.github.shynixn.mccoroutine</groupId>
   <artifactId>mccoroutine-sponge-core</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
   <scope>compile</scope>
 </dependency>
 <dependency>
@@ -312,8 +312,8 @@ val scope = plugin.scope
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.2.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:1.2.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.3.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:1.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
 }
