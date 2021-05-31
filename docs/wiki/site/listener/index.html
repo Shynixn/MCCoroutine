@@ -14,7 +14,7 @@
     
     
       
-        <title>Bridging non-suspendable functions to suspendable functions - MCCoroutine</title>
+        <title>Suspending Listeners - MCCoroutine</title>
       
     
     
@@ -59,7 +59,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#bridging-non-suspendable-functions-to-suspendable-functions" class="md-skip">
+        <a href="#adding-suspending-listeners" class="md-skip">
           Skip to content
         </a>
       
@@ -89,7 +89,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Bridging non-suspendable functions to suspendable functions
+              Suspending Listeners
             
           </span>
         </div>
@@ -212,11 +212,65 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../listener/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Suspending Listeners
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Suspending Listeners
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-create-the-listener-class" class="md-nav__link">
+    1. Create the Listener class
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-connect-javaplugin-and-playerdatalistener" class="md-nav__link">
+    2. Connect JavaPlugin and PlayerDataListener
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-test-the-listener" class="md-nav__link">
+    3. Test the Listener
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -307,29 +361,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-adding-plugin-launch" class="md-nav__link">
-    1. Adding plugin launch
+  <a href="#1-create-the-listener-class" class="md-nav__link">
+    1. Create the Listener class
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-understanding-the-execution-order" class="md-nav__link">
-    2. Understanding the execution order.
+  <a href="#2-connect-javaplugin-and-playerdatalistener" class="md-nav__link">
+    2. Connect JavaPlugin and PlayerDataListener
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-do-not-use-runblocking" class="md-nav__link">
-    3. Do not use runBlocking
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-test-the-foo-class" class="md-nav__link">
-    4. Test the Foo class
+  <a href="#3-test-the-listener" class="md-nav__link">
+    3. Test the Listener
   </a>
   
 </li>
@@ -347,59 +394,48 @@
               
                 
                 
-                <h1 id="bridging-non-suspendable-functions-to-suspendable-functions">Bridging non-suspendable functions to suspendable functions</h1>
-<p>This guide continues the guide 'Creating a new Plugin' and describes how to bridge non suspendable code with suspendable implementations.</p>
-<h3 id="1-adding-plugin-launch">1. Adding plugin launch</h3>
-<p>Use the extension method <code>plugin.launch{}</code> to enter a suspendable context on the bukkit primary thread.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">plugin</span> <span class="p">:</span> <span class="n">Plugin</span><span class="p">)</span> <span class="p">{</span>
-
-    <span class="kd">fun</span> <span class="nf">bar</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">val</span> <span class="nv">job</span> <span class="o">=</span> <span class="n">plugin</span><span class="p">.</span><span class="na">launch</span> <span class="p">{</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-            <span class="n">bob</span><span class="p">()</span>
-        <span class="p">}</span>
+                <h1 id="adding-suspending-listeners">Adding Suspending Listeners</h1>
+<p>This guide continues the guide 'Creating a new Plugin' and describes how listeners can be used to load and save player data.</p>
+<h3 id="1-create-the-listener-class">1. Create the Listener class</h3>
+<p>Create a traditional listener and add suspend to all functions where you perform suspendable operations (e.g. calling other
+suspend functions). You can mix suspendable and non suspendable functions in listeners.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">Listener</span> <span class="p">{</span>
+    <span class="nd">@EventHandler</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span> <span class="n">PlayerJoinEvent</span><span class="p">)</span> <span class="p">{</span>
+       <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+       <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">name</span> 
+       <span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
+       <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
     <span class="p">}</span>
 
-    <span class="kd">private</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">bob</span><span class="p">(){</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<h3 id="2-understanding-the-execution-order">2. Understanding the execution order.</h3>
-<p>By allowing to append <code>suspend</code> to your listeners and command executors it is highly unlikely that you need to use this function. 
-Still, it is important to understand the execution order in this case.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">plugin</span> <span class="p">:</span> <span class="n">Plugin</span><span class="p">)</span> <span class="p">{</span>
-
-    <span class="kd">fun</span> <span class="nf">bar</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="s">&quot;I am first&quot;</span><span class="p">)</span>
-
-        <span class="kd">val</span> <span class="nv">job</span> <span class="o">=</span> <span class="n">plugin</span><span class="p">.</span><span class="na">launch</span> <span class="p">{</span>
-            <span class="n">println</span><span class="p">(</span><span class="s">&quot;I am second&quot;</span><span class="p">)</span> <span class="c1">// The context is not suspended when switched to the same suspendable context.</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-            <span class="n">println</span><span class="p">(</span><span class="s">&quot;I am fourth&quot;</span><span class="p">)</span> <span class="c1">// The context is given back after 1000 milliseconds and continuous here.</span>
-            <span class="n">bob</span><span class="p">()</span>
-        <span class="p">}</span>
-
-        <span class="c1">// When calling delay the suspendable context is suspended and the original context immediately continuous here.</span>
-        <span class="n">println</span><span class="p">(</span><span class="s">&quot;I am third&quot;</span><span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="kd">private</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">bob</span><span class="p">(){</span>
-        <span class="n">println</span><span class="p">(</span><span class="s">&quot;I am fifth&quot;</span><span class="p">)</span>
+    <span class="nd">@EventHandler</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">playerQuitEvent</span><span class="p">:</span> <span class="n">PlayerQuitEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">playerQuitEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+        <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">name</span>
+        <span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
+        <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="s">&quot;I am first</span>
-<span class="s">&quot;</span><span class="n">I</span> <span class="n">am</span> <span class="n">second</span>
-<span class="s">&quot;I am third&quot;</span>
-<span class="s">&quot;I am fifth&quot;</span>
+<h3 id="2-connect-javaplugin-and-playerdatalistener">2. Connect JavaPlugin and PlayerDataListener</h3>
+<p>Instead of using <code>registerEvents</code>, use the provided extension method <code>registerSuspendingEvents</code> to allow
+suspendable functions in your listener. Please consider, that timing measurements are no longer accurate for suspendable functions.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingJavaPlugin</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onEnableAsync</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+        <span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span> <span class="n">plugin</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onDisableAsync</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<h3 id="3-do-not-use-runblocking">3. Do not use runBlocking</h3>
-<p>Using <code>runBlocking</code> in production code is very bad as it annihilates any improvements, we have made by using coroutines. 
-MCCoroutine manipulates the Bukkit Scheduler to rescue the Bukkit Primary Thread Context if it is being used but <code>plugin.launch{}</code>
-is almost always the function you want to use instead.</p>
-<h3 id="4-test-the-foo-class">4. Test the Foo class</h3>
-<p>Connect to the foo class in any way and call it for testing.</p>
-<p>The next page continuous by adding caches to the plugin.</p>
+<h3 id="3-test-the-listener">3. Test the Listener</h3>
+<p>Join and leave your server to observe <code>getDataFromPlayer</code> and <code>saveData</code> messages print to your server log.
+Extend it with real database operations to get familiar with how it works.</p>
+<p>The next page continuous by adding command executors to the plugin.</p>
                 
               
               
@@ -415,6 +451,39 @@ is almost always the function you want to use instead.</p>
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../newplugin/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Creating a new Plugin
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../commandexecutors/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Suspending CommandExecutors
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
