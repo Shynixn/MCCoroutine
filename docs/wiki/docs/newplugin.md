@@ -45,6 +45,8 @@ Here is an easy rule to follow:
   available type ``SuspendingJavaPlugin`` otherwise use ``JavaPlugin``.
 
 ````kotlin
+import com.github.shynixn.mccoroutine.SuspendingJavaPlugin
+
 class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
     override suspend fun onEnableAsync() {
     }
@@ -75,7 +77,12 @@ Here, we perform all database operations on the IO context provided by Kotlin Co
 The result is automatically returned to the Bukkit primary thread. 
 
 ````kotlin
-class Database {
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.bukkit.entity.Player
+import java.util.*
+
+class Database() {
     suspend fun createDbIfNotExist() {
         println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
         withContext(Dispatchers.IO){
@@ -90,7 +97,7 @@ class Database {
         val playerData = withContext(Dispatchers.IO) {
             println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
             // ... get from database by player uuid or create new playerData instance.
-            PlayerData(uuid, name, lastJoinDate)
+            PlayerData(player.uniqueId, player.name, Date(), Date())
         }
 
         println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
@@ -115,6 +122,8 @@ class Database {
 Create a new instance of the database and call it in the onEnable function.
 
 ````kotlin
+import com.github.shynixn.mccoroutine.SuspendingJavaPlugin
+
 class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
     private val database = Database()
   

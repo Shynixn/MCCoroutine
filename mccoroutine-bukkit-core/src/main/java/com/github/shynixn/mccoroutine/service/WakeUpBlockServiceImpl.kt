@@ -3,12 +3,12 @@ package com.github.shynixn.mccoroutine.service
 import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
 import com.github.shynixn.mccoroutine.findClazz
 import org.bukkit.plugin.Plugin
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.locks.LockSupport
 
 class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
-    private val threadSupport = Executors.newFixedThreadPool(1)
-
+    private var threadSupport: ExecutorService? = null
     private val craftSchedulerClazz by lazy {
         plugin.findClazz("org.bukkit.craftbukkit.VERSION.scheduler.CraftScheduler")
     }
@@ -22,6 +22,11 @@ class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
     }
 
     /**
+     * Enables or disables the server heartbeat hack.
+     */
+    override var isManipulatedServerHeartBeatEnabled: Boolean = true
+
+    /**
      * Reference to the primary server thread.
      */
     override var primaryThread: Thread? = null
@@ -31,11 +36,24 @@ class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
      * is not sleeping if a run is scheduled by blocking.
      */
     override fun ensureWakeup() {
+        if (!isManipulatedServerHeartBeatEnabled) {
+            if (threadSupport != null) {
+                threadSupport!!.shutdown()
+                threadSupport = null
+            }
+
+            return
+        }
+
         if (primaryThread == null) {
             return
         }
 
-        threadSupport.submit {
+        if (threadSupport == null) {
+            threadSupport = Executors.newFixedThreadPool(1)
+        }
+
+        threadSupport!!.submit {
             val blockingCoroutine = LockSupport.getBlocker(primaryThread)
 
             if (blockingCoroutine != null) {
@@ -49,6 +67,6 @@ class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
      * Disposes the service.
      */
     override fun dispose() {
-        threadSupport.shutdown()
+        threadSupport?.shutdown()
     }
 }

@@ -8,6 +8,8 @@ with coroutines.
 Create a new class which implements a custom MiniGame which allows players to join when it has not started yet.
 
 ````kotlin
+import org.bukkit.entity.Player
+
 class MiniGame {
     private var isStarted = false;
     private var players = HashSet<Player>()
@@ -35,6 +37,9 @@ given time.
     other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g. server appears frozen).   
 
 ````kotlin
+import kotlinx.coroutines.delay
+import org.bukkit.entity.Player
+
 class MiniGame {
     private var isStarted = false;
     private var players = HashSet<Player>()
@@ -74,6 +79,9 @@ class MiniGame {
 We can extend the start method to call ``run`` which contains a loop to tick the miniGame every 1 second.
 
 ````kotlin
+import kotlinx.coroutines.delay
+import org.bukkit.entity.Player
+
 class MiniGame {
     private var isStarted = false;
     private var players = HashSet<Player>()
@@ -117,6 +125,9 @@ class MiniGame {
 An admin should be able to cancel the minigame which we implement by a ``stop`` function.
 
 ````kotlin
+import kotlinx.coroutines.delay
+import org.bukkit.entity.Player
+
 class MiniGame {
     private var isStarted = false;
     private var players = HashSet<Player>()
@@ -156,6 +167,9 @@ class MiniGame {
 ### 5. The full MiniGame class
 
 ````kotlin
+import kotlinx.coroutines.delay
+import org.bukkit.entity.Player
+
 class MiniGame {
     private var isStarted = false;
     private var players = HashSet<Player>()
@@ -220,6 +234,9 @@ class MiniGame {
 ### 6. Connect JavaPlugin, Listener and MiniGame
 
 ````kotlin
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 
 class MiniGameListener(private val miniGame: MiniGame) : Listener {
     @EventHandler
@@ -233,15 +250,19 @@ class MiniGameListener(private val miniGame: MiniGame) : Listener {
 ````
 
 ````kotlin
+import com.github.shynixn.mccoroutine.SuspendingJavaPlugin
+import com.github.shynixn.mccoroutine.registerSuspendingEvents
+import com.github.shynixn.mccoroutine.setSuspendingExecutor
+
 class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
     private val database = Database()
     private val miniGame = MiniGame()
 
     override suspend fun onEnableAsync() {
         database.createDbIfNotExist()
-        server.pluginManager.registerSuspendingEvents(PlayerDataListener(database), plugin)
+        server.pluginManager.registerSuspendingEvents(PlayerDataListener(database), this)
         getCommand("playerdata")!!.setSuspendingExecutor(PlayerDataCommandExecutor(database))
-        server.pluginManager.registerSuspendingEvents(MiniGameListener(minigame), plugin)
+        server.pluginManager.registerSuspendingEvents(MiniGameListener(miniGame), this)
     }
 
     override suspend fun onDisableAsync() {

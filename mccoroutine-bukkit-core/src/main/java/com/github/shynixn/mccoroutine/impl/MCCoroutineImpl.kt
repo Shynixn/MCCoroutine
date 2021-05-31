@@ -38,7 +38,7 @@ class MCCoroutineImpl : MCCoroutine {
      */
     private fun startCoroutineSession(plugin: Plugin) {
         if (!plugin.isEnabled) {
-            throw RuntimeException("Plugin ${plugin.name} attempt to start a new coroutine session while being disabled. If you need to call a suspension method in JavaPlugin\$onDisable, use kotlinx.coroutines.runblocking{} instead of launch{}. Dispatchers such as plugin.minecraftDispatcher and plugin.asyncDispatcher are also already disposed at this point and cannot be used!")
+            throw RuntimeException("Plugin ${plugin.name} attempt to start a new coroutine session while being disabled. Dispatchers such as plugin.minecraftDispatcher and plugin.asyncDispatcher are already disposed at this point and cannot be used!")
         }
 
         val pluginListener = PluginListener(this, plugin)

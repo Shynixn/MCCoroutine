@@ -36,6 +36,8 @@ open class SuspendingJavaPlugin : JavaPlugin(), SuspendingPlugin {
         runBlocking {
             onEnableAsync()
         }
+        // Disables runBlocking hack to not interfere with other tasks.
+        mcCoroutine.getCoroutineSession(this).wakeUpBlockService.isManipulatedServerHeartBeatEnabled = false
     }
 
     /**

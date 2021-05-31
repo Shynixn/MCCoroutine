@@ -7,6 +7,10 @@ This guide continues the guide 'Creating a new Plugin' and describes how to brid
 Use the extension method ``plugin.launch{}`` to enter a suspendable context on the bukkit primary thread.
 
 ````kotlin
+import com.github.shynixn.mccoroutine.launch
+import kotlinx.coroutines.delay
+import org.bukkit.plugin.Plugin
+
 class Foo(private val plugin : Plugin) {
 
     fun bar() {
@@ -59,7 +63,7 @@ class Foo(private val plugin : Plugin) {
 ### 3. Do not use runBlocking
 
 Using ``runBlocking`` in production code is very bad as it annihilates any improvements, we have made by using coroutines. 
-MCCoroutine manipulates the Bukkit Scheduler to rescue the Bukkit Primary Thread Context if it is being used but ``plugin.launch{}``
+MCCoroutine manipulates the Bukkit Scheduler to allow ``runBlocking`` during startup and disable but ``plugin.launch{}``
 is almost always the function you want to use instead.
 
 ### 4. Test the Foo class

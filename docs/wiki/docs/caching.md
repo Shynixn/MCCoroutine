@@ -11,6 +11,9 @@ accesses when a player rejoins a server in a very short timeframe.
 For this, we put a ``lazy-loading`` cache in front of the  ``Database`` implementation.
 
 ````kotlin
+import kotlinx.coroutines.Deferred
+import org.bukkit.entity.Player
+
 class DatabaseCache(private val database: Database) {
     private val cache = HashMap<Player, Deferred<PlayerData>>()
 
@@ -26,6 +29,10 @@ non-blocking job which has got ``PlayerData`` as result. This means we essential
 the database into the cache.
 
 ````kotlin
+import kotlinx.coroutines.*
+import org.bukkit.entity.Player
+import org.bukkit.plugin.Plugin
+
 class DatabaseCache(private val database: Database, private val plugin: Plugin) {
     private val cache = HashMap<Player, Deferred<PlayerData>>()
 
@@ -33,8 +40,8 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
         return coroutineScope {
             if (!cache.containsKey(player)) {
                 // Cache miss, create a new job
-                cache[player] = async(plugin.minecraftDispatcher) {
-                    database.getDataFromPlayer(playerJoinEvent.player)
+                cache[player] = async(Dispatchers.IO) {
+                    database.getDataFromPlayer(player)
                 }
             }
 
@@ -50,6 +57,10 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
 Clearing the cache is as simple as adding a ``clear`` method.
 
 ````kotlin
+import kotlinx.coroutines.*
+import org.bukkit.entity.Player
+import org.bukkit.plugin.Plugin
+
 class DatabaseCache(private val database: Database, private val plugin: Plugin) {
     private val cache = HashMap<Player, Deferred<PlayerData>>()
 
@@ -61,8 +72,8 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
         return coroutineScope {
             if (!cache.containsKey(player)) {
                 // Cache miss, create a new job
-                cache[player] = async(plugin.minecraftDispatcher) {
-                    database.getDataFromPlayer(playerJoinEvent.player)
+                cache[player] = async(Dispatchers.IO) {
+                    database.getDataFromPlayer(player)
                 }
             }
 
@@ -78,6 +89,11 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
 It is possible to add a new suspendable repeatable background task to save the cached data every 10 minutes. 
 
 ````kotlin
+import com.github.shynixn.mccoroutine.launch
+import kotlinx.coroutines.*
+import org.bukkit.entity.Player
+import org.bukkit.plugin.Plugin
+
 class DatabaseCache(private val database: Database, private val plugin: Plugin) {
     private val cache = HashMap<Player, Deferred<PlayerData>>()
 
@@ -85,7 +101,7 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
         // This plugin.launch launches a new scope in the minecraft server context which can be understood
         // to be a background task and behaves in a similar way to Bukkit.getScheduler().runTask(plugin, Runnable {  })
         plugin.launch {
-            // This background task is a repeatable task which in this case is an endless loop. The endless loop 
+            // This background task is a repeatable task which in this case is an endless loop. The endless loop
             // is automatically stopped by MCCoroutine once you reload your plugin.
             while (true) {
                 // Save all cached player data every 10 minutes.
@@ -98,7 +114,7 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
                     }
                 }
 
-                // Suspending the current context is important in this case otherwise the minecraft thread will only execute this 
+                // Suspending the current context is important in this case otherwise the minecraft thread will only execute this
                 // endless loop as it does not have time to execute other things. Delay gives the thread time to execute other things.
                 delay(10 * 60 * 1000) // 10 minutes
             }
@@ -113,8 +129,8 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
         return coroutineScope {
             if (!cache.containsKey(player)) {
                 // Cache miss, create a new job
-                cache[player] = async(plugin.minecraftDispatcher) {
-                    database.getDataFromPlayer(playerJoinEvent.player)
+                cache[player] = async(Dispatchers.IO) {
+                    database.getDataFromPlayer(player)
                 }
             }
 
@@ -131,13 +147,18 @@ It is no longer necessary to manually call save as auto save is put in place.
 Also, the cache automatically clears itself up every 10 minutes. 
 
 ````kotlin
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+import java.util.*
 
 class PlayerDataListener(private val database : DatabaseCache) : Listener {
     @EventHandler
     suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
-       val playerData = database.getDataFromPlayer(playerJoinEvent.player)
-       playerData.name = player.name 
-       playerData.lastJoinDate = Date()
+        val player = playerJoinEvent.player
+        val playerData = database.getDataFromPlayer(player)
+        playerData.name = player.name
+        playerData.lastJoinDate = Date()
     }
 }
 ````
