@@ -4,7 +4,7 @@ In order to access the MCCoroutine Kotlin API, you need to include the following
 
 !!! note "Further help"
     Please take a look at the sample plugins ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample`` which 
-    can be found on [Github](https://github.com/Shynixn/BlockBall).
+    can be found on [Github](https://github.com/Shynixn/MCCoroutine).
     A real production plugin using MCCoroutine can be found [here](https://github.com/Shynixn/BlockBall).
 
 !!! note "Sponge Documentation"
