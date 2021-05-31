@@ -2,10 +2,15 @@
 
 In order to access the MCCoroutine Kotlin API, you need to include the following libraries into your project.
 
-!!! note "Kotlin Coroutines Description"
+!!! note "Further help"
+    Please take a look at the sample plugins ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample`` which 
+    can be found on [Github]([Sponge Documentation](https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md).
+    A real production plugin using MCCoroutine can be found here (https://github.com/Shynixn/BlockBall).
+
+!!! note "Sponge Documentation"
     Please notice that these are the libraries for Bukkit-API based servers. If you are looking for the Sponge-API, simply
     replace bukkit with sponge in name of the dependencies. e.g. 'com.github.shynixn.mccoroutine:mccoroutine-sponge-api:
-    x.x.x'
+    x.x.x' [Sponge Documentation](https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md)
 
 ### 1. Add MCCoroutine
 
