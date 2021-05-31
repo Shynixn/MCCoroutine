@@ -1,0 +1,622 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.6">
+    
+    
+      
+        <title>Suspending Caches, Background Repeating Tasks - MCCoroutine</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.875de78c.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#adding-suspending-caches-and-background-tasks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MCCoroutine" class="md-header__button md-logo" aria-label="MCCoroutine" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MCCoroutine
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Suspending Caches, Background Repeating Tasks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MCCoroutine" class="md-nav__button md-logo" aria-label="MCCoroutine" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    MCCoroutine
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gettingstarted/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../newplugin/" class="md-nav__link">
+        Creating a new Plugin
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../listener/" class="md-nav__link">
+        Suspending Listeners
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../commandexecutors/" class="md-nav__link">
+        Suspending CommandExecutors
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../repeatingtasks/" class="md-nav__link">
+        Suspending Delayed, Repeating Tasks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Suspending Caches, Background Repeating Tasks
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Suspending Caches, Background Repeating Tasks
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-add-a-simple-cache" class="md-nav__link">
+    1. Add a simple cache
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-deferred-playerdata" class="md-nav__link">
+    2. Deferred PlayerData
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-clear-the-cache" class="md-nav__link">
+    3. Clear the cache
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-adding-auto-save-of-cache" class="md-nav__link">
+    4. Adding auto save of cache
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-update-playerdatalistener" class="md-nav__link">
+    5. Update PlayerDataListener
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-test-the-cache" class="md-nav__link">
+    4. Test the Cache
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../brdige.md" class="md-nav__link">
+        Bridging non-suspendable functions to suspendable functions
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-add-a-simple-cache" class="md-nav__link">
+    1. Add a simple cache
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-deferred-playerdata" class="md-nav__link">
+    2. Deferred PlayerData
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-clear-the-cache" class="md-nav__link">
+    3. Clear the cache
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-adding-auto-save-of-cache" class="md-nav__link">
+    4. Adding auto save of cache
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-update-playerdatalistener" class="md-nav__link">
+    5. Update PlayerDataListener
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-test-the-cache" class="md-nav__link">
+    4. Test the Cache
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="adding-suspending-caches-and-background-tasks">Adding suspending caches and background tasks</h1>
+<p>This guide continues the guide 'Creating a new Plugin' and describes how the caching strategy <code>lazy loading</code> can be
+used together with coroutines.</p>
+<h3 id="1-add-a-simple-cache">1. Add a simple cache</h3>
+<p>When taking a look at the <code>Database</code> implementation from before, we can observe quite a lot of redundant database
+accesses when a player rejoins a server in a very short timeframe.</p>
+<p>For this, we put a <code>lazy-loading</code> cache in front of the  <code>Database</code> implementation.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">cache</span> <span class="o">=</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span> <span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
+
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">):</span> <span class="n">PlayerData</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2-deferred-playerdata">2. Deferred PlayerData</h3>
+<p>Instead of using the type <code>PlayerData</code> directly, we use the type <code>Deferred</code> which is the representation of a
+non-blocking job which has got <code>PlayerData</code> as result. This means we essentially store the job of retrieving data from
+the database into the cache.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="kd">private</span> <span class="kd">val</span> <span class="nv">plugin</span><span class="p">:</span> <span class="n">Plugin</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">cache</span> <span class="o">=</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span> <span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
+
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">):</span> <span class="n">PlayerData</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">coroutineScope</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span> <span class="p">{</span>
+                <span class="c1">// Cache miss, create a new job</span>
+                <span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span> <span class="o">=</span> <span class="n">async</span><span class="p">(</span><span class="n">plugin</span><span class="p">.</span><span class="na">minecraftDispatcher</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Await suspends the current context until the value of the ``Deferred`` job is ready.</span>
+            <span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-clear-the-cache">3. Clear the cache</h3>
+<p>Clearing the cache is as simple as adding a <code>clear</code> method.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="kd">private</span> <span class="kd">val</span> <span class="nv">plugin</span><span class="p">:</span> <span class="n">Plugin</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">cache</span> <span class="o">=</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span> <span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
+
+    <span class="kd">fun</span> <span class="nf">clear</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">cache</span><span class="p">.</span><span class="na">clear</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">):</span> <span class="n">PlayerData</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">coroutineScope</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span> <span class="p">{</span>
+                <span class="c1">// Cache miss, create a new job</span>
+                <span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span> <span class="o">=</span> <span class="n">async</span><span class="p">(</span><span class="n">plugin</span><span class="p">.</span><span class="na">minecraftDispatcher</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Await suspends the current context until the value of the ``Deferred`` job is ready.</span>
+            <span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="4-adding-auto-save-of-cache">4. Adding auto save of cache</h3>
+<p>It is possible to add a new suspendable repeatable background task to save the cached data every 10 minutes. </p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="kd">private</span> <span class="kd">val</span> <span class="nv">plugin</span><span class="p">:</span> <span class="n">Plugin</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">cache</span> <span class="o">=</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span> <span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
+
+    <span class="k">init</span> <span class="p">{</span>
+        <span class="c1">// This plugin.launch launches a new scope in the minecraft server context which can be understood</span>
+        <span class="c1">// to be a background task and behaves in a similar way to Bukkit.getScheduler().runTask(plugin, Runnable {  })</span>
+        <span class="n">plugin</span><span class="p">.</span><span class="na">launch</span> <span class="p">{</span>
+            <span class="c1">// This background task is a repeatable task which in this case is an endless loop. The endless loop </span>
+            <span class="c1">// is automatically stopped by MCCoroutine once you reload your plugin.</span>
+            <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Save all cached player data every 10 minutes.</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">player</span> <span class="k">in</span> <span class="n">cache</span><span class="p">.</span><span class="na">keys</span><span class="p">.</span><span class="na">toTypedArray</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">())</span>
+
+                    <span class="c1">// Remove player when no longer online</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">player</span><span class="p">.</span><span class="na">isOnline</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">cache</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+                <span class="c1">// Suspending the current context is important in this case otherwise the minecraft thread will only execute this </span>
+                <span class="c1">// endless loop as it does not have time to execute other things. Delay gives the thread time to execute other things.</span>
+                <span class="n">delay</span><span class="p">(</span><span class="m">10</span> <span class="o">*</span> <span class="m">60</span> <span class="o">*</span> <span class="m">1000</span><span class="p">)</span> <span class="c1">// 10 minutes</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">fun</span> <span class="nf">clear</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">cache</span><span class="p">.</span><span class="na">clear</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">):</span> <span class="n">PlayerData</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">coroutineScope</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span> <span class="p">{</span>
+                <span class="c1">// Cache miss, create a new job</span>
+                <span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span> <span class="o">=</span> <span class="n">async</span><span class="p">(</span><span class="n">plugin</span><span class="p">.</span><span class="na">minecraftDispatcher</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Await suspends the current context until the value of the ``Deferred`` job is ready.</span>
+            <span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="5-update-playerdatalistener">5. Update PlayerDataListener</h3>
+<p>It is no longer necessary to manually call save as auto save is put in place. 
+Also, the cache automatically clears itself up every 10 minutes. </p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="p">:</span> <span class="n">DatabaseCache</span><span class="p">)</span> <span class="p">:</span> <span class="n">Listener</span> <span class="p">{</span>
+    <span class="nd">@EventHandler</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span> <span class="n">PlayerJoinEvent</span><span class="p">)</span> <span class="p">{</span>
+       <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+       <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">name</span> 
+       <span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="4-test-the-cache">4. Test the Cache</h3>
+<p>Join and leave your server to observe changes on your database.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../repeatingtasks/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Suspending Delayed, Repeating Tasks
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.d351de03.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.34eae1b6.min.js"></script>
+      
+    
+  </body>
+</html>

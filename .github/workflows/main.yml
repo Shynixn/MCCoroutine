@@ -134,6 +134,9 @@ jobs:
     if: "contains(github.ref, 'master')"
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8'
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
@@ -144,9 +147,17 @@ jobs:
           git pull
           git config --global user.email "shynixn@email.com" && git config --global user.name "Shynixn CI Actions"
           rm -rf docs/apidocs
+          rm -rf docs/wiki/site
           chmod +x gradlew
           ./gradlew generateBukkitJavaDocPages > /dev/null
           ./gradlew generateSpongeJavaDocPages > /dev/null
+          sudo apt-get install -y mkdocs
+          pip install mkdocs-material
+          pip install Pygments
+          cd docs/wiki          
+          mkdocs build
+          cd ..
+          cd ..
           git add docs
           git commit --message "Automatic CI Documentation."
           git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/MCCoroutine.git HEAD:master

@@ -1,0 +1,17 @@
+site_name: MCCoroutine
+nav:
+  - 'Introduction': README.md
+  - 'Getting Started': gettingstarted.md
+  - 'Creating a new Plugin': newplugin.md
+  - 'Suspending Listeners': listener.md
+  - 'Suspending CommandExecutors': commandexecutors.md
+  - 'Suspending Delayed, Repeating Tasks': repeatingtasks.md
+  - 'Suspending Caches, Background Repeating Tasks': caching.md
+  - 'Bridging non-suspendable functions to suspendable functions': bridge.md
+theme: material
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
