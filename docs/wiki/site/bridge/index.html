@@ -412,7 +412,11 @@
 <p>This guide continues the guide 'Creating a new Plugin' and describes how to bridge non suspendable code with suspendable implementations.</p>
 <h3 id="1-adding-plugin-launch">1. Adding plugin launch</h3>
 <p>Use the extension method <code>plugin.launch{}</code> to enter a suspendable context on the bukkit primary thread.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">plugin</span> <span class="p">:</span> <span class="n">Plugin</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.launch</span>
+<span class="k">import</span> <span class="nn">kotlinx.coroutines.delay</span>
+<span class="k">import</span> <span class="nn">org.bukkit.plugin.Plugin</span>
+
+<span class="kd">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">plugin</span> <span class="p">:</span> <span class="n">Plugin</span><span class="p">)</span> <span class="p">{</span>
 
     <span class="kd">fun</span> <span class="nf">bar</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">val</span> <span class="nv">job</span> <span class="o">=</span> <span class="n">plugin</span><span class="p">.</span><span class="na">launch</span> <span class="p">{</span>
@@ -456,7 +460,7 @@ Still, it is important to understand the execution order in this case.</p>
 </code></pre></div>
 <h3 id="3-do-not-use-runblocking">3. Do not use runBlocking</h3>
 <p>Using <code>runBlocking</code> in production code is very bad as it annihilates any improvements, we have made by using coroutines. 
-MCCoroutine manipulates the Bukkit Scheduler to rescue the Bukkit Primary Thread Context if it is being used but <code>plugin.launch{}</code>
+MCCoroutine manipulates the Bukkit Scheduler to allow <code>runBlocking</code> during startup and disable but <code>plugin.launch{}</code>
 is almost always the function you want to use instead.</p>
 <h3 id="4-test-the-foo-class">4. Test the Foo class</h3>
 <p>Connect to the foo class in any way and call it for testing.</p>

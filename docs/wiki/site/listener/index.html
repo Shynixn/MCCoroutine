@@ -399,10 +399,17 @@
 <h3 id="1-create-the-listener-class">1. Create the Listener class</h3>
 <p>Create a traditional listener and add suspend to all functions where you perform suspendable operations (e.g. calling other
 suspend functions). You can mix suspendable and non suspendable functions in listeners.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">Listener</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">org.bukkit.event.EventHandler</span>
+<span class="k">import</span> <span class="nn">org.bukkit.event.Listener</span>
+<span class="k">import</span> <span class="nn">org.bukkit.event.player.PlayerJoinEvent</span>
+<span class="k">import</span> <span class="nn">org.bukkit.event.player.PlayerQuitEvent</span>
+<span class="k">import</span> <span class="nn">java.util.*</span>
+
+<span class="kd">class</span> <span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">Listener</span> <span class="p">{</span>
     <span class="nd">@EventHandler</span>
     <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span> <span class="n">PlayerJoinEvent</span><span class="p">)</span> <span class="p">{</span>
-       <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+       <span class="kd">val</span> <span class="nv">player</span> <span class="o">=</span> <span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span>
+       <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
        <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">name</span> 
        <span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
        <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
@@ -410,7 +417,8 @@ suspend functions). You can mix suspendable and non suspendable functions in lis
 
     <span class="nd">@EventHandler</span>
     <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">playerQuitEvent</span><span class="p">:</span> <span class="n">PlayerQuitEvent</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">playerQuitEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="nv">player</span> <span class="o">=</span> <span class="n">playerQuitEvent</span><span class="p">.</span><span class="na">player</span>
+        <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
         <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">name</span>
         <span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
         <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
@@ -420,12 +428,15 @@ suspend functions). You can mix suspendable and non suspendable functions in lis
 <h3 id="2-connect-javaplugin-and-playerdatalistener">2. Connect JavaPlugin and PlayerDataListener</h3>
 <p>Instead of using <code>registerEvents</code>, use the provided extension method <code>registerSuspendingEvents</code> to allow
 suspendable functions in your listener. Please consider, that timing measurements are no longer accurate for suspendable functions.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingJavaPlugin</span><span class="p">()</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.SuspendingJavaPlugin</span>
+<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.registerSuspendingEvents</span>
+
+<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingJavaPlugin</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 
     <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onEnableAsync</span><span class="p">()</span> <span class="p">{</span>
         <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-        <span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span> <span class="n">plugin</span><span class="p">)</span>
+        <span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span> <span class="k">this</span><span class="p">)</span>
     <span class="p">}</span>
 
     <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onDisableAsync</span><span class="p">()</span> <span class="p">{</span>

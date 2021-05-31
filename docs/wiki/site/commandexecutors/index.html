@@ -400,7 +400,12 @@ data.</p>
 <h3 id="1-create-the-commandexecutor-class">1. Create the CommandExecutor class</h3>
 <p>Create a traditional CommandExecutor but implement <code>SuspendingCommandExecutor</code> instead of <code>CommandExecutor</code>. Please
 consider that the return value <code>true</code> is automatically assumed if the function is suspended in one branch.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">SuspendingCommandExecutor</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.SuspendingCommandExecutor</span>
+<span class="k">import</span> <span class="nn">org.bukkit.command.Command</span>
+<span class="k">import</span> <span class="nn">org.bukkit.command.CommandSender</span>
+<span class="k">import</span> <span class="nn">org.bukkit.entity.Player</span>
+
+<span class="kd">class</span> <span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">SuspendingCommandExecutor</span> <span class="p">{</span>
     <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onCommand</span><span class="p">(</span>
         <span class="n">sender</span><span class="p">:</span> <span class="n">CommandSender</span><span class="p">,</span>
         <span class="n">command</span><span class="p">:</span> <span class="n">Command</span><span class="p">,</span>
@@ -415,7 +420,7 @@ consider that the return value <code>true</code> is automatically assumed if the
             <span class="kd">val</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="m">1</span><span class="o">]</span>
             <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">sender</span><span class="p">)</span>
             <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span>
-            <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
+            <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">true</span>
         <span class="p">}</span>
 
@@ -426,7 +431,15 @@ consider that the return value <code>true</code> is automatically assumed if the
 <h3 id="2-connect-javaplugin-and-playerdatacommandexecutor">2. Connect JavaPlugin and PlayerDataCommandExecutor</h3>
 <p>Instead of using <code>setExecutor</code>, use the provided extension method <code>setSuspendingExecutor</code> to allow to register a
 suspendable command executor.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingJavaPlugin</span><span class="p">()</span> <span class="p">{</span>
+<div class="admonition note">
+<p class="admonition-title">Important</p>
+<p>Do not forget to declare the <code>playerdata</code> command in your plugin.yml.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.SuspendingJavaPlugin</span>
+<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.registerSuspendingEvents</span>
+<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.setSuspendingExecutor</span>
+
+<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingJavaPlugin</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 
     <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onEnableAsync</span><span class="p">()</span> <span class="p">{</span>
