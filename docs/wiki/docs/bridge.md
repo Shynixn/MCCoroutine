@@ -65,5 +65,3 @@ is almost always the function you want to use instead.
 ### 4. Test the Foo class
 
 Connect to the foo class in any way and call it for testing.
-
-The next page continuous by adding caches to the plugin.

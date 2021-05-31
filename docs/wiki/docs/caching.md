@@ -75,14 +75,18 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
 
 ### 4. Adding auto save of cache
 
-It is possible to add a new repeatable task to save the cached data every 10 minutes. 
+It is possible to add a new suspendable repeatable background task to save the cached data every 10 minutes. 
 
 ````kotlin
 class DatabaseCache(private val database: Database, private val plugin: Plugin) {
     private val cache = HashMap<Player, Deferred<PlayerData>>()
 
     init {
+        // This plugin.launch launches a new scope in the minecraft server context which can be understood
+        // to be a background task and behaves in a similar way to Bukkit.getScheduler().runTask(plugin, Runnable {  })
         plugin.launch {
+            // This background task is a repeatable task which in this case is an endless loop. The endless loop 
+            // is automatically stopped by MCCoroutine once you reload your plugin.
             while (true) {
                 // Save all cached player data every 10 minutes.
                 for (player in cache.keys.toTypedArray()) {
@@ -94,6 +98,8 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
                     }
                 }
 
+                // Suspending the current context is important in this case otherwise the minecraft thread will only execute this 
+                // endless loop as it does not have time to execute other things. Delay gives the thread time to execute other things.
                 delay(10 * 60 * 1000) // 10 minutes
             }
         }
