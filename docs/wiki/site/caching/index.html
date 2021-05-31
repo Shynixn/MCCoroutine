@@ -14,7 +14,7 @@
     
     
       
-        <title>Caching Database Results - MCCoroutine</title>
+        <title>Suspending Caches, Background Repeating Tasks - MCCoroutine</title>
       
     
     
@@ -59,7 +59,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#advanced-topic-caching" class="md-skip">
+        <a href="#adding-suspending-caches-and-background-tasks" class="md-skip">
           Skip to content
         </a>
       
@@ -89,7 +89,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Caching Database Results
+              Suspending Caches, Background Repeating Tasks
             
           </span>
         </div>
@@ -244,23 +244,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../REPEATINGTASK/" class="md-nav__link">
+      <a href="../repeatingtasks/" class="md-nav__link">
         Suspending Delayed, Repeating Tasks
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="./" class="md-nav__link">
-        Bridging non-suspendable functions to suspendable functions
       </a>
     </li>
   
@@ -284,12 +269,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Caching Database Results
+          Suspending Caches, Background Repeating Tasks
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Caching Database Results
+        Suspending Caches, Background Repeating Tasks
       </a>
       
         
@@ -352,6 +337,21 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../brdige.md" class="md-nav__link">
+        Bridging non-suspendable functions to suspendable functions
+      </a>
     </li>
   
 
@@ -436,12 +436,12 @@
               
                 
                 
-                <h1 id="advanced-topic-caching">Advanced Topic: Caching</h1>
+                <h1 id="adding-suspending-caches-and-background-tasks">Adding suspending caches and background tasks</h1>
 <p>This guide continues the guide 'Creating a new Plugin' and describes how the caching strategy <code>lazy loading</code> can be
 used together with coroutines.</p>
 <h3 id="1-add-a-simple-cache">1. Add a simple cache</h3>
 <p>When taking a look at the <code>Database</code> implementation from before, we can observe quite a lot of redundant database
-accesses when a player rejoins a server in a very short time.</p>
+accesses when a player rejoins a server in a very short timeframe.</p>
 <p>For this, we put a <code>lazy-loading</code> cache in front of the  <code>Database</code> implementation.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">private</span> <span class="kd">val</span> <span class="nv">cache</span> <span class="o">=</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span> <span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
@@ -497,12 +497,16 @@ the database into the cache.</p>
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="4-adding-auto-save-of-cache">4. Adding auto save of cache</h3>
-<p>It is possible to add a new repeatable task to save the cached data every 10 minutes. </p>
+<p>It is possible to add a new suspendable repeatable background task to save the cached data every 10 minutes. </p>
 <div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="kd">private</span> <span class="kd">val</span> <span class="nv">plugin</span><span class="p">:</span> <span class="n">Plugin</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">private</span> <span class="kd">val</span> <span class="nv">cache</span> <span class="o">=</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span> <span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
 
     <span class="k">init</span> <span class="p">{</span>
+        <span class="c1">// This plugin.launch launches a new scope in the minecraft server context which can be understood</span>
+        <span class="c1">// to be a background task and behaves in a similar way to Bukkit.getScheduler().runTask(plugin, Runnable {  })</span>
         <span class="n">plugin</span><span class="p">.</span><span class="na">launch</span> <span class="p">{</span>
+            <span class="c1">// This background task is a repeatable task which in this case is an endless loop. The endless loop </span>
+            <span class="c1">// is automatically stopped by MCCoroutine once you reload your plugin.</span>
             <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
                 <span class="c1">// Save all cached player data every 10 minutes.</span>
                 <span class="k">for</span> <span class="p">(</span><span class="n">player</span> <span class="k">in</span> <span class="n">cache</span><span class="p">.</span><span class="na">keys</span><span class="p">.</span><span class="na">toTypedArray</span><span class="p">())</span> <span class="p">{</span>
@@ -514,6 +518,8 @@ the database into the cache.</p>
                     <span class="p">}</span>
                 <span class="p">}</span>
 
+                <span class="c1">// Suspending the current context is important in this case otherwise the minecraft thread will only execute this </span>
+                <span class="c1">// endless loop as it does not have time to execute other things. Delay gives the thread time to execute other things.</span>
                 <span class="n">delay</span><span class="p">(</span><span class="m">10</span> <span class="o">*</span> <span class="m">60</span> <span class="o">*</span> <span class="m">1000</span><span class="p">)</span> <span class="c1">// 10 minutes</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -570,7 +576,7 @@ Also, the cache automatically clears itself up every 10 minutes. </p>
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="./" class="md-footer__link md-footer__link--prev" rel="prev">
+        <a href="../repeatingtasks/" class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -579,7 +585,7 @@ Also, the cache automatically clears itself up every 10 minutes. </p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Bridging non-suspendable functions to suspendable functions
+              Suspending Delayed, Repeating Tasks
             </div>
           </div>
         </a>
