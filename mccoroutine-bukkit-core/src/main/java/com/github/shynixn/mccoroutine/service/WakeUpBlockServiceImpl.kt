@@ -24,7 +24,7 @@ class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
     /**
      * Enables or disables the server heartbeat hack.
      */
-    override var isManipulatedServerHeartBeatEnabled: Boolean = true
+    override var isManipulatedServerHeartBeatEnabled: Boolean = false
 
     /**
      * Reference to the primary server thread.
