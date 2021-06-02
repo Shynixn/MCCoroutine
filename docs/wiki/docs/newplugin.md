@@ -27,8 +27,8 @@ This example plugin uses gradle as a build system. For more details see the ``St
 
 ```groovy
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.4.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.4.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.5.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.10")
 }
