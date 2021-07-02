@@ -8,6 +8,27 @@
 MCCoroutine is an extension to bukkit and sponge server implementations (Spigot, Paper, SpongeVanilla, SpongeForge etc.) to use Kotlin Coroutines (async,await) for
 all common operations.
 
+**Examples:**
+
+```kotlin
+// Allows to prepend suspend to any listener function.
+class PlayerConnectListener : Listener {
+    @EventHandler
+    suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
+    }
+}
+```
+
+```kotlin
+// Adds a new interface for suspendable command executors
+class AdminCommandExecutor: SuspendingCommandExecutor {
+    override suspend fun onCommand(sender: CommandSender,command: Command,label: String,args: Array<out String>): Boolean {
+        return false
+    }
+}
+```
+
+
 ### Getting started
 
 * [Documentation](https://shynixn.github.io/MCCoroutine/wiki/site/)
