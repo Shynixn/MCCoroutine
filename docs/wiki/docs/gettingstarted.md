@@ -75,6 +75,20 @@ dependencies {
 </dependency>
 ```
 
-### 3. Test if everything is working
+### 3. Shade the dependencies into your plugin.jar file
+
+* For version >= 1.17: Add the kotlin and coroutine dependencies to the libraries tag
+
+**plugin.yml**
+```yaml
+libraries:
+  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.5.0
+  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.5.0
+```
+
+* For version < 1.17: If you are using Kotlin, you probably know how shading dependencies works
+
+
+### 4. Test if everything is working
 
 Try to call ``launch{}`` in your ``onEnable()`` function in your ``Plugin`` class.
