@@ -9,19 +9,19 @@
       
       
       
-      <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.9">
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.1">
     
     
       
-        <title>Suspending Listeners - MCCoroutine</title>
+        <title>Suspending CommandExecutors - MCCoroutine</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.ca7ac06f.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.1118c9be.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.f1a3b89f.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ba0d045b.min.css">
         
       
     
@@ -53,7 +53,7 @@
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
   
     
-    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -61,7 +61,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#adding-suspending-listeners" class="md-skip">
+        <a href="#adding-suspending-commandexecutors" class="md-skip">
           Skip to content
         </a>
       
@@ -72,7 +72,7 @@
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="index.html" title="MCCoroutine" class="md-header__button md-logo" aria-label="MCCoroutine" data-md-component="logo">
+    <a href=".." title="MCCoroutine" class="md-header__button md-logo" aria-label="MCCoroutine" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -91,7 +91,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Suspending Listeners
+              Suspending CommandExecutors
             
           </span>
         </div>
@@ -108,14 +108,18 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-      </button>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -152,7 +156,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="index.html" title="MCCoroutine" class="md-nav__button md-logo" aria-label="MCCoroutine" data-md-component="logo">
+    <a href=".." title="MCCoroutine" class="md-nav__button md-logo" aria-label="MCCoroutine" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -171,7 +175,7 @@
   
   
     <li class="md-nav__item">
-      <a href="index.html" class="md-nav__link">
+      <a href=".." class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -186,7 +190,7 @@
   
   
     <li class="md-nav__item">
-      <a href="gettingstarted.html" class="md-nav__link">
+      <a href="../gettingstarted/" class="md-nav__link">
         Getting Started
       </a>
     </li>
@@ -201,8 +205,23 @@
   
   
     <li class="md-nav__item">
-      <a href="newplugin.html" class="md-nav__link">
+      <a href="../newplugin/" class="md-nav__link">
         Creating a new Plugin
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../listener/" class="md-nav__link">
+        Suspending Listeners
       </a>
     </li>
   
@@ -226,12 +245,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Suspending Listeners
+          Suspending CommandExecutors
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="listener.html" class="md-nav__link md-nav__link--active">
-        Suspending Listeners
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Suspending CommandExecutors
       </a>
       
         
@@ -249,22 +268,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-create-the-listener-class" class="md-nav__link">
-    1. Create the Listener class
+  <a href="#1-create-the-commandexecutor-class" class="md-nav__link">
+    1. Create the CommandExecutor class
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-connect-javaplugin-and-playerdatalistener" class="md-nav__link">
-    2. Connect JavaPlugin and PlayerDataListener
+  <a href="#2-connect-javaplugin-and-playerdatacommandexecutor" class="md-nav__link">
+    2. Connect JavaPlugin and PlayerDataCommandExecutor
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-test-the-listener" class="md-nav__link">
-    3. Test the Listener
+  <a href="#3-test-the-commandexecutor" class="md-nav__link">
+    3. Test the CommandExecutor
   </a>
   
 </li>
@@ -285,22 +304,7 @@
   
   
     <li class="md-nav__item">
-      <a href="commandexecutors.html" class="md-nav__link">
-        Suspending CommandExecutors
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="repeatingtasks.html" class="md-nav__link">
+      <a href="../repeatingtasks/" class="md-nav__link">
         Suspending Delayed, Repeating Tasks
       </a>
     </li>
@@ -315,7 +319,7 @@
   
   
     <li class="md-nav__item">
-      <a href="caching.html" class="md-nav__link">
+      <a href="../caching/" class="md-nav__link">
         Suspending Caches, Background Repeating Tasks
       </a>
     </li>
@@ -330,7 +334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="bridge.html" class="md-nav__link">
+      <a href="../bridge/" class="md-nav__link">
         Bridging non-suspendable functions to suspendable functions
       </a>
     </li>
@@ -363,22 +367,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-create-the-listener-class" class="md-nav__link">
-    1. Create the Listener class
+  <a href="#1-create-the-commandexecutor-class" class="md-nav__link">
+    1. Create the CommandExecutor class
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-connect-javaplugin-and-playerdatalistener" class="md-nav__link">
-    2. Connect JavaPlugin and PlayerDataListener
+  <a href="#2-connect-javaplugin-and-playerdatacommandexecutor" class="md-nav__link">
+    2. Connect JavaPlugin and PlayerDataCommandExecutor
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-test-the-listener" class="md-nav__link">
-    3. Test the Listener
+  <a href="#3-test-the-commandexecutor" class="md-nav__link">
+    3. Test the CommandExecutor
   </a>
   
 </li>
@@ -396,59 +400,67 @@
               
                 
                 
-                <h1 id="adding-suspending-listeners">Adding suspending listeners</h1>
-<p>This guide continues the guide 'Creating a new Plugin' and describes how listeners can be used to load and save player data.</p>
-<h3 id="1-create-the-listener-class">1. Create the Listener class</h3>
-<p>Create a traditional listener and add suspend to all functions where you perform suspendable operations (e.g. calling other
-suspend functions). You can mix suspendable and non suspendable functions in listeners.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">org.bukkit.event.EventHandler</span>
-<span class="k">import</span> <span class="nn">org.bukkit.event.Listener</span>
-<span class="k">import</span> <span class="nn">org.bukkit.event.player.PlayerJoinEvent</span>
-<span class="k">import</span> <span class="nn">org.bukkit.event.player.PlayerQuitEvent</span>
-<span class="k">import</span> <span class="nn">java.util.*</span>
+                <h1 id="adding-suspending-commandexecutors">Adding suspending commandExecutors</h1>
+<p>This guide continues the guide 'Creating a new Plugin' and describes how command executors can be used to edit player
+data.</p>
+<h3 id="1-create-the-commandexecutor-class">1. Create the CommandExecutor class</h3>
+<p>Create a traditional CommandExecutor but implement <code>SuspendingCommandExecutor</code> instead of <code>CommandExecutor</code>. Please
+consider that the return value <code>true</code> is automatically assumed if the function is suspended in one branch.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.SuspendingCommandExecutor</span>
+<span class="k">import</span> <span class="nn">org.bukkit.command.Command</span>
+<span class="k">import</span> <span class="nn">org.bukkit.command.CommandSender</span>
+<span class="k">import</span> <span class="nn">org.bukkit.entity.Player</span>
 
-<span class="kd">class</span> <span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">Listener</span> <span class="p">{</span>
-    <span class="nd">@EventHandler</span>
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span> <span class="n">PlayerJoinEvent</span><span class="p">)</span> <span class="p">{</span>
-       <span class="kd">val</span> <span class="nv">player</span> <span class="o">=</span> <span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span>
-       <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-       <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">name</span> 
-       <span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
-       <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
-    <span class="p">}</span>
+<span class="kd">class</span> <span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">SuspendingCommandExecutor</span> <span class="p">{</span>
+    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onCommand</span><span class="p">(</span>
+        <span class="n">sender</span><span class="p">:</span> <span class="n">CommandSender</span><span class="p">,</span>
+        <span class="n">command</span><span class="p">:</span> <span class="n">Command</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+        <span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="o">&lt;</span><span class="k">out</span> <span class="kt">String</span><span class="o">&gt;</span>
+    <span class="p">):</span> <span class="kt">Boolean</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sender</span> <span class="k">!is</span> <span class="n">Player</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span>
+        <span class="p">}</span>
 
-    <span class="nd">@EventHandler</span>
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">playerQuitEvent</span><span class="p">:</span> <span class="n">PlayerQuitEvent</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">val</span> <span class="nv">player</span> <span class="o">=</span> <span class="n">playerQuitEvent</span><span class="p">.</span><span class="na">player</span>
-        <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-        <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">name</span>
-        <span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
-        <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">size</span> <span class="o">==</span> <span class="m">2</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;rename&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span> <span class="p">{</span>
+            <span class="kd">val</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="m">1</span><span class="o">]</span>
+            <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">sender</span><span class="p">)</span>
+            <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="kc">false</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="2-connect-javaplugin-and-playerdatalistener">2. Connect JavaPlugin and PlayerDataListener</h3>
-<p>Instead of using <code>registerEvents</code>, use the provided extension method <code>registerSuspendingEvents</code> to allow
-suspendable functions in your listener. Please consider, that timing measurements are no longer accurate for suspendable functions.</p>
+<h3 id="2-connect-javaplugin-and-playerdatacommandexecutor">2. Connect JavaPlugin and PlayerDataCommandExecutor</h3>
+<p>Instead of using <code>setExecutor</code>, use the provided extension method <code>setSuspendingExecutor</code> to allow to register a
+suspendable command executor.</p>
+<div class="admonition note">
+<p class="admonition-title">Important</p>
+<p>Do not forget to declare the <code>playerdata</code> command in your plugin.yml.</p>
+</div>
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.SuspendingJavaPlugin</span>
 <span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.registerSuspendingEvents</span>
+<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.setSuspendingExecutor</span>
 
 <span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingJavaPlugin</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
 
     <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onEnableAsync</span><span class="p">()</span> <span class="p">{</span>
         <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-        <span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span> <span class="k">this</span><span class="p">)</span>
+        <span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span> <span class="n">plugin</span><span class="p">)</span>
+        <span class="n">getCommand</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">)</span><span class="o">!!</span><span class="p">.</span><span class="na">setSuspendingExecutor</span><span class="p">(</span><span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
     <span class="p">}</span>
 
     <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onDisableAsync</span><span class="p">()</span> <span class="p">{</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="3-test-the-listener">3. Test the Listener</h3>
-<p>Join and leave your server to observe <code>getDataFromPlayer</code> and <code>saveData</code> messages print to your server log.
-Extend it with real database operations to get familiar with how it works.</p>
-<p>The next page continuous by adding command executors to the plugin.</p>
+<h3 id="3-test-the-commandexecutor">3. Test the CommandExecutor</h3>
+<p>Join your server and use the playerData command to observe <code>getDataFromPlayer</code> and <code>saveData</code> messages print to your server log.
+The next page continuous by adding repeating and delayed tasks to the plugin.</p>
                 
               
               
@@ -468,7 +480,7 @@ Extend it with real database operations to get familiar with how it works.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="newplugin.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Creating a new Plugin" rel="prev">
+        <a href="../listener/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Suspending Listeners" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -477,20 +489,20 @@ Extend it with real database operations to get familiar with how it works.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Creating a new Plugin
+              Suspending Listeners
             </div>
           </div>
         </a>
       
       
         
-        <a href="commandexecutors.html" class="md-footer__link md-footer__link--next" aria-label="Next: Suspending CommandExecutors" rel="next">
+        <a href="../repeatingtasks/" class="md-footer__link md-footer__link--next" aria-label="Next: Suspending Delayed, Repeating Tasks" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Suspending CommandExecutors
+              Suspending Delayed, Repeating Tasks
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -519,10 +531,10 @@ Extend it with real database operations to get familiar with how it works.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": ".", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.477d984a.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.53c85856.min.js", "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.82b56eb2.min.js"></script>
+      <script src="../assets/javascripts/bundle.716f8af4.min.js"></script>
       
     
   </body>
