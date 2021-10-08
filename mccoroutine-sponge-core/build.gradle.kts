@@ -24,9 +24,9 @@ repositories {
 dependencies {
     implementation(project(":mccoroutine-sponge-api"))
 
-    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 
-    testCompile("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    testCompile("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 
     compileOnly("org.spongepowered:spongeapi:7.2.0")
     testCompile("org.spongepowered:spongeapi:7.2.0")

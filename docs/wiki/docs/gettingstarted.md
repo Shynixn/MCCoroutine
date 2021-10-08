@@ -18,8 +18,8 @@ In order to access the MCCoroutine Kotlin API, you need to include the following
 
 ```groovy
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.5.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.5.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0")
 }
 ```
 
@@ -30,21 +30,21 @@ dependencies {
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-bukkit-api</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
     <scope>compile</scope>
 </dependency>
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-bukkit-core</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
     <scope>compile</scope>
 </dependency>
 ```
 
 ### 2. Add the official Kotlin Coroutines libraries
 
-MCCoroutine builds against Kotlin 1.3.x but does not ship the Kotlin Runtime or Kotlin Coroutines Runtime. This means
-you are free to choose any ship your Kotlin Runtime as you like as long it is >= 1.3.0.
+MCCoroutine builds against Kotlin 1.5.x but does not ship the Kotlin Runtime or Kotlin Coroutines Runtime. This means
+you can choose any Kotlin Runtime version as you like as long it is >= 1.3.0.
 
 Replace 1.x.x with the actual versions. 
 
@@ -82,8 +82,8 @@ dependencies {
 **plugin.yml**
 ```yaml
 libraries:
-  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.5.0
-  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.5.0
+  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0
+  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0
 ```
 
 * For version < 1.17: If you are using Kotlin, you probably know how shading dependencies works
