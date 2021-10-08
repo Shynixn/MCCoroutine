@@ -25,7 +25,7 @@ Source:
 
 ## UseCase
 
-In your server software a ordinary approach for scheduling asynchronous actions might look like this:
+In your server software an ordinary approach for scheduling asynchronous actions might look like this:
 
 #### Java - Bukkit
 ```java
