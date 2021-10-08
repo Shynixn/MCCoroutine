@@ -30,11 +30,6 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew clean build shadowJar
-          
-      - name: Publish Test Report
-        run: |
-          ./gradlew jacocoTestReport
-          bash <(curl -s https://codecov.io/bash)
 
       - name: Publish Release to Maven Central
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
