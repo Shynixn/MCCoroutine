@@ -8,6 +8,8 @@
 MCCoroutine is an extension to bukkit and sponge server implementations (Spigot, Paper, SpongeVanilla, SpongeForge etc.) to use Kotlin Coroutines (async,await) for
 all common operations.
 
+**Note**: This library is actively maintained, used in production plugins and has reached a stable state in June 2021. There are no more recent commits as it is seen as feature complete.
+
 **Examples:**
 
 ```kotlin
