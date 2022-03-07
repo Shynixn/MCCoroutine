@@ -100,20 +100,6 @@ fun PluginManager.registerSuspendingListener(plugin: Plugin, listener: Listener)
 }
 
 /**
- * Calls an event with the given details.
- * Allows to await the completion of suspending event listeners.
- *
- * @param event Event details.
- * @param plugin BungeeCord Plugin.
- * @return Collection of awaitable jobs. This job list may be empty if no suspending listener
- * was called. Each job instance represents an awaitable job for each method being called in each suspending listener.
- * For awaiting use callSuspendingEvent(..).joinAll().
- */
-fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin): Collection<Job> {
-    return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event)
-}
-
-/**
  * Registers an command executor with suspending function.
  * Does exactly the same as PluginManager.registerCommand
  * @param plugin BungeeCord Plugin.

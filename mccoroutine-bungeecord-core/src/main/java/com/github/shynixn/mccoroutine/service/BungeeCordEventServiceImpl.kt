@@ -5,8 +5,6 @@ import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Multimap
-import kotlinx.coroutines.Job
-import net.md_5.bungee.api.plugin.Event
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.api.plugin.PluginManager
@@ -14,7 +12,6 @@ import net.md_5.bungee.event.EventBus
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventHandlerMethod
 import java.lang.reflect.Method
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.locks.Lock
 import java.util.logging.Level
 
@@ -73,43 +70,6 @@ internal class BungeeCordEventServiceImpl(private val plugin: Plugin, private va
 
         // Register listener in PluginManager.
         listenersByPlugin.put(plugin, listener)
-    }
-
-    /**
-     * Fires a suspending event.
-     */
-    override fun fireSuspendingEvent(event: Event): Collection<Job> {
-        // Hook into the BungeeCord internal event bus.
-        val eventBusField = PluginManager::class.java.getDeclaredField("eventBus")
-        eventBusField.isAccessible = true
-        val eventBus = eventBusField.get(plugin.proxy.pluginManager) as EventBus
-
-        val eventMapField = EventBus::class.java.getDeclaredField("byEventBaked")
-        eventMapField.isAccessible = true
-        val eventMap = eventMapField.get(eventBus) as MutableMap<Class<*>, Array<EventHandlerMethod>>
-
-        if (!eventMap.containsKey(event.javaClass)) {
-            return emptyList()
-        }
-
-        // TODO: Change
-
-        // We need to consider the multi threading aspects of BungeeCord.
-        // The thread calling invoke is the same, as the one used here.
-        val threadId = Thread.currentThread().id
-        val suspendingEventHandlers = eventMap[event.javaClass]!!.filterIsInstance<SuspendingEventHandlerMethod>()
-        for (suspendingEventHandler in suspendingEventHandlers) {
-            suspendingEventHandler.cachesJob[threadId] = null
-        }
-
-        plugin.proxy.pluginManager.callEvent(event)
-        val jobs = ArrayList<Job>()
-        for (suspendingEventHandler in suspendingEventHandlers) {
-            jobs.add(suspendingEventHandler.cachesJob[threadId]!!)
-            suspendingEventHandler.cachesJob.remove(threadId)
-        }
-
-        return jobs
     }
 
     /**
@@ -190,25 +150,17 @@ internal class BungeeCordEventServiceImpl(private val plugin: Plugin, private va
         lister: Any,
         method: Method
     ) : EventHandlerMethod(lister, method) {
-        val cachesJob = ConcurrentHashMap<Long, Job?>()
 
         override fun invoke(event: Any?) {
             val dispatcher = coroutineSession.unconfinedDispatcherBungeeCord
 
-            val job = coroutineSession.launch(dispatcher) {
+            coroutineSession.launch(dispatcher) {
                 try {
                     // Try as suspension function.
                     method.invokeSuspend(listener, event)
                 } catch (e: IllegalArgumentException) {
                     // Try as ordinary function.
                     method.invoke(listener, event)
-                }
-            }
-
-            if (!cachesJob.isEmpty()) {
-                val threadId = Thread.currentThread().id
-                if (cachesJob.containsKey(threadId)) {
-                    cachesJob[threadId] = job
                 }
             }
         }
