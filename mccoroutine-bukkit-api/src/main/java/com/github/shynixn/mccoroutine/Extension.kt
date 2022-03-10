@@ -122,6 +122,7 @@ fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
 
 /**
  * Calls an event with the given details.
+ * If there are multiple suspend event receivers, each receiver is executed concurrently.
  * Allows to await the completion of suspending event listeners.
  *
  * @param event Event details.
@@ -131,7 +132,22 @@ fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
  * For awaiting use callSuspendingEvent(..).joinAll().
  */
 fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin): Collection<Job> {
-    return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event)
+    return callSuspendingEvent(event, plugin, EventExecutionType.Concurrent)
+}
+
+/**
+ * Calls an event with the given details.
+ * Allows to await the completion of suspending event listeners.
+ *
+ * @param event Event details.
+ * @param plugin Plugin plugin.
+ * @param eventExecutionType Allows to specify how suspend receivers are executed.
+ * @return Collection of awaitable jobs. This job list may be empty if no suspending listener
+ * was called. Each job instance represents an awaitable job for each method being called in each suspending listener.
+ * For awaiting use callSuspendingEvent(..).joinAll().
+ */
+fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin, eventExecutionType: EventExecutionType): Collection<Job> {
+    return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event, eventExecutionType)
 }
 
 /**

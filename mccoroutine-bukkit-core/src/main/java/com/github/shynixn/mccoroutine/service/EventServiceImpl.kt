@@ -1,8 +1,10 @@
 package com.github.shynixn.mccoroutine.service
 
+import com.github.shynixn.mccoroutine.EventExecutionType
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
+import com.github.shynixn.mccoroutine.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.bukkit.Warning
@@ -37,34 +39,59 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
     }
 
     /**
-     * Fires a suspending event.
+     * Fires a suspending [event] with the given [eventExecutionType].
+     * @return Collection of receiver jobs. May already be completed.
      */
-    override fun fireSuspendingEvent(event: Event): Collection<Job> {
+    override fun fireSuspendingEvent(event: Event, eventExecutionType: EventExecutionType): Collection<Job> {
         val listeners = event.handlers.registeredListeners
         val jobs = ArrayList<Job>()
 
-        for (registration in listeners) {
-            if (!registration.plugin.isEnabled) {
-                continue
-            }
-
-            try {
-                if (registration is SuspendingRegisteredListener) {
-                    val job = registration.callSuspendingEvent(event)
-                    jobs.add(job)
-                } else {
-                    registration.callEvent(event)
+        if (eventExecutionType == EventExecutionType.Concurrent) {
+            for (registration in listeners) {
+                if (!registration.plugin.isEnabled) {
+                    continue
                 }
-            } catch (e: Throwable) {
-                plugin.logger.log(
-                    Level.SEVERE,
-                    "Could not pass event " + event.eventName + " to " + registration.plugin.description.fullName, e
-                )
+
+                try {
+                    if (registration is SuspendingRegisteredListener) {
+                        val job = registration.callSuspendingEvent(event)
+                        jobs.add(job)
+                    } else {
+                        registration.callEvent(event)
+                    }
+                } catch (e: Throwable) {
+                    plugin.logger.log(
+                        Level.SEVERE,
+                        "Could not pass event " + event.eventName + " to " + registration.plugin.description.fullName, e
+                    )
+                }
             }
+        } else if (eventExecutionType == EventExecutionType.Consecutive) {
+            jobs.add(plugin.launch(Dispatchers.Unconfined) {
+                for (registration in listeners) {
+                    if (!registration.plugin.isEnabled) {
+                        continue
+                    }
+                    try {
+                        if (registration is SuspendingRegisteredListener) {
+                            registration.callSuspendingEvent(event).join()
+                        } else {
+                            registration.callEvent(event)
+                        }
+                    } catch (e: Throwable) {
+                        plugin.logger.log(
+                            Level.SEVERE,
+                            "Could not pass event " + event.eventName + " to " + registration.plugin.description.fullName,
+                            e
+                        )
+                    }
+                }
+            })
         }
 
         return jobs
     }
+
 
     /**
      * Creates a listener according to the spigot implementation.
