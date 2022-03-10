@@ -24,7 +24,7 @@ repositories {
     }
 }
 
-tasks.register("dependencies") {
+tasks.register("customDependencies") {
     if (!buildDir.exists()) {
         buildDir.mkdir()
     }
