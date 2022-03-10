@@ -24,7 +24,7 @@ repositories {
     }
 }
 
-tasks.register("downloadSpongeCommonJar") {
+tasks.register("dependencies") {
     if (!buildDir.exists()) {
         buildDir.mkdir()
     }

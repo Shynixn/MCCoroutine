@@ -2,7 +2,7 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -29,12 +29,7 @@ jobs:
       - name: Build Java Application
         run: |
           chmod +x gradlew
-          ./gradlew clean build shadowJar
-          
-      - name: Publish Test Report
-        run: |
-          ./gradlew jacocoTestReport
-          bash <(curl -s https://codecov.io/bash)
+          ./gradlew clean dependencies build shadowJar
 
       - name: Publish Release to Maven Central
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
@@ -49,7 +44,7 @@ jobs:
           echo "RELEASE_VERSION=$(./gradlew -q printVersion)" >> $GITHUB_ENV
           ./gradlew clean publishToNexus
           ./gradlew closeAndReleaseRepository
-          
+
       - name: Create Github Release
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
         id: create_release
@@ -95,7 +90,7 @@ jobs:
           asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bukkit-sample/build/libs/mccoroutine-bukkit-sample-${{ env.RELEASE_VERSION }}.jar
           asset_name: MCCoroutine-Bukkit-Plugin-Sample.jar
           asset_content_type: application/jar
-          
+
       - name: Upload Sponge Api to Github
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
         uses: actions/upload-release-asset@v1
@@ -106,7 +101,7 @@ jobs:
           asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-sponge-api/build/libs/mccoroutine-sponge-api-${{ env.RELEASE_VERSION }}.jar
           asset_name: MCCoroutine-Sponge-Api.jar
           asset_content_type: application/jar
-          
+
       - name: Upload Sponge Core to Github
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
         uses: actions/upload-release-asset@v1
@@ -154,7 +149,7 @@ jobs:
           sudo apt-get install -y mkdocs
           pip install mkdocs-material
           pip install Pygments
-          cd docs/wiki          
+          cd docs/wiki
           mkdocs build
           cd ..
           cd ..
