@@ -24,22 +24,6 @@ repositories {
     }
 }
 
-tasks.register("customDependencies") {
-    if (!buildDir.exists()) {
-        buildDir.mkdir()
-    }
-
-    val file = File(buildDir, "SpongeCommon.jar")
-
-    if (!file.exists()) {
-        URL("https://github.com/SpongePowered/Sponge/releases/download/v7.2.0/spongecommon-1.12.2-7.2.0.jar").openStream()
-            .use {
-                Files.copy(it, file.toPath())
-            }
-    }
-}
-
-
 dependencies {
     implementation(project(":mccoroutine-sponge-api"))
 
@@ -48,7 +32,7 @@ dependencies {
     testCompile("org.apache.logging.log4j:log4j-api:2.17.2")
     testCompile("it.unimi.dsi:fastutil:7.0.13")
     testCompile("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    testCompile(files("build/SpongeCommon.jar"))
+    testCompile(files("lib/SpongeCommon.jar"))
 
     compileOnly("org.spongepowered:spongeapi:7.2.0")
     testCompile("org.spongepowered:spongeapi:7.2.0")
