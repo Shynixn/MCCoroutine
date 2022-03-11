@@ -18,8 +18,8 @@ In order to access the MCCoroutine Kotlin API, you need to include the following
 
 ```groovy
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.5.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.5.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0")
 }
 ```
 
@@ -30,13 +30,13 @@ dependencies {
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-bukkit-api</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
     <scope>compile</scope>
 </dependency>
 <dependency>
     <groupId>com.github.shynixn.mccoroutine</groupId>
     <artifactId>mccoroutine-bukkit-core</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -82,8 +82,8 @@ dependencies {
 **plugin.yml**
 ```yaml
 libraries:
-  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.5.0
-  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.5.0
+  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0
+  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0
 ```
 
 * For version < 1.17: If you are using Kotlin, you probably know how shading dependencies works
