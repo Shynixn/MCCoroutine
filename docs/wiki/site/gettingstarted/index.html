@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.9">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
     
     
       
@@ -17,7 +17,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.2b4465f4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
@@ -28,8 +28,9 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
@@ -418,6 +419,7 @@
               
                 
 
+
 <h1 id="getting-started">Getting Started</h1>
 <p>In order to access the MCCoroutine Kotlin API, you need to include the following libraries into your project.</p>
 <div class="admonition note">
@@ -435,21 +437,21 @@ x.x.x' - <a href="https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md">
 <h3 id="1-add-mccoroutine">1. Add MCCoroutine</h3>
 <p><strong>Gradle</strong></p>
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span> <span class="o">{</span>
-    <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.5.0&quot;</span><span class="o">)</span>
-    <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.5.0&quot;</span><span class="o">)</span>
+    <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0&quot;</span><span class="o">)</span>
+    <span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
 <p><strong>Maven</strong></p>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.github.shynixn.mccoroutine<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>mccoroutine-bukkit-api<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.5.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.6.0<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;scope&gt;</span>compile<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 <span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.github.shynixn.mccoroutine<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>mccoroutine-bukkit-core<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.5.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.6.0<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;scope&gt;</span>compile<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div>
@@ -483,8 +485,8 @@ you are free to choose any ship your Kotlin Runtime as you like as long it is &g
 </ul>
 <p><strong>plugin.yml</strong>
 <div class="highlight"><pre><span></span><code><span class="nt">libraries</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.5.0</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.5.0</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0</span><span class="w"></span>
 </code></pre></div></p>
 <ul>
 <li>For version &lt; 1.17: If you are using Kotlin, you probably know how shading dependencies works</li>
@@ -556,10 +558,10 @@ you are free to choose any ship your Kotlin Runtime as you like as long it is &g
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.960e086b.min.js"></script>
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
       
     
   </body>
