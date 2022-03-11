@@ -35,17 +35,13 @@ nexusStaging {
     numberOfRetries = 100
 }
 
-allprojects {
-    apply plugin: 'jacoco'
-}
-
 tasks.register("printVersion") {
     println(this.subprojects.getAt(0).version)
 }
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '1.5.0'
+    version '1.6.0'
 
     sourceCompatibility = 1.8
 
@@ -60,13 +56,6 @@ subprojects {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
-    }
-
-    jacocoTestReport {
-        reports {
-            xml.enabled = true
-            html.enabled = false
-        }
     }
 
     test {
@@ -168,26 +157,6 @@ gradle.taskGraph.whenReady { taskGraph ->
         ext."signing.keyId" = System.getenv('SIGNING_KEY_ID')
         ext."signing.password" = System.getenv('SIGNING_KEY_PASSWORD')
         ext."signing.secretKeyRingFile" = System.getenv('SIGNING_KEY_FILE')
-    }
-}
-
-task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-    classDirectories = files(subprojects.sourceSets.main.output)
-    executionData = files(subprojects.jacocoTestReport.executionData)
-    reports {
-        html.enabled = true
-        xml.enabled = true
-        csv.enabled = false
-    }
-    onlyIf = {
-        true
-    }
-    doFirst {
-        executionData = files(executionData.findAll {
-            it.exists()
-        })
     }
 }
 

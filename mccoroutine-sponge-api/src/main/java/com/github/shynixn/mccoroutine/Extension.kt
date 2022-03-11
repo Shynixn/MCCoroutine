@@ -131,7 +131,26 @@ fun EventManager.registerSuspendingListeners(plugin: PluginContainer, listener: 
  * For awaiting use postEvent(..).joinAll().
  */
 fun EventManager.postSuspending(event: Event, plugin: PluginContainer): Collection<Job> {
-    return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event)
+    return postSuspending(event, plugin, EventExecutionType.Concurrent)
+}
+
+/**
+ * Calls an event with the given details.
+ * Allows to await the completion of suspending event listeners.
+ *
+ * @param event Event details.
+ * @param plugin Plugin plugin.
+ * @param eventExecutionType Allows to specify how suspend receivers are executed.
+ * @return Collection of awaitable jobs. This job list may be empty if no suspending listener
+ * was called. Each job instance represents an awaitable job for each method being called in each suspending listener.
+ * For awaiting use postEvent(..).joinAll().
+ */
+fun EventManager.postSuspending(
+    event: Event,
+    plugin: PluginContainer,
+    eventExecutionType: EventExecutionType
+): Collection<Job> {
+    return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event, eventExecutionType)
 }
 
 /**

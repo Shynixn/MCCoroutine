@@ -1,7 +1,9 @@
 package com.github.shynixn.mccoroutine.sponge.service
 
+import com.github.shynixn.mccoroutine.EventExecutionType
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.EventService
+import com.github.shynixn.mccoroutine.launch
 import com.github.shynixn.mccoroutine.sponge.extension.invokeSuspend
 import com.google.common.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
@@ -90,6 +92,7 @@ internal class EventServiceImpl(private val plugin: PluginContainer, private val
 
             try {
                 // Using the AnnotatedEventListener.Factory will not work because of Filter annotations.
+                method.isAccessible = true
                 val handler = MCCoroutineEventListener(listener, method, coroutineSession)
 
                 val registration = createRegistrationMethod.invoke(
@@ -112,9 +115,10 @@ internal class EventServiceImpl(private val plugin: PluginContainer, private val
     }
 
     /**
-     * Fires a suspending event.
+     * Fires a suspending [event] with the given [eventExecutionType].
+     * @return Collection of receiver jobs. May already be completed.
      */
-    override fun fireSuspendingEvent(event: Event): Collection<Job> {
+    override fun fireSuspendingEvent(event: Event, eventExecutionType: EventExecutionType): Collection<Job> {
         val spongeEventManagerClazz = Class.forName("org.spongepowered.common.event.SpongeEventManager")
         val method = spongeEventManagerClazz.getDeclaredMethod("getHandlerCache", Event::class.java)
         method.isAccessible = true
@@ -129,22 +133,43 @@ internal class EventServiceImpl(private val plugin: PluginContainer, private val
         val listenerField = listerClazz.getDeclaredField("listener")
         listenerField.isAccessible = true
 
-        for (listener in listeners) {
-            val eventListener = listenerField.get(listener) as EventListener<Event>
+        if (eventExecutionType == EventExecutionType.Concurrent) {
+            for (listener in listeners) {
+                val eventListener = listenerField.get(listener) as EventListener<Event>
 
-            try {
-                if (eventListener is MCCoroutineEventListener) {
-                    val job = eventListener.handleSuspend(event)
-                    jobs.add(job)
-                } else {
-                    eventListener.handle(event)
+                try {
+                    if (eventListener is MCCoroutineEventListener) {
+                        val job = eventListener.handleSuspend(event)
+                        jobs.add(job)
+                    } else {
+                        eventListener.handle(event)
+                    }
+                } catch (e: Throwable) {
+                    this.logger.log(
+                        Level.SEVERE,
+                        "Could not pass {${event.javaClass.simpleName}} to {${plugin.name}}.", e
+                    )
                 }
-            } catch (e: Throwable) {
-                this.logger.log(
-                    Level.SEVERE,
-                    "Could not pass {${event.javaClass.simpleName}} to {${plugin.name}}.", e
-                )
             }
+        } else {
+            jobs.add(plugin.launch(Dispatchers.Unconfined) {
+                for (listener in listeners) {
+                    val eventListener = listenerField.get(listener) as EventListener<Event>
+
+                    try {
+                        if (eventListener is MCCoroutineEventListener) {
+                            eventListener.handleSuspend(event).join()
+                        } else {
+                            eventListener.handle(event)
+                        }
+                    } catch (e: Throwable) {
+                        logger.log(
+                            Level.SEVERE,
+                            "Could not pass {${event.javaClass.simpleName}} to {${plugin.name}}.", e
+                        )
+                    }
+                }
+            })
         }
 
         return jobs
