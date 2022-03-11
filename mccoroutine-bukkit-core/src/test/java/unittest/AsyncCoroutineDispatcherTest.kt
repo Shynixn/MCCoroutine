@@ -2,7 +2,6 @@ package unittest
 
 import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
 import com.github.shynixn.mccoroutine.dispatcher.AsyncCoroutineDispatcher
-import helper.any
 import org.bukkit.Server
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitScheduler
@@ -28,7 +27,7 @@ class AsyncCoroutineDispatcherTest {
         val server = Mockito.mock(Server::class.java)
         val scheduler = Mockito.mock(BukkitScheduler::class.java)
         var schedulerRun = false
-        Mockito.`when`(scheduler.runTaskAsynchronously(any(Plugin::class.java), any(Runnable::class.java))).then {
+        Mockito.`when`(scheduler.runTaskAsynchronously(Mockito.any(Plugin::class.java), Mockito.any(Runnable::class.java))).then {
             schedulerRun = true
             Mockito.mock(BukkitTask::class.java)
         }
@@ -62,7 +61,7 @@ class AsyncCoroutineDispatcherTest {
         val server = Mockito.mock(Server::class.java)
         val scheduler = Mockito.mock(BukkitScheduler::class.java)
         var schedulerRun = false
-        Mockito.`when`(scheduler.runTaskAsynchronously(any(Plugin::class.java), any(Runnable::class.java))).then {
+        Mockito.`when`(scheduler.runTaskAsynchronously(Mockito.any(Plugin::class.java), Mockito.any(Runnable::class.java))).then {
             schedulerRun = true
             Mockito.mock(BukkitTask::class.java)
         }
@@ -96,7 +95,7 @@ class AsyncCoroutineDispatcherTest {
         val server = Mockito.mock(Server::class.java)
         val scheduler = Mockito.mock(BukkitScheduler::class.java)
         var schedulerRun = false
-        Mockito.`when`(scheduler.runTaskAsynchronously(any(Plugin::class.java), any(Runnable::class.java))).then {
+        Mockito.`when`(scheduler.runTaskAsynchronously(Mockito.any(Plugin::class.java), Mockito.any(Runnable::class.java))).then {
             schedulerRun = true
             Mockito.mock(BukkitTask::class.java)
         }
@@ -118,6 +117,6 @@ class AsyncCoroutineDispatcherTest {
     }
 
     private fun createWithDependencies(plugin: Plugin): AsyncCoroutineDispatcher {
-        return AsyncCoroutineDispatcher(plugin, Mockito.mock(WakeUpBlockService::class.java))
+        return AsyncCoroutineDispatcher(plugin)
     }
 }

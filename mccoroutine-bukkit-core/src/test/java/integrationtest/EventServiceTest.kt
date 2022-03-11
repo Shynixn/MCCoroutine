@@ -2,8 +2,6 @@ package integrationtest
 
 import com.github.shynixn.mccoroutine.launch
 import com.github.shynixn.mccoroutine.service.EventServiceImpl
-import helper.MockedCoroutineSession
-import helper.any
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.bukkit.Bukkit
@@ -143,7 +141,7 @@ class EventServiceTest {
     }
 
     private fun createWithDependencies(plugin: Plugin): EventServiceImpl {
-        return EventServiceImpl(plugin, MockedCoroutineSession())
+        return EventServiceImpl(plugin)
     }
 
     class DemoListener(

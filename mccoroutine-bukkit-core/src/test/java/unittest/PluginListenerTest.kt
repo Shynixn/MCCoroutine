@@ -1,8 +1,8 @@
 package unittest
 
+import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import com.github.shynixn.mccoroutine.listener.PluginListener
-import helper.MockedMCCoroutine
 import org.bukkit.event.server.PluginDisableEvent
 import org.bukkit.plugin.Plugin
 import org.junit.jupiter.api.Test
@@ -14,7 +14,7 @@ class PluginListenerTest {
     /**
      * Given a plugin disable event of the current plugin.
      * When onPluginDisable is called
-     * then the mccoroutine should get disabled.
+     * Then MCCoroutine should get disabled.
      */
     @Test
     fun onPluginDisable_CurrentPlugin_ShouldDisableCoroutine() {
@@ -34,7 +34,7 @@ class PluginListenerTest {
     /**
      * Given a plugin disable event of another plugin.
      * When onPluginDisable is called
-     * then the mccoroutine should not get disabled.
+     * hen MCCoroutine should not get disabled.
      */
     @Test
     fun onPluginDisable_OtherPlugin_ShouldNotDisableCoroutine() {
@@ -55,5 +55,16 @@ class PluginListenerTest {
         plugin: Plugin = Mockito.mock(Plugin::class.java)
     ): PluginListener {
         return PluginListener(mcCoroutine, plugin)
+    }
+
+    private class MockedMCCoroutine : MCCoroutine {
+        var disableCalled = false
+        override fun getCoroutineSession(plugin: Plugin): CoroutineSession {
+            return Mockito.mock(CoroutineSession::class.java)
+        }
+
+        override fun disable(plugin: Plugin) {
+            disableCalled = true
+        }
     }
 }

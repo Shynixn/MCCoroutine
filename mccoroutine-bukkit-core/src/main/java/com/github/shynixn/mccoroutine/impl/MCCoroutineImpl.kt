@@ -2,10 +2,12 @@ package com.github.shynixn.mccoroutine.impl
 
 import com.github.shynixn.mccoroutine.contract.CoroutineSession
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
-import com.github.shynixn.mccoroutine.service.CoroutineSessionImpl
 import com.github.shynixn.mccoroutine.listener.PluginListener
 import org.bukkit.plugin.Plugin
 
+/**
+ * A singleton facade which keeps all coroutine sessions of all plugins.
+ */
 class MCCoroutineImpl : MCCoroutine {
     private val items = HashMap<Plugin, CoroutineSession>()
 

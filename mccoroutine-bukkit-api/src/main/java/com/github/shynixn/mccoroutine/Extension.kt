@@ -2,6 +2,7 @@ package com.github.shynixn.mccoroutine
 
 import com.github.shynixn.mccoroutine.contract.MCCoroutine
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import org.bukkit.command.PluginCommand
 import org.bukkit.event.Event
@@ -72,32 +73,12 @@ val Plugin.scope: CoroutineScope
  * @param f callback function inside a coroutine scope.
  * @return Cancelable coroutine job.
  */
-fun Plugin.launch(dispatcher: CoroutineContext, f: suspend CoroutineScope.() -> Unit): Job {
-    return mcCoroutine.getCoroutineSession(this).launch(dispatcher, f)
-}
-
-/**
- * Launches the given function in the Coroutine Scope of the given plugin.
- * This function may be called immediately without any delay if the Thread
- * calling this function Bukkit.isPrimaryThread() is true. This means
- * for example that event cancelling or modifying return values is still possible.
- * @param f callback function inside a coroutine scope.
- * @return Cancelable coroutine job.
- */
-fun Plugin.launch(f: suspend CoroutineScope.() -> Unit): Job {
-    return mcCoroutine.getCoroutineSession(this).launch(minecraftDispatcher, f)
-}
-
-/**
- * Launches the given function in the Coroutine Scope of the given plugin async.
- * This function may be called immediately without any delay if the Thread
- * calling this function Bukkit.isPrimaryThread() is false. This means
- * for example that event cancelling or modifying return values is still possible.
- * @param f callback function inside a coroutine scope.
- * @return Cancelable coroutine job.
- */
-fun Plugin.launchAsync(f: suspend CoroutineScope.() -> Unit): Job {
-    return mcCoroutine.getCoroutineSession(this).launch(this.asyncDispatcher, f)
+fun Plugin.launch(
+    context: CoroutineContext = minecraftDispatcher,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    block: suspend CoroutineScope.() -> Unit
+): Job {
+    return mcCoroutine.getCoroutineSession(this).launch(context, start, block)
 }
 
 /**
@@ -146,7 +127,11 @@ fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin): Collection<
  * was called. Each job instance represents an awaitable job for each method being called in each suspending listener.
  * For awaiting use callSuspendingEvent(..).joinAll().
  */
-fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin, eventExecutionType: EventExecutionType): Collection<Job> {
+fun PluginManager.callSuspendingEvent(
+    event: Event,
+    plugin: Plugin,
+    eventExecutionType: EventExecutionType
+): Collection<Job> {
     return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event, eventExecutionType)
 }
 
@@ -171,17 +156,5 @@ fun PluginCommand.setSuspendingTabCompleter(suspendingTabCompleter: SuspendingTa
     return mcCoroutine.getCoroutineSession(plugin).commandService.registerSuspendTabCompleter(
         this,
         suspendingTabCompleter
-    )
-}
-
-/**
- * Finds the version compatible class.
- */
-fun Plugin.findClazz(name: String): Class<*> {
-    return Class.forName(
-        name.replace(
-            "VERSION",
-            serverVersion
-        )
     )
 }

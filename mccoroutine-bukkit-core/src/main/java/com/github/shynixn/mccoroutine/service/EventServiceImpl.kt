@@ -1,10 +1,12 @@
 package com.github.shynixn.mccoroutine.service
 
 import com.github.shynixn.mccoroutine.EventExecutionType
-import com.github.shynixn.mccoroutine.contract.CoroutineSession
+import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.contract.EventService
 import com.github.shynixn.mccoroutine.extension.invokeSuspend
 import com.github.shynixn.mccoroutine.launch
+import com.github.shynixn.mccoroutine.minecraftDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.bukkit.Warning
@@ -19,7 +21,7 @@ import kotlin.IllegalArgumentException
 import kotlin.String
 import kotlin.Throwable
 
-internal class EventServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) :
+internal class EventServiceImpl(private val plugin: Plugin) :
     EventService {
     /**
      * Registers a suspend listener.
@@ -158,7 +160,7 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
                 )
             }
 
-            val executor = SuspendingEventExecutor(eventClass, method, coroutineSession)
+            val executor = SuspendingEventExecutor(eventClass, method, plugin)
             result[eventClass]!!.add(
                 SuspendingRegisteredListener(
                     listener,
@@ -176,7 +178,7 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
     class SuspendingEventExecutor(
         private val eventClass: Class<*>,
         private val method: Method,
-        private val coroutineSession: CoroutineSession
+        private val plugin: Plugin
     ) : EventExecutor {
         fun executeSuspend(listener: Listener, event: Event): Job {
             return executeEvent(listener, event)
@@ -192,13 +194,13 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
                     val isAsync = event.isAsynchronous
 
                     val dispatcher = if (isAsync) {
-                        // Unconfined because async events should be supported too.
-                        Dispatchers.Unconfined
+                        plugin.asyncDispatcher
                     } else {
-                        coroutineSession.dispatcherMinecraft
+                        plugin.minecraftDispatcher
                     }
 
-                    return coroutineSession.launch(dispatcher) {
+                    // We start it unDispatched but enb up either on the asyncDispatcher or minecraftDispatcher.
+                    return plugin.launch(dispatcher, CoroutineStart.UNDISPATCHED) {
                         try {
                             // Try as suspension function.
                             method.invokeSuspend(listener, event)

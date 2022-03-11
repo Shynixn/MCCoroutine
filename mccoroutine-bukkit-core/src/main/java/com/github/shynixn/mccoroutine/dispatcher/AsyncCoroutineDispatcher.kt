@@ -1,14 +1,25 @@
 package com.github.shynixn.mccoroutine.dispatcher
 
-import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
 import kotlinx.coroutines.CoroutineDispatcher
 import org.bukkit.plugin.Plugin
 import kotlin.coroutines.CoroutineContext
 
-internal class AsyncCoroutineDispatcher(
-    private val plugin: Plugin,
-    private val wakeUpBlockService: WakeUpBlockService
+/**
+ * CraftBukkit Async ThreadPool Dispatcher. Dispatches only if the call is at the primary thread.
+ */
+internal open class AsyncCoroutineDispatcher(
+    private val plugin: Plugin
 ) : CoroutineDispatcher() {
+    /**
+     * Returns `true` if the execution of the coroutine should be performed with [dispatch] method.
+     * The default behavior for most dispatchers is to return `true`.
+     * This method should generally be exception-safe. An exception thrown from this method
+     * may leave the coroutines that use this dispatcher in the inconsistent and hard to debug state.
+     */
+    override fun isDispatchNeeded(context: CoroutineContext): Boolean {
+        return plugin.server.isPrimaryThread
+    }
+
     /**
      * Handles dispatching the coroutine on the correct thread.
      */
@@ -17,15 +28,6 @@ internal class AsyncCoroutineDispatcher(
             return
         }
 
-        if (wakeUpBlockService.primaryThread == null && plugin.server.isPrimaryThread) {
-            wakeUpBlockService.primaryThread = Thread.currentThread()
-        }
-
-        if (plugin.server.isPrimaryThread) {
-            plugin.server.scheduler.runTaskAsynchronously(plugin, block)
-            wakeUpBlockService.ensureWakeup()
-        } else {
-            block.run()
-        }
+        plugin.server.scheduler.runTaskAsynchronously(plugin, block)
     }
 }

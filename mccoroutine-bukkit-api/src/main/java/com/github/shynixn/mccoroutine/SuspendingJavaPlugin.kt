@@ -33,12 +33,9 @@ open class SuspendingJavaPlugin : JavaPlugin(), SuspendingPlugin {
      * Called when this plugin is enabled
      */
     override fun onEnable() {
-        mcCoroutine.getCoroutineSession(this).wakeUpBlockService.isManipulatedServerHeartBeatEnabled = true
-        runBlocking {
+        runBlocking(mcCoroutine.getCoroutineSession(this).manipulatedDispatcherMinecraft) {
             onEnableAsync()
         }
-        // Disables runBlocking hack to not interfere with other tasks.
-        mcCoroutine.getCoroutineSession(this).wakeUpBlockService.isManipulatedServerHeartBeatEnabled = false
     }
 
     /**

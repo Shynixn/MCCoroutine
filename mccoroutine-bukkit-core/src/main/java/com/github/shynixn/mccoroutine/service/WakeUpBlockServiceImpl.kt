@@ -1,7 +1,7 @@
 package com.github.shynixn.mccoroutine.service
 
 import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
-import com.github.shynixn.mccoroutine.findClazz
+import com.github.shynixn.mccoroutine.extension.findClazz
 import org.bukkit.plugin.Plugin
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -22,27 +22,17 @@ class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
     }
 
     /**
-     * Enables or disables the server heartbeat hack.
-     */
-    override var isManipulatedServerHeartBeatEnabled: Boolean = false
-
-    /**
      * Reference to the primary server thread.
      */
-    override var primaryThread: Thread? = null
+    private var primaryThread: Thread? = null
 
     /**
      * Calls scheduler management implementations to ensure the
      * is not sleeping if a run is scheduled by blocking.
      */
     override fun ensureWakeup() {
-        if (!isManipulatedServerHeartBeatEnabled) {
-            if (threadSupport != null) {
-                threadSupport!!.shutdown()
-                threadSupport = null
-            }
-
-            return
+        if (plugin.server.isPrimaryThread && primaryThread == null) {
+            primaryThread = Thread.currentThread()
         }
 
         if (primaryThread == null) {

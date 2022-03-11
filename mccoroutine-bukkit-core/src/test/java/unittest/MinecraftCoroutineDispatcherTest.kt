@@ -2,7 +2,6 @@ package unittest
 
 import com.github.shynixn.mccoroutine.contract.WakeUpBlockService
 import com.github.shynixn.mccoroutine.dispatcher.MinecraftCoroutineDispatcher
-import helper.any
 import org.bukkit.Server
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitScheduler
@@ -27,7 +26,7 @@ class MinecraftCoroutineDispatcherTest {
         val server = Mockito.mock(Server::class.java)
         val scheduler = Mockito.mock(BukkitScheduler::class.java)
         var schedulerRun = false
-        Mockito.`when`(scheduler.runTask(any(Plugin::class.java), any(Runnable::class.java))).then {
+        Mockito.`when`(scheduler.runTask(Mockito.any(Plugin::class.java), Mockito.any(Runnable::class.java))).then {
             schedulerRun = true
             Mockito.mock(BukkitTask::class.java)
         }
@@ -61,7 +60,7 @@ class MinecraftCoroutineDispatcherTest {
         val server = Mockito.mock(Server::class.java)
         val scheduler = Mockito.mock(BukkitScheduler::class.java)
         var schedulerRun = false
-        Mockito.`when`(scheduler.runTask(any(Plugin::class.java), any(Runnable::class.java))).then {
+        Mockito.`when`(scheduler.runTask(Mockito.any(Plugin::class.java), Mockito.any(Runnable::class.java))).then {
             schedulerRun = true
             Mockito.mock(BukkitTask::class.java)
         }
@@ -95,7 +94,7 @@ class MinecraftCoroutineDispatcherTest {
         val server = Mockito.mock(Server::class.java)
         val scheduler = Mockito.mock(BukkitScheduler::class.java)
         var schedulerRun = false
-        Mockito.`when`(scheduler.runTaskAsynchronously(any(Plugin::class.java), any(Runnable::class.java))).then {
+        Mockito.`when`(scheduler.runTaskAsynchronously(Mockito.any(Plugin::class.java), Mockito.any(Runnable::class.java))).then {
             schedulerRun = true
             Mockito.mock(BukkitTask::class.java)
         }
@@ -117,6 +116,6 @@ class MinecraftCoroutineDispatcherTest {
     }
 
     private fun createWithDependencies(plugin: Plugin): MinecraftCoroutineDispatcher {
-        return MinecraftCoroutineDispatcher(plugin, Mockito.mock(WakeUpBlockService::class.java))
+        return MinecraftCoroutineDispatcher(plugin)
     }
 }

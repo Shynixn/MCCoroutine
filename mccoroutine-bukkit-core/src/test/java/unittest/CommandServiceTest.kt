@@ -2,8 +2,6 @@ package unittest
 
 import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
 import com.github.shynixn.mccoroutine.service.CommandServiceImpl
-import helper.MockedCoroutineSession
-import helper.any
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -38,7 +36,7 @@ class CommandServiceTest {
         }
         val pluginCommand = Mockito.mock(PluginCommand::class.java)
         var wrappedCommandExecutor: CommandExecutor? = null
-        Mockito.`when`(pluginCommand.setExecutor(any(CommandExecutor::class.java))).thenAnswer {
+        Mockito.`when`(pluginCommand.setExecutor(Mockito.any(CommandExecutor::class.java))).thenAnswer {
             wrappedCommandExecutor = it.arguments[0] as CommandExecutor
             Unit
         }
@@ -58,6 +56,6 @@ class CommandServiceTest {
     }
 
     private fun createWithDependencies(plugin: Plugin): CommandServiceImpl {
-        return CommandServiceImpl(plugin, MockedCoroutineSession())
+        return CommandServiceImpl(plugin)
     }
 }
