@@ -2,6 +2,8 @@ package helper
 
 import org.bukkit.Bukkit
 import org.bukkit.Server
+import org.bukkit.command.CommandSender
+import org.bukkit.command.PluginCommand
 import org.bukkit.command.SimpleCommandMap
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginDescriptionFile
@@ -19,7 +21,16 @@ class MockedBukkitServer {
         private val mainThread = Executors.newSingleThreadExecutor()
         private var plugin: Plugin? = null
         private var mainThreadIdHandle: Long = 0L
+        private var commandMapData: SimpleCommandMap? = null
     }
+
+    /**
+     * Gets the command map.
+     */
+    val commandMap: SimpleCommandMap
+        get() {
+            return commandMapData!!
+        }
 
     /**
      * Main Server Thread.
@@ -66,6 +77,12 @@ class MockedBukkitServer {
         val pluginManager = SimplePluginManager(server, Mockito.mock(SimpleCommandMap::class.java))
         Mockito.`when`(server.pluginManager).thenReturn(pluginManager)
 
+        commandMapData = SimpleCommandMap(server)
+        Mockito.`when`(server.dispatchCommand(Mockito.any(CommandSender::class.java), Mockito.anyString())).thenAnswer {
+            commandMap.dispatch(it.getArgument(0), it.getArgument(1))
+            true
+        }
+
         plugin = Mockito.mock(Plugin::class.java)
         Mockito.`when`(plugin!!.server).thenReturn(server)
         Mockito.`when`(server.isPrimaryThread).thenAnswer {
@@ -84,6 +101,16 @@ class MockedBukkitServer {
         val serverField = Bukkit::class.java.getDeclaredField("server")
         serverField.isAccessible = true
         serverField.set(null, server)
+
+        val pluginCommandConstructor =
+            PluginCommand::class.java.getDeclaredConstructor(String::class.java, Plugin::class.java)
+        pluginCommandConstructor.isAccessible = true
+        val pluginCommand = pluginCommandConstructor.newInstance("test", plugin)
+        commandMap.register("test", pluginCommand)
+
+        Mockito.`when`(server.getPluginCommand(Mockito.anyString())).thenAnswer {
+            pluginCommand
+        }
 
         return plugin!!
     }
