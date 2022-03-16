@@ -1,13 +1,11 @@
 package com.github.shynixn.mccoroutine.bukkit.internal
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 interface CoroutineSession {
     /**
-     * Gets the scope.
+     * Gets the plugin scope.
      */
     val scope: CoroutineScope
 
@@ -35,16 +33,6 @@ interface CoroutineSession {
      * Gets the block service during startup.
      */
     val wakeUpBlockService: WakeUpBlockService
-
-    /**
-     * Launches the given function on the plugin coroutine scope.
-     * @return Cancelable coroutine job.
-     */
-    fun launch(
-        context: CoroutineContext,
-        start: CoroutineStart,
-        block: suspend CoroutineScope.() -> Unit
-    ): Job
 
     /**
      * Disposes the session.

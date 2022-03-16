@@ -77,22 +77,6 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     }
 
     /**
-     * Launches the given function on the plugin coroutine scope.
-     * @return Cancelable coroutine job.
-     */
-    override fun launch(
-        context: CoroutineContext,
-        start: CoroutineStart,
-        block: suspend CoroutineScope.() -> Unit
-    ): Job {
-        if (!scope.isActive) {
-            return Job()
-        }
-
-        return scope.launch(context, start, block)
-    }
-
-    /**
      * Disposes the session.
      */
     override fun dispose() {

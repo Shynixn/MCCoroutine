@@ -1,9 +1,7 @@
 package com.github.shynixn.mccoroutine.bukkit
 
 import com.github.shynixn.mccoroutine.bukkit.internal.MCCoroutine
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import org.bukkit.command.PluginCommand
 import org.bukkit.event.Event
 import org.bukkit.event.Listener
@@ -64,7 +62,11 @@ fun Plugin.launch(
     start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ): Job {
-    return mcCoroutine.getCoroutineSession(this).launch(context, start, block)
+    if (!scope.isActive) {
+        return Job()
+    }
+
+    return scope.launch(context, start, block)
 }
 
 /**
