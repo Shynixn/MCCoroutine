@@ -35,7 +35,7 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
         this.getCommand("mccor")!!.setSuspendingExecutor(commandExecutor)
         this.getCommand("mccor")!!.setSuspendingTabCompleter(commandExecutor)
 
-        println("[MCCoroutineSamplePlugin] OnEnabled on Primary Thread: " + Bukkit.isPrimaryThread())
+        println("[MCCoroutineSamplePlugin] OnEnabled End on Primary Thread: " + Bukkit.isPrimaryThread())
     }
 
     /**

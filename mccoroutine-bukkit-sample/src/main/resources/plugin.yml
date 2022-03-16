@@ -1,7 +1,7 @@
 name: MCCoroutine-Sample
 version: 1.6.0
 author: Shynixn
-main: com.github.shynixn.mccoroutine.sample.MCCoroutineSamplePlugin
+main: com.github.shynixn.mccoroutine.bukkit.sample.MCCoroutineSamplePlugin
 commands:
   mccor:
     description: Command for operations.

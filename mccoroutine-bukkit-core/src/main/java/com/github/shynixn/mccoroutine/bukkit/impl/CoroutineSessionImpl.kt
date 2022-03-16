@@ -2,11 +2,10 @@ package com.github.shynixn.mccoroutine.bukkit.impl
 
 import com.github.shynixn.mccoroutine.bukkit.dispatcher.AsyncCoroutineDispatcher
 import com.github.shynixn.mccoroutine.bukkit.dispatcher.MinecraftCoroutineDispatcher
-import com.github.shynixn.mccoroutine.bukkit.dispatcher.StartupAsyncCoroutineDispatcher
-import com.github.shynixn.mccoroutine.bukkit.dispatcher.StartupMinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.bukkit.internal.CommandService
 import com.github.shynixn.mccoroutine.bukkit.internal.CoroutineSession
 import com.github.shynixn.mccoroutine.bukkit.internal.EventService
+import com.github.shynixn.mccoroutine.bukkit.internal.WakeUpBlockService
 import com.github.shynixn.mccoroutine.bukkit.service.CommandServiceImpl
 import com.github.shynixn.mccoroutine.bukkit.service.EventServiceImpl
 import com.github.shynixn.mccoroutine.bukkit.service.WakeUpBlockServiceImpl
@@ -16,8 +15,6 @@ import java.util.logging.Level
 import kotlin.coroutines.CoroutineContext
 
 internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSession {
-    private val wakeUpBlockService = WakeUpBlockServiceImpl(plugin)
-
     /**
      * Gets minecraft coroutine scope.
      */
@@ -27,30 +24,21 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
      * Gets the minecraft dispatcher.
      */
     override val dispatcherMinecraft: CoroutineContext by lazy {
-        MinecraftCoroutineDispatcher(plugin)
+        MinecraftCoroutineDispatcher(plugin, wakeUpBlockService)
     }
 
     /**
      * Gets the async dispatcher.
      */
     override val dispatcherAsync: CoroutineContext by lazy {
-        AsyncCoroutineDispatcher(plugin)
+        AsyncCoroutineDispatcher(plugin, wakeUpBlockService)
     }
 
     /**
-     * A minecraft dispatcher which manipulates thread locks.
-     * Do not use it.
+     * Gets the block service during startup.
      */
-    override val manipulatedDispatcherMinecraft: CoroutineContext by lazy {
-        StartupMinecraftCoroutineDispatcher(wakeUpBlockService, plugin)
-    }
-
-    /**
-     * An async dispatcher which manipulates thread locks.
-     * Do not use it.
-     */
-    override val manipulatedDispatcherAsync: CoroutineContext by lazy {
-        StartupAsyncCoroutineDispatcher(wakeUpBlockService, plugin)
+    override val wakeUpBlockService: WakeUpBlockService by lazy {
+        WakeUpBlockServiceImpl(plugin)
     }
 
     /**

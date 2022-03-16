@@ -32,16 +32,9 @@ interface CoroutineSession {
     val dispatcherAsync: CoroutineContext
 
     /**
-     * A minecraft dispatcher which manipulates thread locks.
-     * Do not use it.
+     * Gets the block service during startup.
      */
-    val manipulatedDispatcherMinecraft: CoroutineContext
-
-    /**
-     * An async dispatcher which manipulates thread locks.
-     * Do not use it.
-     */
-    val manipulatedDispatcherAsync: CoroutineContext
+    val wakeUpBlockService: WakeUpBlockService
 
     /**
      * Launches the given function on the plugin coroutine scope.

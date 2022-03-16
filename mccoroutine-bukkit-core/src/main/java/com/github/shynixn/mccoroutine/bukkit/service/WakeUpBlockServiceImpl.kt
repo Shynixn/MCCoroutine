@@ -7,6 +7,9 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.locks.LockSupport
 
+/**
+ * This implementation is only active during plugin startup. Does not affect the server when running.
+ */
 class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
     private var threadSupport: ExecutorService? = null
     private val craftSchedulerClazz by lazy {
@@ -22,16 +25,31 @@ class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
     }
 
     /**
+     * Enables or disables the server heartbeat hack.
+     */
+    override var isManipulatedServerHeartBeatEnabled: Boolean = false
+
+    /**
      * Reference to the primary server thread.
      */
-    private var primaryThread: Thread? = null
+    override var primaryThread: Thread? = null
 
     /**
      * Calls scheduler management implementations to ensure the
      * is not sleeping if a run is scheduled by blocking.
      */
     override fun ensureWakeup() {
-        if (plugin.server.isPrimaryThread && primaryThread == null) {
+        if (!isManipulatedServerHeartBeatEnabled) {
+            if (threadSupport != null) {
+                threadSupport!!.shutdown()
+                threadSupport = null
+            }
+
+            // In all cases except startup, the call immediately returns here.
+            return
+        }
+
+        if (primaryThread == null && plugin.server.isPrimaryThread) {
             primaryThread = Thread.currentThread()
         }
 
