@@ -1,5 +1,6 @@
 package com.github.shynixn.mccoroutine.bukkit.sample.listener
 
+import com.github.shynixn.mccoroutine.bukkit.MCCoroutineExceptionEvent
 import com.github.shynixn.mccoroutine.bukkit.asyncDispatcher
 import com.github.shynixn.mccoroutine.bukkit.sample.impl.UserDataCache
 import kotlinx.coroutines.withContext
@@ -39,5 +40,16 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
         userDataCache.clearCache(playerQuitEvent.player)
         println("[PlayerConnectListener-Quit] " + playerQuitEvent.player.name + " left the server. Don't forget your " + apple + ".")
         println("[PlayerConnectListener-Quit] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())
+    }
+
+    @EventHandler
+    fun onCoroutineException(event: MCCoroutineExceptionEvent) {
+        if (event.plugin != plugin) {
+            // Other plugin, we do not care.
+            return
+        }
+
+        // Print Exception
+        event.exception.printStackTrace()
     }
 }

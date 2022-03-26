@@ -1,5 +1,6 @@
 package com.github.shynixn.mccoroutine.bukkit.impl
 
+import com.github.shynixn.mccoroutine.bukkit.MCCoroutineExceptionEvent
 import com.github.shynixn.mccoroutine.bukkit.dispatcher.AsyncCoroutineDispatcher
 import com.github.shynixn.mccoroutine.bukkit.dispatcher.MinecraftCoroutineDispatcher
 import com.github.shynixn.mccoroutine.bukkit.internal.CommandService
@@ -58,15 +59,23 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
     init {
         // Root Exception Handler. All Exception which are not consumed by the caller end up here.
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
-            if (e is CancellationException) {
-                plugin.logger.log(Level.INFO, "Coroutine has been cancelled.")
-            } else {
-                plugin.logger.log(
-                    Level.SEVERE,
-                    "This is not an error of MCCoroutine! See sub exception for details.",
-                    e
-                )
-            }
+            val mcCoroutineExceptionEvent = MCCoroutineExceptionEvent(plugin, e)
+
+            plugin.server.scheduler.runTask(plugin, Runnable {
+                plugin.server.pluginManager.callEvent(mcCoroutineExceptionEvent)
+
+                if (!mcCoroutineExceptionEvent.isCancelled) {
+                    if (e is CancellationException) {
+                        plugin.logger.log(Level.INFO, "Coroutine has been cancelled.")
+                    } else {
+                        plugin.logger.log(
+                            Level.SEVERE,
+                            "This is not an error of MCCoroutine! See sub exception for details.",
+                            e
+                        )
+                    }
+                }
+            })
         }
 
         // Build Coroutine plugin scope for exception handling

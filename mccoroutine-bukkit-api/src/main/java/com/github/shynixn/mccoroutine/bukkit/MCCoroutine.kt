@@ -7,6 +7,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
+import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -49,14 +50,30 @@ val Plugin.scope: CoroutineScope
     }
 
 /**
- * Launches the given function in the Coroutine Scope of the given plugin.
- * This function may be called immediately without any delay if the Thread
- * calling this function Bukkit.isPrimaryThread() is true. This means
- * for example that event cancelling or modifying return values is still possible.
- * @param dispatcher Coroutine context. The default context is minecraft dispatcher.
- * @param f callback function inside a coroutine scope.
- * @return Cancelable coroutine job.
- */
+ * Launches a new coroutine on the minecraft main thread without blocking the current thread and returns a reference to the coroutine as a [Job].
+ * The coroutine is cancelled when the resulting job is [cancelled][Job.cancel].
+ *
+ * The coroutine context is inherited from a [Plugin.scope]. Additional context elements can be specified with [context] argument.
+ * If the context does not have any dispatcher nor any other [ContinuationInterceptor], then [Plugin.minecraftDispatcher] is used.
+ * The parent job is inherited from a [Plugin.scope] as well, but it can also be overridden
+ * with a corresponding [context] element.
+ *
+ * By default, the coroutine is immediately scheduled for execution if the current thread is already the minecraft server thread.
+ * If the current thread is not the minecraft server thread, the coroutine is moved to the [org.bukkit.scheduler.BukkitScheduler] and executed
+ * in the next server tick schedule.
+ * Other start options can be specified via `start` parameter. See [CoroutineStart] for details.
+ * An optional [start] parameter can be set to [CoroutineStart.LAZY] to start coroutine _lazily_. In this case,
+ * the coroutine [Job] is created in _new_ state. It can be explicitly started with [start][Job.start] function
+ * and will be started implicitly on the first invocation of [join][Job.join].
+ *
+ * Uncaught exceptions in this coroutine do not cancel the parent job or any other child jobs.
+ *
+ * See [newCoroutineContext] for a description of debugging facilities that are available for a newly created coroutine.
+ *
+ * @param context additional to [CoroutineScope.coroutineContext] context of the coroutine.
+ * @param start coroutine start option. The default value is [CoroutineStart.DEFAULT].
+ * @param block the coroutine code which will be invoked in the context of the provided scope.
+ **/
 fun Plugin.launch(
     context: CoroutineContext = minecraftDispatcher,
     start: CoroutineStart = CoroutineStart.DEFAULT,
@@ -71,7 +88,7 @@ fun Plugin.launch(
 
 /**
  * Registers an event listener with suspending functions.
- * Does exactly the same thing as PluginManager.registerEvents but makes suspension functions
+ * Does exactly the same thing as PluginManager.registerEvents but makes suspend functions
  * possible.
  * Example:
  *
@@ -101,7 +118,7 @@ fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
  * For awaiting use callSuspendingEvent(..).joinAll().
  */
 fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin): Collection<Job> {
-    return callSuspendingEvent(event, plugin, com.github.shynixn.mccoroutine.bukkit.EventExecutionType.Concurrent)
+    return callSuspendingEvent(event, plugin, EventExecutionType.Concurrent)
 }
 
 /**
@@ -118,7 +135,7 @@ fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin): Collection<
 fun PluginManager.callSuspendingEvent(
     event: Event,
     plugin: Plugin,
-    eventExecutionType: com.github.shynixn.mccoroutine.bukkit.EventExecutionType
+    eventExecutionType: EventExecutionType
 ): Collection<Job> {
     return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event, eventExecutionType)
 }
