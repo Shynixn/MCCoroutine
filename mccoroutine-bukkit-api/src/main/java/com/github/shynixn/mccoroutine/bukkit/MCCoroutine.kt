@@ -1,6 +1,5 @@
 package com.github.shynixn.mccoroutine.bukkit
 
-import com.github.shynixn.mccoroutine.bukkit.internal.MCCoroutine
 import kotlinx.coroutines.*
 import org.bukkit.command.PluginCommand
 import org.bukkit.event.Event
@@ -11,7 +10,7 @@ import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
 
 /**
- * Static session.
+ * Static session for all plugins.
  */
 internal val mcCoroutine: MCCoroutine by lazy {
     try {
@@ -66,11 +65,11 @@ val Plugin.scope: CoroutineScope
  * the coroutine [Job] is created in _new_ state. It can be explicitly started with [start][Job.start] function
  * and will be started implicitly on the first invocation of [join][Job.join].
  *
- * Uncaught exceptions in this coroutine do not cancel the parent job or any other child jobs.
+ * Uncaught exceptions in this coroutine do not cancel the parent job or any other child jobs. All uncaught exceptions
+ * are logged to [Plugin.getLogger] by default. If you w
  *
- * See [newCoroutineContext] for a description of debugging facilities that are available for a newly created coroutine.
- *
- * @param context additional to [CoroutineScope.coroutineContext] context of the coroutine.
+ * @param context The coroutine context to start. Should almost be always be [Plugin.minecraftDispatcher]. Async operations should be
+ * be created using [withContext] after using the default parameters of this method.
  * @param start coroutine start option. The default value is [CoroutineStart.DEFAULT].
  * @param block the coroutine code which will be invoked in the context of the provided scope.
  **/
@@ -103,7 +102,7 @@ fun Plugin.launch(
  * @param plugin Bukkit Plugin.
  */
 fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
-    return mcCoroutine.getCoroutineSession(plugin).eventService.registerSuspendListener(listener)
+    return mcCoroutine.getCoroutineSession(plugin).registerSuspendListener(listener)
 }
 
 /**
@@ -137,7 +136,7 @@ fun PluginManager.callSuspendingEvent(
     plugin: Plugin,
     eventExecutionType: EventExecutionType
 ): Collection<Job> {
-    return mcCoroutine.getCoroutineSession(plugin).eventService.fireSuspendingEvent(event, eventExecutionType)
+    return mcCoroutine.getCoroutineSession(plugin).fireSuspendingEvent(event, eventExecutionType)
 }
 
 /**
@@ -147,7 +146,7 @@ fun PluginManager.callSuspendingEvent(
 fun PluginCommand.setSuspendingExecutor(
     suspendingCommandExecutor: SuspendingCommandExecutor
 ) {
-    return mcCoroutine.getCoroutineSession(plugin).commandService.registerSuspendCommandExecutor(
+    return mcCoroutine.getCoroutineSession(plugin).registerSuspendCommandExecutor(
         this,
         suspendingCommandExecutor
     )
@@ -158,8 +157,20 @@ fun PluginCommand.setSuspendingExecutor(
  * Does exactly the same as PluginCommand.setExecutor.
  */
 fun PluginCommand.setSuspendingTabCompleter(suspendingTabCompleter: SuspendingTabCompleter) {
-    return mcCoroutine.getCoroutineSession(plugin).commandService.registerSuspendTabCompleter(
+    return mcCoroutine.getCoroutineSession(plugin).registerSuspendTabCompleter(
         this,
         suspendingTabCompleter
     )
+}
+
+interface MCCoroutine {
+    /**
+     * Get coroutine session for the given plugin.
+     */
+    fun getCoroutineSession(plugin: Plugin): CoroutineSession
+
+    /**
+     * Disposes the given plugin.
+     */
+    fun disable(plugin: Plugin)
 }

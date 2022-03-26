@@ -2,7 +2,6 @@ package com.github.shynixn.mccoroutine.bukkit.service
 
 import com.github.shynixn.mccoroutine.bukkit.asyncDispatcher
 import com.github.shynixn.mccoroutine.bukkit.extension.invokeSuspend
-import com.github.shynixn.mccoroutine.bukkit.internal.EventService
 import com.github.shynixn.mccoroutine.bukkit.launch
 import com.github.shynixn.mccoroutine.bukkit.minecraftDispatcher
 import kotlinx.coroutines.CoroutineStart
@@ -21,12 +20,11 @@ import kotlin.String
 import kotlin.Throwable
 import kotlin.check
 
-internal class EventServiceImpl(private val plugin: Plugin) :
-    EventService {
+internal class EventServiceImpl(private val plugin: Plugin) {
     /**
      * Registers a suspend listener.
      */
-    override fun registerSuspendListener(listener: Listener) {
+    fun registerSuspendListener(listener: Listener) {
         val registeredListeners = createCoroutineListener(listener, plugin)
 
         val method = SimplePluginManager::class.java
@@ -44,7 +42,7 @@ internal class EventServiceImpl(private val plugin: Plugin) :
      * Fires a suspending [event] with the given [eventExecutionType].
      * @return Collection of receiver jobs. May already be completed.
      */
-    override fun fireSuspendingEvent(
+    fun fireSuspendingEvent(
         event: Event,
         eventExecutionType: com.github.shynixn.mccoroutine.bukkit.EventExecutionType
     ): Collection<Job> {

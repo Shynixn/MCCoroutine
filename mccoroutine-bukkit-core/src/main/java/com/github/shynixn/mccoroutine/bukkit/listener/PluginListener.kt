@@ -1,6 +1,6 @@
 package com.github.shynixn.mccoroutine.bukkit.listener
 
-import com.github.shynixn.mccoroutine.bukkit.internal.MCCoroutine
+import com.github.shynixn.mccoroutine.bukkit.MCCoroutine
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.server.PluginDisableEvent

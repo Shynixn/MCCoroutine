@@ -1,15 +1,15 @@
 package com.github.shynixn.mccoroutine.bukkit.impl
 
-import com.github.shynixn.mccoroutine.bukkit.internal.CoroutineSession
-import com.github.shynixn.mccoroutine.bukkit.internal.MCCoroutine
+import com.github.shynixn.mccoroutine.bukkit.CoroutineSession
+import com.github.shynixn.mccoroutine.bukkit.MCCoroutine
 import com.github.shynixn.mccoroutine.bukkit.listener.PluginListener
 import org.bukkit.plugin.Plugin
 
 /**
- * A singleton facade which keeps all coroutine sessions of all plugins.
+ * A singleton implementation which keeps all coroutine sessions of all plugins.
  */
 class MCCoroutineImpl : MCCoroutine {
-    private val items = HashMap<Plugin, CoroutineSession>()
+    private val items = HashMap<Plugin, CoroutineSessionImpl>()
 
     /**
      * Get coroutine session for the given plugin.

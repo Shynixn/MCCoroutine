@@ -1,7 +1,6 @@
 package com.github.shynixn.mccoroutine.bukkit.service
 
 import com.github.shynixn.mccoroutine.bukkit.extension.findClazz
-import com.github.shynixn.mccoroutine.bukkit.internal.WakeUpBlockService
 import org.bukkit.plugin.Plugin
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -10,7 +9,7 @@ import java.util.concurrent.locks.LockSupport
 /**
  * This implementation is only active during plugin startup. Does not affect the server when running.
  */
-class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
+internal class WakeUpBlockServiceImpl(private val plugin: Plugin) {
     private var threadSupport: ExecutorService? = null
     private val craftSchedulerClazz by lazy {
         plugin.findClazz("org.bukkit.craftbukkit.VERSION.scheduler.CraftScheduler")
@@ -27,18 +26,18 @@ class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
     /**
      * Enables or disables the server heartbeat hack.
      */
-    override var isManipulatedServerHeartBeatEnabled: Boolean = false
+    var isManipulatedServerHeartBeatEnabled: Boolean = false
 
     /**
      * Reference to the primary server thread.
      */
-    override var primaryThread: Thread? = null
+    var primaryThread: Thread? = null
 
     /**
      * Calls scheduler management implementations to ensure the
      * is not sleeping if a run is scheduled by blocking.
      */
-    override fun ensureWakeup() {
+    fun ensureWakeup() {
         if (!isManipulatedServerHeartBeatEnabled) {
             if (threadSupport != null) {
                 threadSupport!!.shutdown()
@@ -74,7 +73,7 @@ class WakeUpBlockServiceImpl(private val plugin: Plugin) : WakeUpBlockService {
     /**
      * Disposes the service.
      */
-    override fun dispose() {
+    fun dispose() {
         threadSupport?.shutdown()
     }
 }
