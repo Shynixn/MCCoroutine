@@ -4,8 +4,6 @@ import com.github.shynixn.mccoroutine.bukkit.SuspendingCommandExecutor
 import com.github.shynixn.mccoroutine.bukkit.SuspendingTabCompleter
 import com.github.shynixn.mccoroutine.bukkit.internal.CommandService
 import com.github.shynixn.mccoroutine.bukkit.launch
-import com.github.shynixn.mccoroutine.bukkit.minecraftDispatcher
-import kotlinx.coroutines.CoroutineStart
 import org.bukkit.command.PluginCommand
 import org.bukkit.plugin.Plugin
 
@@ -22,7 +20,8 @@ internal class CommandServiceImpl(private val plugin: Plugin) :
             // If the result is delayed we can automatically assume it is true.
             var success = true
 
-            plugin.launch(plugin.minecraftDispatcher, CoroutineStart.UNDISPATCHED) {
+            // Commands in spigot always arrive synchronously. Therefore, we can simply use the default properties.
+            plugin.launch {
                 success = commandExecutor.onCommand(p0, p1, p2, p3)
             }
 
@@ -37,7 +36,8 @@ internal class CommandServiceImpl(private val plugin: Plugin) :
         pluginCommand.setTabCompleter { sender, command, alias, args ->
             var result = emptyList<String>()
 
-            plugin.launch(plugin.minecraftDispatcher, CoroutineStart.UNDISPATCHED) {
+            // Tab Completes in spigot always arrive synchronously. Therefore, we can simply use the default properties.
+            plugin.launch {
                 result = tabCompleter.onTabComplete(sender, command, alias, args)
             }
 

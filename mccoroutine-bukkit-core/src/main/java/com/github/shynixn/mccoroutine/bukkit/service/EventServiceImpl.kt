@@ -44,7 +44,10 @@ internal class EventServiceImpl(private val plugin: Plugin) :
      * Fires a suspending [event] with the given [eventExecutionType].
      * @return Collection of receiver jobs. May already be completed.
      */
-    override fun fireSuspendingEvent(event: Event, eventExecutionType: com.github.shynixn.mccoroutine.bukkit.EventExecutionType): Collection<Job> {
+    override fun fireSuspendingEvent(
+        event: Event,
+        eventExecutionType: com.github.shynixn.mccoroutine.bukkit.EventExecutionType
+    ): Collection<Job> {
         if (event.isAsynchronous) {
             check(!Thread.holdsLock(this)) { event.eventName + " cannot be triggered asynchronously from inside synchronized code." }
             check(!plugin.server.isPrimaryThread) { event.eventName + " cannot be triggered asynchronously from primary server thread." }
@@ -206,7 +209,8 @@ internal class EventServiceImpl(private val plugin: Plugin) :
                         plugin.minecraftDispatcher
                     }
 
-                    // We start it unDispatched but enb up either on the asyncDispatcher or minecraftDispatcher.
+                    // We want to start it on the same thread as the calling thread -> unDispatched.
+                    // However, after a possible suspension we either end up on the asyncDispatcher or minecraft Dispatcher.
                     return plugin.launch(dispatcher, CoroutineStart.UNDISPATCHED) {
                         try {
                             // Try as suspension function.
