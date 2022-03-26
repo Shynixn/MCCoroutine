@@ -19,10 +19,9 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
      */
     @EventHandler
     suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
-        println("[PlayerConnectListener-Join] Is starting on Primary Thread: " + Bukkit.isPrimaryThread())
+        println("[PlayerConnectListener/onPlayerJoinEvent] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
         val userData = userDataCache.getUserDataFromPlayerAsync(playerJoinEvent.player).await()
-        println("[PlayerConnectListener-Join] " + playerJoinEvent.player.name + " joined the server. KillCount [${userData.amountOfPlayerKills}].")
-        println("[PlayerConnectListener-Join] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())
+        println("[PlayerConnectListener/onPlayerJoinEvent] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
     }
 
     /**
@@ -30,16 +29,16 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
      */
     @EventHandler
     suspend fun onPlayerQuitEvent(playerQuitEvent: PlayerQuitEvent) {
-        println("[PlayerConnectListener-Quit] Is starting on Primary Thread: " + Bukkit.isPrimaryThread())
+        println("[PlayerConnectListener/onPlayerQuitEvent] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
 
         val apple = withContext(plugin.asyncDispatcher) {
+            println("[PlayerConnectListener/onPlayerQuitEvent] Simulate data save on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
             Thread.sleep(500)
             ItemStack(Material.APPLE)
         }
 
         userDataCache.clearCache(playerQuitEvent.player)
-        println("[PlayerConnectListener-Quit] " + playerQuitEvent.player.name + " left the server. Don't forget your " + apple + ".")
-        println("[PlayerConnectListener-Quit] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())
+        println("[PlayerConnectListener/onPlayerQuitEvent] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
     }
 
     @EventHandler

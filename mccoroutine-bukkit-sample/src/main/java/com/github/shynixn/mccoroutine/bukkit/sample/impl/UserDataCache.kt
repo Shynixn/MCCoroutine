@@ -38,13 +38,14 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
      */
     suspend fun getUserDataFromPlayerAsync(player: Player): Deferred<UserData> {
         return coroutineScope {
+            println("[UserDataCache/getUserDataFromPlayerAsync] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
             if (!cache.containsKey(player)) {
                 cache[player] = async(plugin.asyncDispatcher) {
-                    println("[Cache] is downloading async: " + !Bukkit.isPrimaryThread())
+                    println("[UserDataCache/getUserDataFromPlayerAsync] Is downloading data on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
                     fakeDatabase.getUserDataFromPlayer(player)
                 }
             }
-            println("[Cache] is downloading waiting on Primary Thread: " + Bukkit.isPrimaryThread())
+
             cache[player]!!
         }
     }

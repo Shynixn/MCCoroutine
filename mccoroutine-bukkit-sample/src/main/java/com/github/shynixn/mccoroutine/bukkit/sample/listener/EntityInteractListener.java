@@ -21,11 +21,9 @@ public class EntityInteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractAtEntityEvent event) {
-        System.out.println("[EntityInteractListener] Is starting on Primary Thread: " + Bukkit.isPrimaryThread());
-
         CompletionStage<UserData> future = this.userDataCache.getUserDataFromPlayer(event.getPlayer());
         future.thenAccept(useData -> {
-            System.out.println("[EntityInteractListener] Is ending on Primary Thread: " + Bukkit.isPrimaryThread());
+            System.out.println("Result: " + useData);
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;

@@ -14,10 +14,10 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
      * Called when this plugin is enabled
      */
     override suspend fun onEnableAsync() {
-        println("[MCCoroutineSamplePlugin] OnEnable on Primary Thread: " + Bukkit.isPrimaryThread())
+        println("[MCCoroutineSamplePlugin/onEnableAsync] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
 
-        withContext(this.asyncDispatcher) {
-            println("[MCCoroutineSamplePlugin] Loading some data on async Thread: " + Bukkit.isPrimaryThread())
+        withContext(Dispatchers.IO) {
+            println("[MCCoroutineSamplePlugin/onEnableAsync] Simulating data load Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
             Thread.sleep(500)
         }
 
@@ -35,21 +35,20 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
         this.getCommand("mccor")!!.setSuspendingExecutor(commandExecutor)
         this.getCommand("mccor")!!.setSuspendingTabCompleter(commandExecutor)
 
-        println("[MCCoroutineSamplePlugin] OnEnabled End on Primary Thread: " + Bukkit.isPrimaryThread())
-    }
+        println("[MCCoroutineSamplePlugin/onEnableAsync] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")    }
 
     /**
      * Called when this plugin is disabled.
      */
     override suspend fun onDisableAsync() {
-        println("[MCCoroutineSamplePlugin] OnDisable on Primary Thread " + Bukkit.isPrimaryThread())
+        println("[MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
 
         // Do not use asyncDispatcher as it is already disposed at this point.
         withContext(Dispatchers.IO) {
-            println("[MCCoroutineSamplePlugin] Storing player data before shutting down...." + Bukkit.isPrimaryThread())
+            println("[MCCoroutineSamplePlugin/onDisableAsync] Simulating data save on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
             Thread.sleep(500)
         }
 
-        println("[MCCoroutineSamplePlugin] Completed shutting down." + Bukkit.isPrimaryThread())
+        println("[MCCoroutineSamplePlugin/onDisableAsync] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
     }
 }

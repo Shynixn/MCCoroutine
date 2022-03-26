@@ -30,19 +30,19 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache, private val
             val playerKills = args[2].toInt()
             val otherPlayer = Bukkit.getPlayer(playerName)!!
 
-            println("[AdminCommandExecutor] Is starting on Primary Thread: " + Bukkit.isPrimaryThread())
+            println("[AdmingCommandExecutor/onCommand] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
             val userData = userDataCache.getUserDataFromPlayerAsync(otherPlayer).await()
             userData.amountOfPlayerKills = playerKills
             userDataCache.saveUserData(otherPlayer)
-            println("[AdminCommandExecutor] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())
+            println("[AdmingCommandExecutor/onCommand] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
             return true
         }
 
         if (args.size == 1 && args[0].equals("leave", true) && sender is Player) {
-            println("[AdminCommandExecutor] Is starting on Primary Thread: " + Bukkit.isPrimaryThread())
+            println("[AdmingCommandExecutor/onCommand] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
             val event = PlayerQuitEvent(sender, null)
             Bukkit.getPluginManager().callSuspendingEvent(event, plugin).joinAll()
-            println("[AdminCommandExecutor] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())
+            println("[AdmingCommandExecutor/onCommand] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}/primaryThread=${Bukkit.isPrimaryThread()}")
         }
 
         if (args.size == 1 && args[0].equals("exception", true) && sender is Player) {
