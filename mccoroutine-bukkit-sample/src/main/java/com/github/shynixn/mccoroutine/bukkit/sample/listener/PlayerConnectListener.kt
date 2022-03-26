@@ -51,5 +51,6 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
 
         // Print Exception
         event.exception.printStackTrace()
+        event.isCancelled = true
     }
 }

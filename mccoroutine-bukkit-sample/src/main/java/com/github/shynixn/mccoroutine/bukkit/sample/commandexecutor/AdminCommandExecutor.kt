@@ -45,9 +45,14 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache, private val
             println("[AdminCommandExecutor] Is ending on Primary Thread: " + Bukkit.isPrimaryThread())
         }
 
+        if (args.size == 1 && args[0].equals("exception", true) && sender is Player) {
+            throw RuntimeException("Some Exception!")
+        }
+
         if (args.isEmpty()) {
             sender.sendMessage("/mccor set <player> <kill>")
             sender.sendMessage("/mccor leave")
+            sender.sendMessage("/mccor exception")
             return true
         }
 
