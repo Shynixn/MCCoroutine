@@ -75,9 +75,7 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
                 plugin.server.pluginManager.callEvent(mcCoroutineExceptionEvent)
 
                 if (!mcCoroutineExceptionEvent.isCancelled) {
-                    if (e is CancellationException) {
-                        plugin.logger.log(Level.INFO, "Coroutine has been cancelled.")
-                    } else {
+                    if (e !is CancellationException) {
                         plugin.logger.log(
                             Level.SEVERE,
                             "This is not an error of MCCoroutine! See sub exception for details.",
