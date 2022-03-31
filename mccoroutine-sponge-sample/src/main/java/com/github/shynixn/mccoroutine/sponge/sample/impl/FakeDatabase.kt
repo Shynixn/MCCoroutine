@@ -1,6 +1,6 @@
-package com.github.shynixn.mccoroutine.sample.bungeecord.impl
+package com.github.shynixn.mccoroutine.sponge.sample.impl
 
-import com.github.shynixn.mccoroutine.sample.bungeecord.entity.UserData
+import com.github.shynixn.mccoroutine.sponge.sample.entity.UserData
 import org.spongepowered.api.entity.living.player.Player
 
 class FakeDatabase {

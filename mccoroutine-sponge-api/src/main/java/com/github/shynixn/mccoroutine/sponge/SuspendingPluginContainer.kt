@@ -1,9 +1,8 @@
-package com.github.shynixn.mccoroutine
+package com.github.shynixn.mccoroutine.sponge
 
 import com.google.inject.Inject
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.event.Listener
-import org.spongepowered.api.event.Order
 import org.spongepowered.api.event.game.state.GameConstructionEvent
 import org.spongepowered.api.plugin.PluginContainer
 

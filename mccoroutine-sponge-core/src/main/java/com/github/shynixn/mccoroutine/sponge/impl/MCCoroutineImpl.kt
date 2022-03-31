@@ -1,12 +1,11 @@
 package com.github.shynixn.mccoroutine.sponge.impl
 
-import com.github.shynixn.mccoroutine.contract.CoroutineSession
-import com.github.shynixn.mccoroutine.contract.MCCoroutine
-import com.github.shynixn.mccoroutine.sponge.service.CoroutineSessionImpl
+import com.github.shynixn.mccoroutine.sponge.CoroutineSession
+import com.github.shynixn.mccoroutine.sponge.MCCoroutine
 import org.spongepowered.api.plugin.PluginContainer
 
 class MCCoroutineImpl : MCCoroutine {
-    private val items = HashMap<PluginContainer, CoroutineSession>()
+    private val items = HashMap<PluginContainer, CoroutineSessionImpl>()
 
     /**
      * Get coroutine session for the given plugin.

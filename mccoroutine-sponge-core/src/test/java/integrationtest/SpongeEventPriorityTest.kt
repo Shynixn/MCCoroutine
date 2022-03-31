@@ -2,9 +2,9 @@
 
 package integrationtest
 
-import com.github.shynixn.mccoroutine.EventExecutionType
-import com.github.shynixn.mccoroutine.postSuspending
-import com.github.shynixn.mccoroutine.registerSuspendingListeners
+import com.github.shynixn.mccoroutine.sponge.EventExecutionType
+import com.github.shynixn.mccoroutine.sponge.postSuspending
+import com.github.shynixn.mccoroutine.sponge.registerSuspendingListeners
 import helper.MockedSpongeServer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
@@ -17,7 +17,7 @@ import org.spongepowered.api.event.Order
 import org.spongepowered.api.event.network.ClientConnectionEvent
 import kotlin.test.assertEquals
 
-class EventPriorityTest {
+class SpongeEventPriorityTest {
     /**
      * Given
      *  a call of a suspending event

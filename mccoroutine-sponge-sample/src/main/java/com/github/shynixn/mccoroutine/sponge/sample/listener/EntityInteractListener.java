@@ -1,7 +1,7 @@
-package com.github.shynixn.mccoroutine.sample.bungeecord.listener;
+package com.github.shynixn.mccoroutine.sponge.sample.listener;
 
-import com.github.shynixn.mccoroutine.sample.bungeecord.entity.UserData;
-import com.github.shynixn.mccoroutine.sample.bungeecord.impl.UserDataCache;
+import com.github.shynixn.mccoroutine.sponge.sample.entity.UserData;
+import com.github.shynixn.mccoroutine.sponge.sample.impl.UserDataCache;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;

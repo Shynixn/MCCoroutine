@@ -1,4 +1,4 @@
-package com.github.shynixn.mccoroutine
+package com.github.shynixn.mccoroutine.sponge
 
 import org.spongepowered.api.command.CommandSource
 import org.spongepowered.api.command.args.ArgumentParseException

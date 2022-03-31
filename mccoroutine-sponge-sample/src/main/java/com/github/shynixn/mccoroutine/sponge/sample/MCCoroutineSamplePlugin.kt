@@ -1,14 +1,14 @@
-package com.github.shynixn.mccoroutine.sample
+package com.github.shynixn.mccoroutine.sponge.sample
 
-import com.github.shynixn.mccoroutine.SuspendingPluginContainer
-import com.github.shynixn.mccoroutine.asyncDispatcher
-import com.github.shynixn.mccoroutine.registerSuspendingListeners
-import com.github.shynixn.mccoroutine.sample.bungeecord.commandexecutor.AdminCommandExecutor
-import com.github.shynixn.mccoroutine.sample.bungeecord.impl.FakeDatabase
-import com.github.shynixn.mccoroutine.sample.bungeecord.impl.UserDataCache
-import com.github.shynixn.mccoroutine.sample.bungeecord.listener.EntityInteractListener
-import com.github.shynixn.mccoroutine.sample.bungeecord.listener.PlayerConnectListener
-import com.github.shynixn.mccoroutine.suspendingExecutor
+import com.github.shynixn.mccoroutine.sponge.SuspendingPluginContainer
+import com.github.shynixn.mccoroutine.sponge.asyncDispatcher
+import com.github.shynixn.mccoroutine.sponge.registerSuspendingListeners
+import com.github.shynixn.mccoroutine.sponge.sample.commandexecutor.AdminCommandExecutor
+import com.github.shynixn.mccoroutine.sponge.sample.impl.FakeDatabase
+import com.github.shynixn.mccoroutine.sponge.sample.impl.UserDataCache
+import com.github.shynixn.mccoroutine.sponge.sample.listener.EntityInteractListener
+import com.github.shynixn.mccoroutine.sponge.sample.listener.PlayerConnectListener
+import com.github.shynixn.mccoroutine.sponge.suspendingExecutor
 import com.google.inject.Inject
 import kotlinx.coroutines.withContext
 import org.spongepowered.api.Sponge

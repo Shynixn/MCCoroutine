@@ -1,11 +1,10 @@
-package com.github.shynixn.mccoroutine.bukkit
+package com.github.shynixn.mccoroutine.sponge
 
 import kotlinx.coroutines.*
-import org.bukkit.command.PluginCommand
-import org.bukkit.event.Event
-import org.bukkit.event.Listener
-import org.bukkit.plugin.Plugin
-import org.bukkit.plugin.PluginManager
+import org.spongepowered.api.command.spec.CommandSpec
+import org.spongepowered.api.event.Event
+import org.spongepowered.api.event.EventManager
+import org.spongepowered.api.plugin.PluginContainer
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
 
@@ -14,11 +13,11 @@ import kotlin.coroutines.CoroutineContext
  */
 internal val mcCoroutine: MCCoroutine by lazy {
     try {
-        Class.forName("com.github.shynixn.mccoroutine.bukkit.impl.MCCoroutineImpl")
+        Class.forName("com.github.shynixn.mccoroutine.sponge.impl.MCCoroutineImpl")
             .newInstance() as MCCoroutine
     } catch (e: Exception) {
         throw RuntimeException(
-            "Failed to load MCCoroutine implementation. Shade mccoroutine-bukkit-core into your plugin.",
+            "Failed to load MCCoroutine implementation. Shade mccoroutine-sponge-core into your plugin.",
             e
         )
     }
@@ -27,7 +26,7 @@ internal val mcCoroutine: MCCoroutine by lazy {
 /**
  * Gets the plugin minecraft dispatcher.
  */
-val Plugin.minecraftDispatcher: CoroutineContext
+val PluginContainer.minecraftDispatcher: CoroutineContext
     get() {
         return mcCoroutine.getCoroutineSession(this).dispatcherMinecraft
     }
@@ -35,7 +34,7 @@ val Plugin.minecraftDispatcher: CoroutineContext
 /**
  * Gets the plugin async dispatcher.
  */
-val Plugin.asyncDispatcher: CoroutineContext
+val PluginContainer.asyncDispatcher: CoroutineContext
     get() {
         return mcCoroutine.getCoroutineSession(this).dispatcherAsync
     }
@@ -43,7 +42,7 @@ val Plugin.asyncDispatcher: CoroutineContext
 /**
  * Gets the plugin coroutine scope.
  */
-val Plugin.scope: CoroutineScope
+val PluginContainer.scope: CoroutineScope
     get() {
         return mcCoroutine.getCoroutineSession(this).scope
     }
@@ -52,9 +51,9 @@ val Plugin.scope: CoroutineScope
  * Launches a new coroutine on the minecraft main thread without blocking the current thread and returns a reference to the coroutine as a [Job].
  * The coroutine is cancelled when the resulting job is [cancelled][Job.cancel].
  *
- * The coroutine context is inherited from a [Plugin.scope]. Additional context elements can be specified with [context] argument.
+ * The coroutine context is inherited from a [PluginContainer.scope]. Additional context elements can be specified with [context] argument.
  * If the context does not have any dispatcher nor any other [ContinuationInterceptor], then [Plugin.minecraftDispatcher] is used.
- * The parent job is inherited from a [Plugin.scope] as well, but it can also be overridden
+ * The parent job is inherited from a [PluginContainer.scope] as well, but it can also be overridden
  * with a corresponding [context] element.
  *
  * By default, the coroutine is immediately scheduled for execution if the current thread is already the minecraft server thread.
@@ -66,14 +65,14 @@ val Plugin.scope: CoroutineScope
  * and will be started implicitly on the first invocation of [join][Job.join].
  *
  * Uncaught exceptions in this coroutine do not cancel the parent job or any other child jobs. All uncaught exceptions
- * are logged to [Plugin.getLogger] by default.
+ * are logged to a customer logger by default.
  *
  * @param context The coroutine context to start. Should almost be always be [Plugin.minecraftDispatcher]. Async operations should be
  * be created using [withContext] after using the default parameters of this method.
  * @param start coroutine start option. The default value is [CoroutineStart.DEFAULT].
  * @param block the coroutine code which will be invoked in the context of the provided scope.
  **/
-fun Plugin.launch(
+fun PluginContainer.launch(
     context: CoroutineContext = minecraftDispatcher,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
@@ -101,7 +100,7 @@ fun Plugin.launch(
  * @param listener Bukkit Listener.
  * @param plugin Bukkit Plugin.
  */
-fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
+fun EventManager.registerSuspendingListeners(plugin: PluginContainer, listener: Any) {
     return mcCoroutine.getCoroutineSession(plugin).registerSuspendListener(listener)
 }
 
@@ -111,13 +110,13 @@ fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
  * Allows to await the completion of suspending event listeners.
  *
  * @param event Event details.
- * @param plugin Plugin plugin.
+ * @param plugin PluginContainer plugin.
  * @return Collection of awaitable jobs. This job list may be empty if no suspending listener
  * was called. Each job instance represents an awaitable job for each method being called in each suspending listener.
  * For awaiting use callSuspendingEvent(..).joinAll().
  */
-fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin): Collection<Job> {
-    return callSuspendingEvent(event, plugin, EventExecutionType.Concurrent)
+fun EventManager.postSuspending(event: Event, plugin: PluginContainer): Collection<Job> {
+    return postSuspending(event, plugin, EventExecutionType.Concurrent)
 }
 
 /**
@@ -131,9 +130,10 @@ fun PluginManager.callSuspendingEvent(event: Event, plugin: Plugin): Collection<
  * was called. Each job instance represents an awaitable job for each method being called in each suspending listener.
  * For awaiting use callSuspendingEvent(..).joinAll().
  */
-fun PluginManager.callSuspendingEvent(
+
+fun EventManager.postSuspending(
     event: Event,
-    plugin: Plugin,
+    plugin: PluginContainer,
     eventExecutionType: EventExecutionType
 ): Collection<Job> {
     return mcCoroutine.getCoroutineSession(plugin).fireSuspendingEvent(event, eventExecutionType)
@@ -143,34 +143,25 @@ fun PluginManager.callSuspendingEvent(
  * Registers an command executor with suspending function.
  * Does exactly the same as PluginCommand.setExecutor.
  */
-fun PluginCommand.setSuspendingExecutor(
+fun CommandSpec.Builder.suspendingExecutor(
+    plugin: PluginContainer,
     suspendingCommandExecutor: SuspendingCommandExecutor
-) {
-    return mcCoroutine.getCoroutineSession(plugin).registerSuspendCommandExecutor(
+): CommandSpec.Builder {
+    mcCoroutine.getCoroutineSession(plugin).registerSuspendCommandExecutor(
         this,
         suspendingCommandExecutor
     )
-}
-
-/**
- * Registers a tab completer with suspending function.
- * Does exactly the same as PluginCommand.setExecutor.
- */
-fun PluginCommand.setSuspendingTabCompleter(suspendingTabCompleter: SuspendingTabCompleter) {
-    return mcCoroutine.getCoroutineSession(plugin).registerSuspendTabCompleter(
-        this,
-        suspendingTabCompleter
-    )
+    return this
 }
 
 interface MCCoroutine {
     /**
      * Get coroutine session for the given plugin.
      */
-    fun getCoroutineSession(plugin: Plugin): CoroutineSession
+    fun getCoroutineSession(plugin: PluginContainer): CoroutineSession
 
     /**
      * Disposes the given plugin.
      */
-    fun disable(plugin: Plugin)
+    fun disable(plugin: PluginContainer)
 }
