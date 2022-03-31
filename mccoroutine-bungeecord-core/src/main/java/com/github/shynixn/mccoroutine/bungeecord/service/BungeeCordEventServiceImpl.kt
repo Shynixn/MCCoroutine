@@ -1,10 +1,11 @@
-package com.github.shynixn.mccoroutine.service
+package com.github.shynixn.mccoroutine.bungeecord.service
 
-import com.github.shynixn.mccoroutine.contract.CoroutineSession
-import com.github.shynixn.mccoroutine.contract.EventService
-import com.github.shynixn.mccoroutine.extension.invokeSuspend
+import com.github.shynixn.mccoroutine.bungeecord.bungeeCordDispatcher
+import com.github.shynixn.mccoroutine.bungeecord.extension.invokeSuspend
+import com.github.shynixn.mccoroutine.bungeecord.launch
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Multimap
+import kotlinx.coroutines.CoroutineStart
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.api.plugin.PluginManager
@@ -15,13 +16,12 @@ import java.lang.reflect.Method
 import java.util.concurrent.locks.Lock
 import java.util.logging.Level
 
-internal class BungeeCordEventServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) :
-    EventService {
+internal class BungeeCordEventServiceImpl(private val plugin: Plugin) {
     /**
      * Registers a suspend listener.
      * The reflection calls are only present at startup which does not rise any performance concerns later on.
      */
-    override fun registerSuspendListener(listener: Listener) {
+    fun registerSuspendListener(listener: Listener) {
         // Hook into the BungeeCord internal fields.
         val eventBusField = PluginManager::class.java.getDeclaredField("eventBus")
         eventBusField.isAccessible = true
@@ -130,7 +130,7 @@ internal class BungeeCordEventServiceImpl(private val plugin: Plugin, private va
                     for ((key, value1) in handlersByListener) {
                         for (method in value1) {
                             method.isAccessible = true
-                            val ehm = SuspendingEventHandlerMethod(coroutineSession, key, method)
+                            val ehm = SuspendingEventHandlerMethod(plugin, key, method)
                             handlersList.add(ehm)
                         }
                     }
@@ -146,15 +146,13 @@ internal class BungeeCordEventServiceImpl(private val plugin: Plugin, private va
      * Extension of EventHandler.
      */
     private class SuspendingEventHandlerMethod(
-        private val coroutineSession: CoroutineSession,
+        private val plugin: Plugin,
         lister: Any,
         method: Method
     ) : EventHandlerMethod(lister, method) {
 
         override fun invoke(event: Any?) {
-            val dispatcher = coroutineSession.unconfinedDispatcherBungeeCord
-
-            coroutineSession.launch(dispatcher) {
+            plugin.launch(plugin.bungeeCordDispatcher, CoroutineStart.UNDISPATCHED) {
                 try {
                     // Try as suspension function.
                     method.invokeSuspend(listener, event)

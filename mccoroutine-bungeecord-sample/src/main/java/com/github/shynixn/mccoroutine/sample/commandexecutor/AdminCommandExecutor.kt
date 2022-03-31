@@ -1,6 +1,6 @@
 package com.github.shynixn.mccoroutine.sample.commandexecutor
 
-import com.github.shynixn.mccoroutine.SuspendingCommand
+import com.github.shynixn.mccoroutine.bungeecord.SuspendingCommand
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.plugin.Plugin

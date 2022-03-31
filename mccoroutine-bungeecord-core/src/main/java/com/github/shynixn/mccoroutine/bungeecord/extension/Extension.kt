@@ -1,4 +1,4 @@
-package com.github.shynixn.mccoroutine.extension
+package com.github.shynixn.mccoroutine.bungeecord.extension
 
 import net.md_5.bungee.api.plugin.Plugin
 import java.lang.reflect.Method

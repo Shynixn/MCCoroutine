@@ -1,6 +1,9 @@
 package com.github.shynixn.mccoroutine.sample
 
 import com.github.shynixn.mccoroutine.*
+import com.github.shynixn.mccoroutine.bungeecord.SuspendingPlugin
+import com.github.shynixn.mccoroutine.bungeecord.registerSuspendingCommand
+import com.github.shynixn.mccoroutine.bungeecord.registerSuspendingListener
 import com.github.shynixn.mccoroutine.sample.commandexecutor.AdminCommandExecutor
 import com.github.shynixn.mccoroutine.sample.impl.FakeDatabase
 import com.github.shynixn.mccoroutine.sample.impl.UserDataCache

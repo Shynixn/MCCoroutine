@@ -1,10 +1,12 @@
-package com.github.shynixn.mccoroutine
+package com.github.shynixn.mccoroutine.bungeecord
 
+import kotlinx.coroutines.CoroutineStart
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.plugin.Command
+import net.md_5.bungee.api.plugin.Plugin
 
 abstract class SuspendingCommand {
-    private val command: WrappedCommand
+    internal val command: WrappedCommand
     val name: String
         get() = command.name
     val permission: String?
@@ -19,10 +21,12 @@ abstract class SuspendingCommand {
 
     constructor(name: String) {
         command = WrappedCommand(name)
+        command.handle = this
     }
 
     constructor(name: String, permission: String, vararg aliases: String) {
         command = WrappedCommand(name, permission, *aliases)
+        command.handle = this
     }
 
     abstract suspend fun execute(sender: CommandSender, args: Array<out String>)
@@ -60,15 +64,20 @@ abstract class SuspendingCommand {
         return command.toString()
     }
 
-    private class WrappedCommand : Command {
+    internal class WrappedCommand : Command {
+        var plugin: Plugin? = null
+        var handle: SuspendingCommand? = null
+
         constructor(name: String) : super(name) {
         }
 
         constructor(name: String, permission: String, vararg aliases: String) : super(name, permission, *aliases) {
         }
 
-        override fun execute(sender: CommandSender?, args: Array<out String>?) {
-            // Disabled
+        override fun execute(sender: CommandSender, args: Array<out String>) {
+            plugin!!.launch(plugin!!.bungeeCordDispatcher, CoroutineStart.UNDISPATCHED) {
+                handle!!.execute(sender, args)
+            }
         }
 
         public override fun setPermissionMessage(permissionMessage: String?) {

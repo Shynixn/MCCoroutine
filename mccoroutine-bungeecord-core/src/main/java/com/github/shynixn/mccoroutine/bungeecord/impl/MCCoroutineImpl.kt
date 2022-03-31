@@ -1,13 +1,13 @@
-package com.github.shynixn.mccoroutine.impl
+package com.github.shynixn.mccoroutine.bungeecord.impl
 
-import com.github.shynixn.mccoroutine.contract.CoroutineSession
-import com.github.shynixn.mccoroutine.contract.MCCoroutine
-import com.github.shynixn.mccoroutine.extension.isEnabled
+import com.github.shynixn.mccoroutine.bungeecord.CoroutineSession
+import com.github.shynixn.mccoroutine.bungeecord.MCCoroutine
+import com.github.shynixn.mccoroutine.bungeecord.extension.isEnabled
 import net.md_5.bungee.api.plugin.Plugin
 import java.util.concurrent.ConcurrentHashMap
 
 class MCCoroutineImpl : MCCoroutine {
-    private val items = ConcurrentHashMap<Plugin, CoroutineSession>()
+    private val items = ConcurrentHashMap<Plugin, CoroutineSessionImpl>()
 
     /**
      * Get coroutine session for the given plugin.

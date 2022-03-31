@@ -1,4 +1,4 @@
-package com.github.shynixn.mccoroutine
+package com.github.shynixn.mccoroutine.bungeecord
 
 import kotlinx.coroutines.runBlocking
 import net.md_5.bungee.api.ProxyServer
@@ -39,7 +39,7 @@ open class SuspendingPlugin : Plugin {
     }
 
     /**
-     * Called when this plugin is enabled
+     * Called when this plugin is enabled.
      */
     override fun onEnable() {
         runBlocking {
