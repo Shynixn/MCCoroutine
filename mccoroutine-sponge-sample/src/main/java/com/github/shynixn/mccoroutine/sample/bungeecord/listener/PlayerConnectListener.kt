@@ -1,8 +1,8 @@
-package com.github.shynixn.mccoroutine.sample.listener
+package com.github.shynixn.mccoroutine.sample.bungeecord.listener
 
 import com.github.shynixn.mccoroutine.asyncDispatcher
-import com.github.shynixn.mccoroutine.sample.commandexecutor.AdminCommandExecutor
-import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
+import com.github.shynixn.mccoroutine.sample.bungeecord.commandexecutor.AdminCommandExecutor
+import com.github.shynixn.mccoroutine.sample.bungeecord.impl.UserDataCache
 import kotlinx.coroutines.withContext
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.event.Listener

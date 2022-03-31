@@ -1,7 +1,7 @@
-package com.github.shynixn.mccoroutine.sample.impl
+package com.github.shynixn.mccoroutine.sample.bungeecord.impl
 
 import com.github.shynixn.mccoroutine.asyncDispatcher
-import com.github.shynixn.mccoroutine.sample.entity.UserData
+import com.github.shynixn.mccoroutine.sample.bungeecord.entity.UserData
 import com.github.shynixn.mccoroutine.scope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async

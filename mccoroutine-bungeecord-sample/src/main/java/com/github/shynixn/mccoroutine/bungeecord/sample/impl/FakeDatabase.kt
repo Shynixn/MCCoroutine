@@ -1,6 +1,6 @@
-package com.github.shynixn.mccoroutine.sample.impl
+package com.github.shynixn.mccoroutine.bungeecord.sample.impl
 
-import com.github.shynixn.mccoroutine.sample.entity.UserData
+import com.github.shynixn.mccoroutine.bungeecord.sample.entity.UserData
 import net.md_5.bungee.api.connection.ProxiedPlayer
 
 class FakeDatabase {

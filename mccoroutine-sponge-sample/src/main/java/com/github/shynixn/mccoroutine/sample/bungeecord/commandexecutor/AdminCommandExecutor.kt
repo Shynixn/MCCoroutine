@@ -1,9 +1,9 @@
-package com.github.shynixn.mccoroutine.sample.commandexecutor
+package com.github.shynixn.mccoroutine.sample.bungeecord.commandexecutor
 
 import com.github.shynixn.mccoroutine.SuspendingCommandElement
 import com.github.shynixn.mccoroutine.SuspendingCommandExecutor
 import com.github.shynixn.mccoroutine.postSuspending
-import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
+import com.github.shynixn.mccoroutine.sample.bungeecord.impl.UserDataCache
 import kotlinx.coroutines.joinAll
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.CommandResult

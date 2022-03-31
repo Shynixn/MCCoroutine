@@ -1,13 +1,13 @@
-package com.github.shynixn.mccoroutine.sample
+package com.github.shynixn.mccoroutine.bungeecord.sample
 
 import com.github.shynixn.mccoroutine.bungeecord.SuspendingPlugin
 import com.github.shynixn.mccoroutine.bungeecord.registerSuspendingCommand
 import com.github.shynixn.mccoroutine.bungeecord.registerSuspendingListener
-import com.github.shynixn.mccoroutine.sample.commandexecutor.AdminCommandExecutor
-import com.github.shynixn.mccoroutine.sample.impl.FakeDatabase
-import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
-import com.github.shynixn.mccoroutine.sample.listener.PlayerConnectListener
-import com.github.shynixn.mccoroutine.sample.listener.PlayerDisconnectListener
+import com.github.shynixn.mccoroutine.bungeecord.sample.commandexecutor.AdminCommandExecutor
+import com.github.shynixn.mccoroutine.bungeecord.sample.impl.FakeDatabase
+import com.github.shynixn.mccoroutine.bungeecord.sample.impl.UserDataCache
+import com.github.shynixn.mccoroutine.bungeecord.sample.listener.PlayerConnectListener
+import com.github.shynixn.mccoroutine.bungeecord.sample.listener.PlayerDisconnectListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

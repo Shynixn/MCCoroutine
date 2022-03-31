@@ -3,11 +3,11 @@ package com.github.shynixn.mccoroutine.sample
 import com.github.shynixn.mccoroutine.SuspendingPluginContainer
 import com.github.shynixn.mccoroutine.asyncDispatcher
 import com.github.shynixn.mccoroutine.registerSuspendingListeners
-import com.github.shynixn.mccoroutine.sample.commandexecutor.AdminCommandExecutor
-import com.github.shynixn.mccoroutine.sample.impl.FakeDatabase
-import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
-import com.github.shynixn.mccoroutine.sample.listener.EntityInteractListener
-import com.github.shynixn.mccoroutine.sample.listener.PlayerConnectListener
+import com.github.shynixn.mccoroutine.sample.bungeecord.commandexecutor.AdminCommandExecutor
+import com.github.shynixn.mccoroutine.sample.bungeecord.impl.FakeDatabase
+import com.github.shynixn.mccoroutine.sample.bungeecord.impl.UserDataCache
+import com.github.shynixn.mccoroutine.sample.bungeecord.listener.EntityInteractListener
+import com.github.shynixn.mccoroutine.sample.bungeecord.listener.PlayerConnectListener
 import com.github.shynixn.mccoroutine.suspendingExecutor
 import com.google.inject.Inject
 import kotlinx.coroutines.withContext

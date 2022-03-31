@@ -1,6 +1,6 @@
-package com.github.shynixn.mccoroutine.sample.listener
+package com.github.shynixn.mccoroutine.bungeecord.sample.listener
 
-import com.github.shynixn.mccoroutine.sample.impl.UserDataCache
+import com.github.shynixn.mccoroutine.bungeecord.sample.impl.UserDataCache
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin

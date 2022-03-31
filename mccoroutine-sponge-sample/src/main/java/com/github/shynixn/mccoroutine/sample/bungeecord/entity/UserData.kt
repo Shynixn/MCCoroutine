@@ -1,4 +1,4 @@
-package com.github.shynixn.mccoroutine.sample.entity
+package com.github.shynixn.mccoroutine.sample.bungeecord.entity
 
 class UserData {
     var amountOfPlayerKills: Int = 0
