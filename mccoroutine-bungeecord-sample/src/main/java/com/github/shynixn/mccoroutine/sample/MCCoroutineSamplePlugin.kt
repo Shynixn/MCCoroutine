@@ -1,6 +1,5 @@
 package com.github.shynixn.mccoroutine.sample
 
-import com.github.shynixn.mccoroutine.*
 import com.github.shynixn.mccoroutine.bungeecord.SuspendingPlugin
 import com.github.shynixn.mccoroutine.bungeecord.registerSuspendingCommand
 import com.github.shynixn.mccoroutine.bungeecord.registerSuspendingListener

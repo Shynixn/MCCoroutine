@@ -1,8 +1,7 @@
 package com.github.shynixn.mccoroutine.sample.impl
 
-import com.github.shynixn.mccoroutine.asyncDispatcher
+import com.github.shynixn.mccoroutine.bungeecord.scope
 import com.github.shynixn.mccoroutine.sample.entity.UserData
-import com.github.shynixn.mccoroutine.scope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.future
 import net.md_5.bungee.api.connection.ProxiedPlayer
@@ -27,7 +26,7 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
     suspend fun saveUserData(player: ProxiedPlayer) {
         val userData = cache[player]!!.await()
         println("[UserDataCache/saveUserData] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
-        withContext(plugin.asyncDispatcher) {
+        withContext(Dispatchers.IO) {
             fakeDatabase.saveUserData(userData)
             println("[UserDataCache/saveUserData] Is saving on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
         }
@@ -41,7 +40,7 @@ class UserDataCache(private val plugin: Plugin, private val fakeDatabase: FakeDa
         return coroutineScope {
             if (!cache.containsKey(player)) {
                 println("[UserDataCache/getUserDataFromPlayerAsync] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
-                cache[player] = async(plugin.asyncDispatcher) {
+                cache[player] = async(Dispatchers.IO) {
                     println("[UserDataCache/getUserDataFromPlayerAsync] Is downloading on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
                     fakeDatabase.getUserDataFromPlayer(player)
                 }

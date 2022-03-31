@@ -49,6 +49,7 @@ class MockedBungeeCordServer {
         val plugin = Mockito.mock(Plugin::class.java)
         Mockito.`when`(plugin.proxy).thenReturn(proxyServer)
         Mockito.`when`(plugin.executorService).thenReturn(pluginThreadPool)
+        Mockito.`when`(plugin.logger).thenReturn(logger)
 
         val field = ProxyServer::class.java.getDeclaredField("instance")
         field.isAccessible = true
