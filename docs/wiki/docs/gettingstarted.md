@@ -1,94 +1,71 @@
 # Getting Started
 
-In order to access the MCCoroutine Kotlin API, you need to include the following libraries into your project.
+In order to use the MCCoroutine Kotlin API, you need to include the following libraries into your project.
 
-!!! note "Further help"
-    Please take a look at the sample plugins ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample`` which 
-    can be found on [Github](https://github.com/Shynixn/MCCoroutine).
-    A real production plugin using MCCoroutine can be found [here](https://github.com/Shynixn/BlockBall).
+## Add MCCoroutine Libraries
 
-!!! note "Sponge Documentation"
-    Please notice that these are the libraries for Bukkit-API based servers. If you are looking for the Sponge-API, simply
-    replace bukkit with sponge in name of the dependencies. e.g. 'com.github.shynixn.mccoroutine:mccoroutine-sponge-api:
-    x.x.x' - [Sponge Documentation](https://github.com/Shynixn/MCCoroutine/blob/master/SPONGE.md)
+=== "Bukkit"
 
-### 1. Add MCCoroutine
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0")
+    }
+    ```
 
-**Gradle**
+=== "BungeeCord"
 
-```groovy
-dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0")
-}
-```
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:1.6.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:1.6.0")
+    }
+    ```
 
-**Maven**
+=== "Sponge"
 
-```xml
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:1.6.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:1.6.0")
+    }
+    ```
 
-<dependency>
-    <groupId>com.github.shynixn.mccoroutine</groupId>
-    <artifactId>mccoroutine-bukkit-api</artifactId>
-    <version>1.6.0</version>
-    <scope>compile</scope>
-</dependency>
-<dependency>
-    <groupId>com.github.shynixn.mccoroutine</groupId>
-    <artifactId>mccoroutine-bukkit-core</artifactId>
-    <version>1.6.0</version>
-    <scope>compile</scope>
-</dependency>
-```
 
-### 2. Add the official Kotlin Coroutines libraries
+## Add Kotlin Coroutines Libraries
 
-MCCoroutine builds against Kotlin 1.3.x but does not ship the Kotlin Runtime or Kotlin Coroutines Runtime. This means
-you are free to choose any ship your Kotlin Runtime as you like as long it is >= 1.3.0.
+MCCoroutine builds against Kotlin 1.3.x, however it does not distribute the Kotlin Runtime or Kotlin Coroutines Runtime.
+This means, you can use any Kotlin version in your plugins. It is even encouraged to always use the latest version.
 
 Replace 1.x.x with the actual versions. 
-
-**Gradle**
 
 ```groovy
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.x.x")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.x.x")
 }
 ```
 
-**Maven**
+## Shade Dependencies
 
-```xml
+=== "Bukkit Server 1.17 - Latest"
 
-<dependency>
-    <groupId>org.jetbrains.kotlinx</groupId>
-    <artifactId>kotlinx-coroutines-core</artifactId>
-    <version>1.x.x</version>
-    <scope>compile</scope>
-</dependency>
-<dependency>
-    <groupId>org.jetbrains.kotlinx</groupId>
-    <artifactId>kotlinx-coroutines-jdk8</artifactId>
-    <version>1.x.x</version>
-    <scope>compile</scope>
-</dependency>
-```
+    **plugin.yml**
+    ```yaml
+    libraries:
+      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0
+      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0
+    ```
 
-### 3. Shade the dependencies into your plugin.jar file
+=== "Other Server"
 
-* For version >= 1.17: Add the kotlin and coroutine dependencies to the libraries tag
-
-**plugin.yml**
-```yaml
-libraries:
-  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.6.0
-  - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.6.0
-```
-
-* For version < 1.17: If you are using Kotlin, you probably know how shading dependencies works
+    Shade the libraries into your plugin.jar file using gradle or maven. 
 
 
-### 4. Test if everything is working
+## Test if everything is working correctly
 
 Try to call ``launch{}`` in your ``onEnable()`` function in your ``Plugin`` class.
+
+!!! note "Further help"
+    Please take a look at the sample plugins ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample`` which
+    can be found on [Github](https://github.com/Shynixn/MCCoroutine).
+    A real production plugin using MCCoroutine can be found [here](https://github.com/Shynixn/BlockBall).
