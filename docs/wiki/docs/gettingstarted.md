@@ -61,7 +61,7 @@ dependencies {
     Shade the libraries into your plugin.jar file using gradle or maven. 
 
 
-## Test if everything is working correctly
+### Test the Plugin
 
 Try to call ``launch{}`` in your ``onEnable()`` function in your ``Plugin`` class.
 
