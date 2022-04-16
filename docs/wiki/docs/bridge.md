@@ -35,35 +35,110 @@ class Foo(private val plugin : Plugin) {
 It is recommended to use suspendable command executors or suspendable listeners to switch to ``suspend`` functions. However, if you
 use ``plugin.launch``, it is important to understand the execution order.
 
-````kotlin
-class Foo(private val plugin : Plugin) {
+=== "Bukkit and Sponge"
 
-    fun bar() {
-        println("I am first")
-        
-        val job = plugin.launch {
-            println("I am second") // The context is not suspended when switched to the same suspendable context.
-            delay(1000)
-            println("I am fourth") // The context is given back after 1000 milliseconds and continuous here.
-            bob()
+    ````kotlin
+    class Foo(private val plugin : Plugin) {
+    
+        fun bar() {
+            // Main Thread
+            println("I am first")
+            
+            val job = plugin.launch {
+                println("I am second") // The context is not suspended when switched to the same suspendable context.
+                delay(1000)
+                println("I am fourth") // The context is given back after 1000 milliseconds and continuous here.
+                bob()
+            }
+            
+            // When calling delay the suspendable context is suspended and the original context immediately continuous here.
+            println("I am third")
         }
-        
-        // When calling delay the suspendable context is suspended and the original context immediately continuous here.
-        println("I am third")
+    
+        private suspend fun bob(){
+            println("I am fifth")
+        }
     }
+    ````
 
-    private suspend fun bob(){
-        println("I am fifth")
+    ````kotlin
+    "I am first"
+    "I am second"
+    "I am third"
+    "I am fourth"
+    "I am fifth"
+    ````
+
+=== "BungeeCord"
+
+    As BungeeCord does not have a main thread, the execution order is slightly different.
+    
+    ````kotlin
+    class Foo(private val plugin : Plugin) {
+    
+        fun bar() {
+            // Any thread
+            println("I am first")
+            
+            val job = plugin.launch {
+                println("I am second") // The context is suspended because it is not known which context was present before.
+                delay(1000)
+                println("I am fourth") // The context is given back after 1000 milliseconds and continuous here.
+                bob()
+            }
+            
+            // When calling delay the suspendable context is suspended and the original context immediately continuous here.
+            println("I am third")
+        }
+    
+        private suspend fun bob(){
+            println("I am fifth")
+        }
     }
-}
-````
+    ````
+    
+    ````kotlin
+    "I am first"
+    "I am third"
+    "I am second"
+    "I am fourth"
+    "I am fifth"
+    ````
 
-````kotlin
-"I am first"
-"I am second"
-"I am third"
-"I am fifth"
-````
+    You can actually change this behaviour by passing a different parameter to ``start``. This might be useful for 
+    other libraries wanting to use MCCoroutine.
+
+    ````kotlin
+    class Foo(private val plugin : Plugin) {
+    
+        fun bar() {
+            // Any thread
+            println("I am first")
+            
+            val job = plugin.launch(start = CoroutineStart.UNDISPATCHED) {
+                println("I am second") // The context is not suspended because start is undispatched.
+                delay(1000)
+                println("I am fourth") // The context is given back after 1000 milliseconds and continuous here.
+                bob()
+            }
+            
+            // When calling delay the suspendable context is suspended and the original context immediately continuous here.
+            println("I am third")
+        }
+    
+        private suspend fun bob(){
+            println("I am fifth")
+        }
+    }
+    ````
+    
+    ````kotlin
+    "I am first"
+    "I am second"
+    "I am third"
+    "I am fourth"
+    "I am fifth"
+    ````
 
 ## Do not use runBlocking
 
