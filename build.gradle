@@ -41,7 +41,7 @@ tasks.register("printVersion") {
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '1.6.0'
+    version '2.0.0'
 
     sourceCompatibility = 1.8
 
@@ -96,7 +96,7 @@ subprojects {
                 artifact javadocJar
                 pom {
                     name = 'MCCoroutine'
-                    description = 'MCCoroutine bukkit api server extension to work with Kotlin Coroutines.'
+                    description = 'MCCoroutine is a library, which adds extensive support for Kotlin Coroutines for Minecraft Server environments.'
                     url = 'https://github.com/Shynixn/MCCoroutine'
                     licenses {
                         license {
@@ -174,4 +174,10 @@ task generateSpongeJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'javadoc'
     outputDirectory = "docs/apidocs/sponge"
     sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-sponge-api/src/main/java'))
+}
+
+task generateBungeeCordJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "docs/apidocs/bungeecord"
+    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bungeecord-api/src/main/java'))
 }
