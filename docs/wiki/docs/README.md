@@ -26,6 +26,7 @@ the existing APIs with suspendable commands, events and schedules.
 **Supported Proxies:**
 
 * BungeeCord
+* Waterfall
 
 ## Features
 
