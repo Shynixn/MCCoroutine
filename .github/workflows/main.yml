@@ -124,6 +124,39 @@ jobs:
           asset_name: MCCoroutine-Sponge-Plugin-Sample.jar
           asset_content_type: application/jar
 
+      - name: Upload BungeeCord Api to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bungeecord-api/build/libs/mccoroutine-bungeecord-api-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-BungeeCord-Api.jar
+          asset_content_type: application/jar
+
+      - name: Upload BungeeCord Core to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bungeecord-core/build/libs/mccoroutine-bungeecord-core-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-BungeeCord-Core.jar
+          asset_content_type: application/jar
+
+      - name: Upload BungeeCord Sample Plugin to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bungeecord-sample/build/libs/mccoroutine-bungeecord-sample-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-BungeeCord-Plugin-Sample.jar
+          asset_content_type: application/jar
+
   Documentation:
     runs-on: ubuntu-latest
     if: "contains(github.ref, 'master')"
@@ -146,6 +179,7 @@ jobs:
           chmod +x gradlew
           ./gradlew generateBukkitJavaDocPages > /dev/null
           ./gradlew generateSpongeJavaDocPages > /dev/null
+          ./gradlew generateBungeeCordJavaDocPages > /dev/null
           sudo apt-get install -y mkdocs
           pip install mkdocs-material
           pip install Pygments

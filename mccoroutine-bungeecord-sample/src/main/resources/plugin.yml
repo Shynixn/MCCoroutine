@@ -1,0 +1,10 @@
+name: MCCoroutine-Sample
+version: 2.0.0
+author: Shynixn
+main: com.github.shynixn.mccoroutine.bungeecord.sample.MCCoroutineSamplePlugin
+commands:
+  mccor:
+    description: Sample command.
+    permission: mccoroutine.sample
+    permission-message: You do not have permission!
+    usage: /<command>

@@ -1,17 +1,36 @@
 site_name: MCCoroutine
+repo_url: https://github.com/Shynixn/MCCoroutine
+site_author: Shynixn
 nav:
-  - 'Introduction': README.md
-  - 'Getting Started': gettingstarted.md
-  - 'Creating a new Plugin': newplugin.md
-  - 'Suspending Listeners': listener.md
-  - 'Suspending CommandExecutors': commandexecutors.md
-  - 'Suspending Delayed, Repeating Tasks': repeatingtasks.md
-  - 'Suspending Caches, Background Repeating Tasks': caching.md
-  - 'Bridging non-suspendable functions to suspendable functions': bridge.md
-theme: material
+  - 'Getting Started':
+      - Introduction: README.md
+      - Installation: installation.md
+  - 'User Guide':
+    - 'Suspending Plugin': plugin.md
+    - 'Suspending Listeners': listener.md
+    - 'Suspending CommandExecutors': commandexecutor.md
+    - 'Suspending Delayed, Repeating Tasks': tasks.md
+    - 'Suspending API Functions': bridge.md
+    - 'Suspending Caches, Background Repeating Tasks': caching.md
+    - 'Suspending Exceptions': exception.md
+  - 'FAQ': faq.md
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - content.tabs.link
+extra:
+  generator: false
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.tabbed:
+      alternate_style: true
