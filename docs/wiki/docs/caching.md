@@ -109,7 +109,7 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
 After introducing a cache, we can implement a new suspendable background task to save the cached data every 10 minutes.
 
 ````kotlin
-import com.github.shynixn.mccoroutine.launch
+import com.github.shynixn.mccoroutine.bukkit.launch
 import kotlinx.coroutines.*
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
