@@ -20,11 +20,11 @@ public class PlayerDisconnectListener implements Listener {
 
     @EventHandler
     public void onPlayerDisconnect(ServerDisconnectEvent event) {
-        System.out.println("[PlayerConnectListener/onPlayerJoinEvent] Is starting on Thread:" + Thread.currentThread().getName() + "" + Thread.currentThread().getId());
+        System.out.println("[PlayerDisconnectListener/onPlayerDisconnect] Is starting on Thread:" + Thread.currentThread().getName() + "" + Thread.currentThread().getId());
 
         CompletionStage<UserData> future = this.userDataCache.getUserDataFromPlayer(event.getPlayer());
         future.thenAccept(useData -> {
-            System.out.println("[PlayerConnectListener/onPlayerJoinEvent] Is ending on Thread:" + Thread.currentThread().getName() + "" + Thread.currentThread().getId());
+            System.out.println("[PlayerDisconnectListener/onPlayerDisconnect] Is ending on Thread:" + Thread.currentThread().getName() + "" + Thread.currentThread().getId());
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;
