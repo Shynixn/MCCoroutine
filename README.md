@@ -57,10 +57,11 @@ private suspend fun bob() {
 }
 ```
 
-### Getting started
+## Getting started
 
 * [User Guide](https://shynixn.github.io/MCCoroutine/wiki/site/)
 * [MCCoroutine JavaDocs for the Bukkit-API](https://shynixn.github.io/MCCoroutine/apidocs/bukkit)
+* [MCCoroutine JavaDocs for the BungeeCord-API](https://shynixn.github.io/MCCoroutine/apidocs/bungeecord)
 * [MCCoroutine JavaDocs for the Sponge-API](https://shynixn.github.io/MCCoroutine/apidocs/sponge)
 * [Article on custom frameworks](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md)
    
