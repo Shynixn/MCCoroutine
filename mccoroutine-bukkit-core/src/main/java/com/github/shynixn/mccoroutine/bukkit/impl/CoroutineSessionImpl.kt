@@ -71,19 +71,21 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
             val mcCoroutineExceptionEvent = MCCoroutineExceptionEvent(plugin, e)
 
-            plugin.server.scheduler.runTask(plugin, Runnable {
-                plugin.server.pluginManager.callEvent(mcCoroutineExceptionEvent)
+            if (plugin.isEnabled) {
+                plugin.server.scheduler.runTask(plugin, Runnable {
+                    plugin.server.pluginManager.callEvent(mcCoroutineExceptionEvent)
 
-                if (!mcCoroutineExceptionEvent.isCancelled) {
-                    if (e !is CancellationException) {
-                        plugin.logger.log(
-                            Level.SEVERE,
-                            "This is not an error of MCCoroutine! See sub exception for details.",
-                            e
-                        )
+                    if (!mcCoroutineExceptionEvent.isCancelled) {
+                        if (e !is CancellationException) {
+                            plugin.logger.log(
+                                Level.SEVERE,
+                                "This is not an error of MCCoroutine! See sub exception for details.",
+                                e
+                            )
+                        }
                     }
-                }
-            })
+                })
+            }
         }
 
         // Build Coroutine plugin scope for exception handling
