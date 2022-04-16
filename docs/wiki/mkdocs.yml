@@ -10,8 +10,9 @@ nav:
     - 'Suspending Listeners': listener.md
     - 'Suspending CommandExecutors': commandexecutor.md
     - 'Suspending Delayed, Repeating Tasks': tasks.md
+    - 'Suspending API Functions': bridge.md
     - 'Suspending Caches, Background Repeating Tasks': caching.md
-    - 'Bridging non-suspendable functions to suspendable functions': bridge.md
+
   - 'FAQ':
     - Installation: faq.md
 theme:

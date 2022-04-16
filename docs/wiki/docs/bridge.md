@@ -1,13 +1,18 @@
-# Bridging non-suspendable functions to suspendable functions
+# Suspending API Functions
 
-This guide continues the guide 'Creating a new Plugin' and describes how to bridge non suspendable code with suspendable implementations.
+This page explains how you can switch into a suspendable scope anywhere in your plugin.
 
-### 1. Adding plugin launch
+## Plugin launch
 
-Use the extension method ``plugin.launch{}`` to enter a suspendable context on the bukkit primary thread.
+Use the extension method ``plugin.launch{}`` to enter a suspendable context on any thread. ``plugin.launch{}`` is threadsafe
+and can be called from any thread at any time. 
+
+This function also accepts two optional parameters ``context: CoroutineContext`` and ``start: CoroutineStart``. 
+It is not recommend changing them because it is very likely to make mistakes here. It requires a very deep understanding of Java threads, Java thread pools, Kotlin Coroutines and how each
+minecraft framework uses schedulers to dispatch tasks correctly when using other parameters. The default parameters are almost always correct.
 
 ````kotlin
-import com.github.shynixn.mccoroutine.launch
+import com.github.shynixn.mccoroutine.bukkit.launch
 import kotlinx.coroutines.delay
 import org.bukkit.plugin.Plugin
 
@@ -25,10 +30,10 @@ class Foo(private val plugin : Plugin) {
 }
 ````
 
-### 2. Understanding the execution order.
+## Plugin launch execution order
 
-By allowing to append ``suspend`` to your listeners and command executors it is highly unlikely that you need to use this function. 
-Still, it is important to understand the execution order in this case.
+It is recommended to use suspendable command executors or suspendable listeners to switch to ``suspend`` functions. However, if you
+use ``plugin.launch``, it is important to understand the execution order.
 
 ````kotlin
 class Foo(private val plugin : Plugin) {
@@ -54,18 +59,14 @@ class Foo(private val plugin : Plugin) {
 ````
 
 ````kotlin
-"I am first
-"I am second
+"I am first"
+"I am second"
 "I am third"
 "I am fifth"
 ````
 
-### 3. Do not use runBlocking
+## Do not use runBlocking
 
 Using ``runBlocking`` in production code is very bad as it annihilates any improvements, we have made by using coroutines. 
-MCCoroutine manipulates the Bukkit Scheduler to allow ``runBlocking`` during startup and disable but ``plugin.launch{}``
+MCCoroutine manipulates the Bukkit Scheduler to allow ``runBlocking`` during startup and disable, but ``plugin.launch{}``
 is almost always the function you want to use instead.
-
-### 4. Test the Foo class
-
-Connect to the foo class in any way and call it for testing.
