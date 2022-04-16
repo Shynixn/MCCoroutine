@@ -9,7 +9,7 @@ nav:
     - 'Suspending Plugin': plugin.md
     - 'Suspending Listeners': listener.md
     - 'Suspending CommandExecutors': commandexecutor.md
-    - 'Suspending Delayed, Repeating Tasks': repeatingtasks.md
+    - 'Suspending Delayed, Repeating Tasks': tasks.md
     - 'Suspending Caches, Background Repeating Tasks': caching.md
     - 'Bridging non-suspendable functions to suspendable functions': bridge.md
   - 'FAQ':

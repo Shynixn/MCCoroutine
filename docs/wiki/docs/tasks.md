@@ -1,40 +1,78 @@
 # Adding delayed and repeating tasks
 
-This guide continues the guide 'Creating a new Plugin' and describes how delayed and repeating tasks can be performed
-with coroutines.
+This page explains how you can delay and repeat tasks using Kotlin Coroutines.
 
-### 1. Create MiniGame class
+## Delaying tasks
 
-Create a new class which implements a custom MiniGame which allows players to join when it has not started yet.
+If you are already in a ``suspend`` function, you can simply use ``delay`` to delay an execution.
 
-````kotlin
-import org.bukkit.entity.Player
-
-class MiniGame {
-    private var isStarted = false;
-    private var players = HashSet<Player>()
-
-    fun join(player: Player) {
-        if (isStarted) {
-            return;
-        }
-
-        players.add(player)
-    }
-}
-````
-
-### 2. Add a start function to the MiniGame class
-
-Using ``delay()`` we can delay the current context (Bukkit primary thread) by 1000 milliseconds, to easily generate a
-countdown without blocking the server. ``delay()`` essentially suspends the current context and continuous after the
+Using ``delay`` we can delay the current context (e.g. Main Thread) by some milliseconds, to easily delay actions
+without blocking the server. ``delay`` essentially suspends the current context and continuous after the
 given time.
 
 !!! note "Difference between delay() and Thread.sleep()"
     There is a big difference with ``delay()`` and ``Thread.sleep()``. Consult the official Kotlin Coroutines
-    documentation for details, however essentially ``Thread.sleep()`` blocks the thread for a given time and 
+    documentation for details, however essentially ``Thread.sleep()`` blocks the thread for a given time and
     ``delay()`` suspends the thread for a given time. When a thread is suspended, it can do other work (e.g. server handles
-    other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g. server appears frozen).   
+    other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g. server appears frozen).
+
+
+````kotlin
+suspend fun sayHello() {
+    println("Please say hello in 2 seconds")
+    delay(2000) // Delay for 2000 milliseconds
+    println("hello")
+}
+````
+
+If you are not in a ``suspend`` function, use ``plugin.launch`` together with ``delay``.
+
+````kotlin
+fun sayHello() {
+   plugin.launch {
+        println("Please say hello in 2 seconds")
+        delay(2000) // Delay for 2000 milliseconds
+        println("hello")
+   }
+}
+````
+
+## Repeating tasks
+
+If you are already in a ``suspend`` function, you can simply use traditional loops with ``delay`` to repeat tasks.
+
+````kotlin
+suspend fun sayHello() {
+    println("Please say hello 10 times every 2 seconds")
+    
+    for (i in 0 until 10){
+        delay(2000) // Delay for 2000 milliseconds
+        println("hello")
+    }
+}
+````
+
+If you are not in a ``suspend`` function, use ``plugin.launch`` together with ``delay``.
+
+````kotlin
+fun sayHello() {
+    plugin.launch {
+        println("Please say hello 10 times every 2 seconds")
+
+        for (i in 0 until 10) {
+            delay(2000) // Delay for 2000 milliseconds
+            println("hello")
+        }
+    }
+}
+````
+
+## Creating a Minigame using delay (Bukkit)
+
+One example where ``delay`` is really useful is when creating minigames. It makes the
+contract of minigame classes very easy to understand. Let's start by implementing a basic minigame class.
+
+The first example shows a countdown in the start function of the minigame.
 
 ````kotlin
 import kotlinx.coroutines.delay
@@ -74,7 +112,7 @@ class MiniGame {
 }
 ````
 
-### 3. Add a run function to the MiniGame class
+### Add a run function to the MiniGame class
 
 We can extend the start method to call ``run`` which contains a loop to tick the miniGame every 1 second.
 
@@ -120,9 +158,9 @@ class MiniGame {
 }
 ````
 
-### 4. Add a function to stop the game.
+### Add a function to stop the game.
 
-An admin should be able to cancel the minigame which we implement by a ``stop`` function.
+An admin should be able to cancel the minigame, which we can implement by a ``stop`` function.
 
 ````kotlin
 import kotlinx.coroutines.delay
@@ -164,7 +202,7 @@ class MiniGame {
 }
 ````
 
-### 5. The full MiniGame class
+### The full MiniGame class:
 
 ````kotlin
 import kotlinx.coroutines.delay
@@ -231,7 +269,7 @@ class MiniGame {
 }
 ````
 
-### 6. Connect JavaPlugin, Listener and MiniGame
+### Connect JavaPlugin, Listener and MiniGame
 
 ````kotlin
 import org.bukkit.event.EventHandler
@@ -250,15 +288,16 @@ class MiniGameListener(private val miniGame: MiniGame) : Listener {
 ````
 
 ````kotlin
-import com.github.shynixn.mccoroutine.SuspendingJavaPlugin
-import com.github.shynixn.mccoroutine.registerSuspendingEvents
-import com.github.shynixn.mccoroutine.setSuspendingExecutor
+import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
+import com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents
+import com.github.shynixn.mccoroutine.bukkit.setSuspendingExecutor
 
 class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
     private val database = Database()
     private val miniGame = MiniGame()
 
     override suspend fun onEnableAsync() {
+        // Minecraft Main Thread
         database.createDbIfNotExist()
         server.pluginManager.registerSuspendingEvents(PlayerDataListener(database), this)
         getCommand("playerdata")!!.setSuspendingExecutor(PlayerDataCommandExecutor(database))
@@ -266,12 +305,11 @@ class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
     }
 
     override suspend fun onDisableAsync() {
+        // Minecraft Main Thread
     }
 }
 ````
 
-### 7. Test the MiniGame
+### Test the MiniGame
 
-Join your server to observe Minigame messages print to your server log.
-
-The next page continuous by adding caches using background-delayed-repeating tasks.
+Join your server to observe Minigame messages getting printed to your server log.
