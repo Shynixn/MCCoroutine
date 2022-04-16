@@ -131,7 +131,7 @@ suspendable functions). You can mix suspendable and non suspendable functions in
     import com.github.shynixn.mccoroutine.bungeecord.registerSuspendingListener
     
     class MCCoroutineSamplePlugin : SuspendingPlugin() {
-    private val database = Database()
+        private val database = Database()
     
         override suspend fun onEnableAsync() {
             // BungeeCord Startup Thread
