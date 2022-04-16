@@ -1,4 +1,4 @@
-# Adding suspending listeners
+# Suspending Listeners
 
 This page explains how you can use Kotlin Coroutines using the ``suspend`` key word for listeners in minecraft plugins.
 

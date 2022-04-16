@@ -1,14 +1,34 @@
-# Adding suspending caches and background tasks
+# Suspending Caches, Background Repeating Tasks
 
-This guide continues the guide 'Creating a new Plugin' and describes how the caching strategy ``lazy loading`` can be
-used together with coroutines.
+This page explains how you can create a ``lazy-loading`` cache using Kotlin Coroutines.
 
-### 1. Add a simple cache
+In minecraft plugins, players can perform many actions in a short time period. If plugins want to keep track of them and store
+every action in the database, creating a new database call for every single action may cause performance problems. Therefore, caches are often
+implemented, which is a lot easier when using coroutines.
 
-When taking a look at the ``Database`` implementation from before, we can observe quite a lot of redundant database
+
+## Implementing a Cache (Bukkit)
+
+When taking a look at the ``Database`` implementation below, we can observe quite a lot of redundant database
 accesses when a player rejoins a server in a very short timeframe.
 
 For this, we put a ``lazy-loading`` cache in front of the  ``Database`` implementation.
+
+````kotlin
+class Database() {
+    fun createDbIfNotExist() {
+        // ... SQL calls
+    }
+
+    fun getDataFromPlayer(player : Player) : PlayerData {
+        // ... SQL calls
+    }
+
+    fun saveData(player : Player, playerData : PlayerData) {
+        // ... SQL calls
+    }
+}
+````
 
 ````kotlin
 import kotlinx.coroutines.Deferred
@@ -22,9 +42,9 @@ class DatabaseCache(private val database: Database) {
 }
 ````
 
-### 2. Deferred PlayerData
+### Deferred PlayerData
 
-Instead of using the type ``PlayerData`` directly, we use the type ``Deferred`` which is the representation of a
+Instead of using the type ``PlayerData`` directly, we use the type ``Deferred``, which is the representation of a
 non-blocking job which has got ``PlayerData`` as result. This means we essentially store the job of retrieving data from
 the database into the cache.
 
@@ -45,14 +65,14 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
                 }
             }
 
-            // Await suspends the current context until the value of the ``Deferred`` job is ready.
+            // Await suspends the current context until the value of the Deferred job is ready.
             cache[player]!!.await()
         }
     }
 }
 ````
 
-### 3. Clear the cache
+### Implementing cache clearing
 
 Clearing the cache is as simple as adding a ``clear`` method.
 
@@ -84,9 +104,9 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
 }
 ````
 
-### 4. Adding auto save of cache
+## Background Repeating Tasks
 
-It is possible to add a new suspendable repeatable background task to save the cached data every 10 minutes. 
+After introducing a cache, we can implement a new suspendable background task to save the cached data every 10 minutes.
 
 ````kotlin
 import com.github.shynixn.mccoroutine.launch
@@ -140,29 +160,3 @@ class DatabaseCache(private val database: Database, private val plugin: Plugin) 
     }
 }
 ````
-
-### 5. Update PlayerDataListener
-
-It is no longer necessary to manually call save as auto save is put in place. 
-Also, the cache automatically clears itself up every 10 minutes. 
-
-````kotlin
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerJoinEvent
-import java.util.*
-
-class PlayerDataListener(private val database : DatabaseCache) : Listener {
-    @EventHandler
-    suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerJoinEvent) {
-        val player = playerJoinEvent.player
-        val playerData = database.getDataFromPlayer(player)
-        playerData.name = player.name
-        playerData.lastJoinDate = Date()
-    }
-}
-````
-
-### 4. Test the Cache
-
-Join and leave your server to observe changes on your database.

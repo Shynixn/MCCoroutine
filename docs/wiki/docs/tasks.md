@@ -1,4 +1,4 @@
-# Adding delayed and repeating tasks
+# Suspending Delayed, Repeating Tasks
 
 This page explains how you can delay and repeat tasks using Kotlin Coroutines.
 

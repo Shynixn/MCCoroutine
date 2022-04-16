@@ -1,4 +1,4 @@
-# Adding suspending commandExecutors
+# Suspending Commandexecutors
 
 This page explains how you can use Kotlin Coroutines using the suspend key word for command executors in minecraft plugins.
 
