@@ -5,10 +5,23 @@
 | master        | [![Build Status](https://github.com/Shynixn/MCCoroutine/workflows/CI/badge.svg?branch=master)](https://github.com/Shynixn/MCCoroutine/actions)| ![GitHub license](https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api.svg?style=flat-square)  |[Download latest release](https://repo1.maven.org/maven2/com/github/shynixn/mccoroutine/)|
 | development   | [![Build Status](https://github.com/Shynixn/MCCoroutine/workflows/CI/badge.svg?branch=development)](https://github.com/Shynixn/MCCoroutine/actions) |![GitHub license](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.shynixn.mccoroutine/mccoroutine-bukkit-api.svg?style=flat-square) |  [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/mccoroutine/) |
 
-MCCoroutine is an extension to bukkit and sponge server implementations (Spigot, Paper, SpongeVanilla, SpongeForge etc.) to use Kotlin Coroutines (async,await) for
-all common operations.
+MCCoroutine is a library, which adds extensive support for Kotlin Coroutines for Minecraft Server environments.
 
-**Note**: This library is actively maintained, used in production plugins and has reached a stable state in June 2021. There are no more recent commits as it is seen as feature complete.
+Plugins for game servers and proxy servers often need to perform asynchronous operations (e.g. accessing databases) to
+be scalable for a large amount of players. MCCoroutine brings the full power of Kotlin Coroutines to them by extending
+the existing APIs with suspendable commands, events and schedules.
+
+**Supported Game Servers:**
+
+* Spigot
+* Paper
+* CraftBukkit
+* SpongeVanilla
+* SpongeForge
+
+**Supported Proxies:**
+
+* BungeeCord
 
 **Examples:**
 
