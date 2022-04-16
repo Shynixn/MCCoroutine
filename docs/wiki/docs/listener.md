@@ -1,8 +1,8 @@
 # Adding suspending listeners
 
-This page explains how you can use Kotlin Coroutines using the ``suspend`` key word for listeners in minecraft plugins
+This page explains how you can use Kotlin Coroutines using the ``suspend`` key word for listeners in minecraft plugins.
 
-## Create the Listener class
+## Create the Listener
 
 Create a listener and add suspend to all functions where you perform suspendable operations (e.g. calling other
 suspendable functions). You can mix suspendable and non suspendable functions in listeners.
