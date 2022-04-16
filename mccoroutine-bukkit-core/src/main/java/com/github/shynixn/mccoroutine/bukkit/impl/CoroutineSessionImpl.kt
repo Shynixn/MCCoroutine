@@ -129,6 +129,7 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
      * Disposes the session.
      */
     fun dispose() {
+        scope.coroutineContext.cancelChildren()
         scope.cancel()
         wakeUpBlockService.dispose()
     }

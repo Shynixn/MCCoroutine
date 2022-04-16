@@ -105,5 +105,6 @@ internal class CoroutineSessionImpl(private val plugin: PluginContainer) :
      */
     fun dispose() {
         scope.coroutineContext.cancelChildren()
+        scope.cancel()
     }
 }
