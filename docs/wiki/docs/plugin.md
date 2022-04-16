@@ -116,46 +116,138 @@ class PlayerData(var uuid: UUID, var name: String, var lastJoinDate: Date, var l
 Create a class ``Database``, which is responsible to store/retrieve this data into/from a database. 
 Here, it is important that we perform all IO calls on async threads and returns on the minecraft main thread.
 
-````kotlin
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.bukkit.entity.Player
-import java.util.*
+=== "Bukkit"
 
-class Database() {
-    suspend fun createDbIfNotExist() {
-        println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
-        withContext(Dispatchers.IO){
-            println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
-            // ... create tables
+    ````kotlin
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import org.bukkit.entity.Player
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
+            withContext(Dispatchers.IO){
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
         }
-        println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
-    }
-
-    suspend fun getDataFromPlayer(player : Player) : PlayerData {
-        println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
-        val playerData = withContext(Dispatchers.IO) {
-            println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
-            // ... get from database by player uuid or create new playerData instance.
-            PlayerData(player.uniqueId, player.name, Date(), Date())
+    
+        suspend fun getDataFromPlayer(player : Player) : PlayerData {
+            println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uniqueId, player.name, Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
+            return playerData;
         }
-
-        println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
-        return playerData;
-    }
-  
-    suspend fun saveData(player : Player, playerData : PlayerData) {
-        println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
-
-        withContext(Dispatchers.IO){
-            println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
-            // insert or update playerData
+      
+        suspend fun saveData(player : Player, playerData : PlayerData) {
+            println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
+    
+            withContext(Dispatchers.IO){
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on minecraft thread " + Thread.currentThread().id)
         }
-
-        println("[saveData] End on minecraft thread " + Thread.currentThread().id)
     }
-}
-````
+    ````
+
+=== "BungeeCord"
+
+    !!! note "Important"
+        BungeeCord does not have a main thread or minecraft thread. Instead it operates on different types of [thread pools](https://docs.oracle.com/javase/tutorial/essential/concurrency/pools.html).
+        This means, the thread id is not always the same if we suspend an operation. Therefore, it is recommend to print the name of the thread instead of the id to see which threadpool you are currently on.
+
+    ````kotlin
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import net.md_5.bungee.api.connection.ProxiedPlayer
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on any thread " + Thread.currentThread().name)
+            withContext(Dispatchers.IO){
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().name)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on bungeecord plugin threadpool " + Thread.currentThread().name)
+        }   
+    
+        suspend fun getDataFromPlayer(player : ProxiedPlayer) : PlayerData {
+            println("[getDataFromPlayer] Start on any thread " + Thread.currentThread().name)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().name)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uniqueId, player.name, Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on bungeecord plugin threadpool " + Thread.currentThread().name)
+            return playerData;
+        }
+    
+        suspend fun saveData(player : ProxiedPlayer, playerData : PlayerData) {
+            println("[saveData] Start on any thread " + Thread.currentThread().name)
+    
+            withContext(Dispatchers.IO){
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().name)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on bungeecord plugin threadpool " + Thread.currentThread().name)
+        }
+    }
+    ````
+
+=== "Sponge"
+
+    ````kotlin
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import org.spongepowered.api.entity.living.player.Player
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
+            withContext(Dispatchers.IO){
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
+        }
+    
+        suspend fun getDataFromPlayer(player : Player) : PlayerData {
+            println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uniqueId, player.name, Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
+            return playerData;
+        }
+    
+        suspend fun saveData(player : Player, playerData : PlayerData) {
+            println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
+    
+            withContext(Dispatchers.IO){
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on minecraft thread " + Thread.currentThread().id)
+        }
+    }
+    ````
 
 Create a new instance of the database and call it in your main class.
 
