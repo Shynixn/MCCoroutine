@@ -78,7 +78,7 @@ This page explains how you can use Kotlin Coroutines using the suspend key word 
                 return CommandResult.empty()
             }
     
-            if (args.hasAny("rename")) {
+            if (args.hasAny("name")) {
                 val name = args.getOne<String>("name").get()
                 val playerData = database.getDataFromPlayer(src)
                 playerData.name = name
@@ -191,10 +191,10 @@ This page explains how you can use Kotlin Coroutines using the suspend key word 
                 .description(Text.of("Command for operations."))
                 .permission("mccoroutine.sample")
                 .arguments(
-                    GenericArguments.onlyOne(GenericArguments.string(Text.of("player")))
+                    GenericArguments.onlyOne(GenericArguments.string(Text.of("name")))
                 )
                 .suspendingExecutor(pluginContainer, PlayerDataCommandExecutor(database))
-            Sponge.getCommandManager().register(pluginContainer, commandSpec.build(), listOf("mccor"))
+            Sponge.getCommandManager().register(pluginContainer, commandSpec.build(), listOf("playerdata"))
         }
     
         @Listener

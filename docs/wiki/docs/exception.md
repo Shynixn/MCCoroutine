@@ -22,7 +22,8 @@ You can handle exceptions by yourself by listening to the ``MCCoroutineException
 and can be used for logging. The following points should be considered:
 
 * The event arrives at the main thread (Bukkit, Sponge)
-* The event is also called for ``CoroutineCancellation``.
+* The event is also called for ``CoroutineCancellation``
+* Exceptions arrive for every plugin using MCCoroutine. Check if ``event.plugin`` equals your plugin.
 * You can cancel the event to disable logging the event with the default exception behaviour
 * You can make this event a ``suspend`` function, however put a ``try-catch`` over the entire function. Otherwise, any
   exception which occur while logging the original exception could stack indefinitely which eventually causes a ``OutOfMemoryException``
