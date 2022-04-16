@@ -17,6 +17,14 @@ contains additional thread pools which may increase memory usage slightly. Take 
 No, they are as fast as ordinary listeners and command executors. The registration of them is slightly slower
 because reflection calls are used to create them. Once players join the server and events arrive, they are the same speed.
 
+### How to cancel all running jobs?
+
+You can control the behaviour of the coroutine using ``plugin.scope``.
+
+````kotlin
+plugin.scope.coroutineContext.cancelChildren()
+````
+
 ### How to cancel suspendable events?
 
 The following example is not possible. You cannot cancel events after you have suspended the context for the

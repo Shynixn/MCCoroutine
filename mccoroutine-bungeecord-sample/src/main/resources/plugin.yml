@@ -1,0 +1,4 @@
+name: MCCoroutine-Sample
+version: 1.6.0
+author: Shynixn
+main: com.github.shynixn.mccoroutine.bungeecord.sample.demo.MCCoroutineSamplePlugin
