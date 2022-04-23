@@ -119,6 +119,11 @@ interface MCCoroutine {
     fun getCoroutineSession(plugin: PluginContainer): CoroutineSession
 
     /**
+     * Configures the suspending plugin container with the real plugin Container.
+     */
+    fun setupCoroutineSession(plugin: PluginContainer, suspendingPluginContainer: SuspendingPluginContainer)
+
+    /**
      * Disables coroutine for the given plugin.
      */
     fun disable(plugin: PluginContainer)
