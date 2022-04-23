@@ -18,20 +18,9 @@ internal class CommandServiceImpl(
     /**
      * Registers a command to velocity.
      */
-    fun registerCommand(meta: CommandMeta, command: Command) {
-        if (command is SuspendingSimpleCommand) {
-            registerSimpleCommand(meta, command)
-        } else {
-            throw IllegalArgumentException("Implement SimpleCommand to register this suspendable command.")
-        }
-    }
-
-    /**
-     * Registers a simple command.
-     */
-    private fun registerSimpleCommand(meta: CommandMeta, suspendingSimpleCommand: SuspendingSimpleCommand) {
+    fun registerCommand(meta: CommandMeta, command: SuspendingSimpleCommand) {
         val commandManager = suspendingPluginContainer.server.commandManager
-        val wrapper = InternalSimpleCommand(pluginContainer, suspendingSimpleCommand)
+        val wrapper = InternalSimpleCommand(pluginContainer, command)
         commandManager.register(meta, wrapper)
     }
 

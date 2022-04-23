@@ -2,6 +2,7 @@ package com.github.shynixn.mccoroutine.velocity
 
 import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandMeta
+import com.velocitypowered.api.command.SimpleCommand
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
 
@@ -27,5 +28,5 @@ interface CoroutineSession {
     /**
      * Registers a suspend command.
      */
-    fun registerSuspendCommand(meta: CommandMeta? = null, command: Command)
+    fun registerSuspendCommand(meta: CommandMeta, command: SuspendingSimpleCommand)
 }

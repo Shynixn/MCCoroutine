@@ -3,10 +3,12 @@ package com.github.shynixn.mccoroutine.velocity.impl
 import com.github.shynixn.mccoroutine.velocity.CoroutineSession
 import com.github.shynixn.mccoroutine.velocity.MCCoroutineExceptionEvent
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
+import com.github.shynixn.mccoroutine.velocity.SuspendingSimpleCommand
 import com.github.shynixn.mccoroutine.velocity.dispatcher.VelocityCoroutineDispatcher
 import com.github.shynixn.mccoroutine.velocity.service.CommandServiceImpl
 import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandMeta
+import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -70,8 +72,8 @@ internal class CoroutineSessionImpl(
     /**
      * Registers a suspend command.
      */
-    override fun registerSuspendCommand(meta: CommandMeta?, command: Command) {
-        commandService.registerCommand(meta!!, command)
+    override fun registerSuspendCommand(meta: CommandMeta, command: SuspendingSimpleCommand) {
+        commandService.registerCommand(meta, command)
     }
 
     /**

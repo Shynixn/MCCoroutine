@@ -1,8 +1,11 @@
 package com.github.shynixn.mccoroutine.velocity
 
+import com.mojang.brigadier.builder.ArgumentBuilder
+import com.mojang.brigadier.context.CommandContext
 import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandManager
 import com.velocitypowered.api.command.CommandMeta
+import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.event.EventManager
 import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.*
@@ -99,6 +102,24 @@ fun EventManager.registerSuspend(plugin: Any, listener: Any) {
 }
 
 /**
+ * Allows to register a suspending command.
+ */
+fun <S, T : ArgumentBuilder<S, T>> ArgumentBuilder<S, T>.executesSuspend(
+    plugin: PluginContainer,
+    command: suspend (context: CommandContext<S>) -> Int
+): T {
+    val result = this.executes({ commandContext ->
+        // Start unDispatched on the same thread but end up on the velocity dispatcher.
+        plugin.launch(plugin.velocityDispatcher, CoroutineStart.UNDISPATCHED) {
+            command.invoke(commandContext)
+        }
+        com.mojang.brigadier.Command.SINGLE_SUCCESS
+    })!!
+
+    return result
+}
+
+/**
  * Registers an command executor with suspending function.
  * Does exactly the same as CommandManager.register
  * @param meta CommandMeta.
@@ -106,8 +127,8 @@ fun EventManager.registerSuspend(plugin: Any, listener: Any) {
  * @param command SuspendingCommand.
  */
 fun CommandManager.registerSuspend(
-    meta : CommandMeta,
-    command: Command,
+    meta: CommandMeta,
+    command: SuspendingSimpleCommand,
     plugin: Any
 ) {
     require(plugin is PluginContainer)
