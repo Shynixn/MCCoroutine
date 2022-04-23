@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList
 import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandInvocation
 
-interface SuspendInvocableCommand<I : CommandInvocation<*>> : Command {
+interface SuspendInvocableCommand<I : CommandInvocation<*>> {
     /**
      * Executes the command for the specified invocation.
      *
