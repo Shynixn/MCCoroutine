@@ -37,16 +37,7 @@ class MockedVelocityServer {
         }
         val server = Mockito.mock(ProxyServer::class.java)
         val pluginManager = Mockito.mock(PluginManager::class.java)
-        val eventManager = Mockito.mock(EventManager::class.java)
-        Mockito.`when`(eventManager.fire<Any>(Mockito.any())).thenAnswer {
-            val completableFuture = CompletableFuture<Any>()
-
-            pluginThreadPool.submit(Runnable {
-                completableFuture.complete(it.getArgument(0))
-            })
-
-            completableFuture
-        }
+        val eventManager = VelocityEventManager(pluginManager)
 
         Mockito.`when`(server.eventManager).thenReturn(eventManager)
         val scheduler = Mockito.mock(Scheduler::class.java)
@@ -75,8 +66,7 @@ class MockedVelocityServer {
         Mockito.`when`(server.pluginManager).thenReturn(pluginManager)
         Mockito.`when`(pluginManager.isLoaded(Mockito.anyString())).thenReturn(true)
 
-        val eventManager2 = VelocityEventManager(pluginManager)
-        val commandManager = VelocityCommandManager(eventManager2)
+        val commandManager = VelocityCommandManager(eventManager)
         Mockito.`when`(server.commandManager).thenReturn(commandManager)
 
         val plugin = MockedPlugin(server, logger)

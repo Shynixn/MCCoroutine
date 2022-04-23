@@ -6,6 +6,7 @@ import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.github.shynixn.mccoroutine.velocity.SuspendingSimpleCommand
 import com.github.shynixn.mccoroutine.velocity.dispatcher.VelocityCoroutineDispatcher
 import com.github.shynixn.mccoroutine.velocity.service.CommandServiceImpl
+import com.github.shynixn.mccoroutine.velocity.service.EventServiceImpl
 import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandMeta
 import com.velocitypowered.api.command.SimpleCommand
@@ -19,6 +20,9 @@ internal class CoroutineSessionImpl(
 ) : CoroutineSession {
     private val commandService: CommandServiceImpl by lazy {
         CommandServiceImpl(pluginContainer, suspendingPluginContainer)
+    }
+    private val eventService: EventServiceImpl by lazy {
+        EventServiceImpl(pluginContainer, suspendingPluginContainer)
     }
 
     /**
@@ -66,7 +70,7 @@ internal class CoroutineSessionImpl(
      * Registers a suspend listener.
      */
     override fun registerSuspendListener(listener: Any) {
-        TODO("Not yet implemented")
+        eventService.registerListener(listener)
     }
 
     /**
