@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.velocity.CoroutineSession
 import com.github.shynixn.mccoroutine.velocity.MCCoroutineExceptionEvent
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.github.shynixn.mccoroutine.velocity.dispatcher.VelocityCoroutineDispatcher
+import com.github.shynixn.mccoroutine.velocity.service.CommandServiceImpl
 import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandMeta
 import com.velocitypowered.api.plugin.PluginContainer
@@ -14,6 +15,10 @@ internal class CoroutineSessionImpl(
     private val pluginContainer: PluginContainer,
     private val suspendingPluginContainer: SuspendingPluginContainer
 ) : CoroutineSession {
+    private val commandService: CommandServiceImpl by lazy {
+        CommandServiceImpl(pluginContainer, suspendingPluginContainer)
+    }
+
     /**
      * Gets the scope.
      */
@@ -66,7 +71,7 @@ internal class CoroutineSessionImpl(
      * Registers a suspend command.
      */
     override fun registerSuspendCommand(meta: CommandMeta?, command: Command) {
-        TODO("Not yet implemented")
+        commandService.registerCommand(meta!!, command)
     }
 
     /**

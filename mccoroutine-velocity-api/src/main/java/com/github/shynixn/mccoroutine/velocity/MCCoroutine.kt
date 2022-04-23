@@ -101,15 +101,17 @@ fun EventManager.registerSuspend(plugin: Any, listener: Any) {
 /**
  * Registers an command executor with suspending function.
  * Does exactly the same as CommandManager.register
+ * @param meta CommandMeta.
  * @param plugin Velocity Plugin.
  * @param command SuspendingCommand.
  */
 fun CommandManager.registerSuspend(
+    meta : CommandMeta,
     command: Command,
     plugin: Any
 ) {
     require(plugin is PluginContainer)
-    return mcCoroutine.getCoroutineSession(plugin).registerSuspendCommand(null, command)
+    return mcCoroutine.getCoroutineSession(plugin).registerSuspendCommand(meta, command)
 }
 
 interface MCCoroutine {

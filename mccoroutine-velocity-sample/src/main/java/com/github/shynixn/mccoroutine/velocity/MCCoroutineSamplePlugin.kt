@@ -43,7 +43,8 @@ class MCCoroutineSamplePlugin {
         proxyServer.eventManager.registerSuspend(this, PlayerDisconnectListener(cache))
 
         val commandExecutor = AdminCommandExecutor(cache)
-        proxyServer.commandManager.registerSuspend(commandExecutor, this)
+        val meta = proxyServer.commandManager.metaBuilder("test")
+        proxyServer.commandManager.registerSuspend(meta.build(),commandExecutor, this)
     }
 
     @Subscribe

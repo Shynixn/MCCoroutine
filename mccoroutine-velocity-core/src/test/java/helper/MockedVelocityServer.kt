@@ -8,6 +8,8 @@ import com.velocitypowered.api.plugin.PluginManager
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.scheduler.ScheduledTask
 import com.velocitypowered.api.scheduler.Scheduler
+import com.velocitypowered.proxy.command.VelocityCommandManager
+import com.velocitypowered.proxy.event.VelocityEventManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
@@ -24,6 +26,8 @@ class MockedVelocityServer {
     val ionNettyDispatcher: IONettyDispatcher by lazy {
         IONettyDispatcher()
     }
+
+    lateinit var proxyServer: ProxyServer
 
     fun boot(mlogger: Logger? = null): PluginContainer {
         val logger = if(mlogger == null){
@@ -71,7 +75,12 @@ class MockedVelocityServer {
         Mockito.`when`(server.pluginManager).thenReturn(pluginManager)
         Mockito.`when`(pluginManager.isLoaded(Mockito.anyString())).thenReturn(true)
 
+        val eventManager2 = VelocityEventManager(pluginManager)
+        val commandManager = VelocityCommandManager(eventManager2)
+        Mockito.`when`(server.commandManager).thenReturn(commandManager)
+
         val plugin = MockedPlugin(server, logger)
+        proxyServer = server
 
         return plugin
     }
