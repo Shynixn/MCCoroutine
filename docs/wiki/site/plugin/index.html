@@ -11,7 +11,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.9">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.120efc48.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c5ef100.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.9647289d.min.css">
@@ -594,7 +594,7 @@ For this, a new plugin is developed from scratch to handle asynchronous and sync
 <h2 id="plugin-main-class">Plugin Main class</h2>
 <p>MCCoroutine does not need to be called explicitly in your plugin main class. It is started implicitly when you use it for the first time and
 disposed automatically when you reload your plugin. </p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label><label for="__tabbed_1_4">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>The first decision for Bukkit API based plugins is to decide between <code>JavaPlugin</code> or <code>SuspendingJavaPlugin</code>, which is a new base
@@ -679,6 +679,28 @@ If so, add a field which injects the type <code>SuspendingPluginContainer</code>
 <span class="p">}</span>
 </code></pre></div>
 </div>
+<div class="tabbed-block">
+<p>MCCoroutine requires to initialize the plugin coroutine scope manually in your plugin main class. This 
+also allows to call suspending functions in your plugin main class.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer</span>
+<span class="nd">@Plugin</span><span class="p">(</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Velocity.&quot;</span>
+<span class="p">)</span>
+<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">{</span>
+     <span class="nd">@Inject</span>
+    <span class="k">constructor</span><span class="p">(</span><span class="n">suspendingPluginContainer</span><span class="p">:</span> <span class="n">SuspendingPluginContainer</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">suspendingPluginContainer</span><span class="p">.</span><span class="na">initialize</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Subscribe</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onProxyInitialization</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">ProxyInitializeEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Velocity Thread Pool</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
 </div>
 </div>
 <h2 id="calling-a-database-from-plugin-main-class">Calling a Database from Plugin Main class</h2>
@@ -688,7 +710,7 @@ If so, add a field which injects the type <code>SuspendingPluginContainer</code>
 </code></pre></div>
 <p>Create a class <code>Database</code>, which is responsible to store/retrieve this data into/from a database. 
 Here, it is important that we perform all IO calls on async threads and returns on the minecraft main thread.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit</label><label for="__tabbed_2_2">BungeeCord</label><label for="__tabbed_2_3">Sponge</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit</label><label for="__tabbed_2_2">BungeeCord</label><label for="__tabbed_2_3">Sponge</label><label for="__tabbed_2_4">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">kotlinx.coroutines.Dispatchers</span>
@@ -818,10 +840,56 @@ This means, the thread id is not always the same if we suspend an operation. The
 <span class="p">}</span>
 </code></pre></div>
 </div>
+<div class="tabbed-block">
+<div class="admonition note">
+<p class="admonition-title">Important</p>
+<p>Velocity does not have a main thread or minecraft thread. Instead it operates on different types of <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/pools.html">thread pools</a>.
+This means, the thread id is not always the same if we suspend an operation. Therefore, it is recommend to print the name of the thread instead of the id to see which threadpool you are currently on.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.velocitypowered.api.proxy.Player</span>
+<span class="k">import</span> <span class="nn">kotlinx.coroutines.Dispatchers</span>
+<span class="k">import</span> <span class="nn">kotlinx.coroutines.withContext</span>
+<span class="k">import</span> <span class="nn">java.util.*</span>
+
+<span class="kd">class</span> <span class="nc">Database</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">createDbIfNotExist</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Start on any thread &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+        <span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Creating database on database io thread &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+            <span class="c1">// ... create tables</span>
+        <span class="p">}</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] End on velocity plugin threadpool &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">):</span> <span class="n">PlayerData</span> <span class="p">{</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Start on any thread &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Retrieving player data on database io thread &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+            <span class="c1">// ... get from database by player uuid or create new playerData instance.</span>
+            <span class="n">PlayerData</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="na">uniqueId</span><span class="p">,</span> <span class="n">player</span><span class="p">.</span><span class="na">username</span><span class="p">,</span> <span class="n">Date</span><span class="p">(),</span> <span class="n">Date</span><span class="p">())</span>
+        <span class="p">}</span>
+
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] End on velocity plugin threadpool &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">playerData</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">:</span> <span class="n">PlayerData</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Start on any thread &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+
+        <span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Saving player data on database io thread &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+            <span class="c1">// insert or update playerData</span>
+        <span class="p">}</span>
+
+        <span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] End on velocity plugin threadpool &quot;</span> <span class="o">+</span> <span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
 </div>
 </div>
 <p>Create a new instance of the database and call it in your main class.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Bukkit</label><label for="__tabbed_3_2">BungeeCord</label><label for="__tabbed_3_3">Sponge</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:4"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Bukkit</label><label for="__tabbed_3_2">BungeeCord</label><label for="__tabbed_3_3">Sponge</label><label for="__tabbed_3_4">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin</span>
@@ -877,6 +945,31 @@ This means, the thread id is not always the same if we suspend an operation. The
     <span class="nd">@Listener</span>
     <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onDisable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">GameStoppingServerEvent</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// Minecraft Main Thread</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>MCCoroutine requires to initialize the plugin coroutine scope manually in your plugin main class. This 
+also allows to call suspending functions in your plugin main class.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer</span>
+<span class="nd">@Plugin</span><span class="p">(</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Velocity.&quot;</span>
+<span class="p">)</span>
+<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+     <span class="nd">@Inject</span>
+    <span class="k">constructor</span><span class="p">(</span><span class="n">suspendingPluginContainer</span><span class="p">:</span> <span class="n">SuspendingPluginContainer</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">suspendingPluginContainer</span><span class="p">.</span><span class="na">initialize</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Subscribe</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onProxyInitialization</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">ProxyInitializeEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Velocity Thread Pool</span>
+        <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -949,7 +1042,7 @@ Extend it with real database operations to get familiar with how it works.</p>
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.6e54b5cd.min.js"></script>
+      <script src="../assets/javascripts/bundle.748e2769.min.js"></script>
       
     
   </body>

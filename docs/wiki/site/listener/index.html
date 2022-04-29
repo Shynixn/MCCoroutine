@@ -11,7 +11,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.9">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.120efc48.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c5ef100.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.9647289d.min.css">
@@ -601,7 +601,7 @@
 <h2 id="create-the-listener">Create the Listener</h2>
 <p>Create a listener and add suspend to all functions where you perform suspendable operations (e.g. calling other
 suspendable functions). You can mix suspendable and non suspendable functions in listeners.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label><label for="__tabbed_1_4">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">org.bukkit.event.EventHandler</span>
@@ -685,10 +685,41 @@ suspendable functions). You can mix suspendable and non suspendable functions in
 <span class="p">}</span>
 </code></pre></div>
 </div>
+<div class="tabbed-block">
+<p>In Velocity events can be <a href="https://velocitypowered.com/wiki/developers/event-api/">handled asynchronously</a>. This allows full
+control over consuming, processing and resuming events when performing long running operations. When you create a suspend
+function using MCCoroutine, they automatically handle <code>Continuation</code> and <code>EventTask</code>. You do not have to do anything yourself,
+all suspend functions are automatically processed asynchronously.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.velocitypowered.api.event.Subscribe</span>
+<span class="k">import</span> <span class="nn">com.velocitypowered.api.event.connection.DisconnectEvent</span>
+<span class="k">import</span> <span class="nn">com.velocitypowered.api.event.connection.PostLoginEvent</span>
+<span class="k">import</span> <span class="nn">java.util.*</span>
+
+<span class="kd">class</span> <span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nd">@Subscribe</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">PostLoginEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="nv">player</span> <span class="o">=</span> <span class="n">event</span><span class="p">.</span><span class="na">player</span>
+        <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+        <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">username</span>
+        <span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
+        <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Subscribe</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">DisconnectEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="nv">player</span> <span class="o">=</span> <span class="n">event</span><span class="p">.</span><span class="na">player</span>
+        <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+        <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">player</span><span class="p">.</span><span class="na">username</span>
+        <span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span> <span class="o">=</span> <span class="n">Date</span><span class="p">()</span>
+        <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
 </div>
 </div>
 <h3 id="register-the-listener">Register the Listener</h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit</label><label for="__tabbed_2_2">BungeeCord</label><label for="__tabbed_2_3">Sponge</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit</label><label for="__tabbed_2_2">BungeeCord</label><label for="__tabbed_2_3">Sponge</label><label for="__tabbed_2_4">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Instead of using <code>registerEvents</code>, use the provided extension method <code>registerSuspendingEvents</code> to allow
@@ -771,6 +802,42 @@ suspendable functions in your listener. Please notice, that timing measurements 
 <span class="p">}</span>
 </code></pre></div>
 </div>
+<div class="tabbed-block">
+<p>Instead of using <code>register</code>, use the provided extension method <code>registerSuspend</code> to allow
+suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer</span>
+<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.velocity.registerSuspend</span>
+<span class="k">import</span> <span class="nn">com.google.inject.Inject</span>
+<span class="k">import</span> <span class="nn">com.velocitypowered.api.event.Subscribe</span>
+<span class="k">import</span> <span class="nn">com.velocitypowered.api.event.proxy.ProxyInitializeEvent</span>
+<span class="k">import</span> <span class="nn">com.velocitypowered.api.plugin.Plugin</span>
+<span class="k">import</span> <span class="nn">com.velocitypowered.api.proxy.ProxyServer</span>
+
+<span class="nd">@Plugin</span><span class="p">(</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Velocity.&quot;</span>
+<span class="p">)</span>
+<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">lateinit</span> <span class="kd">var</span> <span class="nv">proxyServer</span><span class="p">:</span> <span class="n">ProxyServer</span>
+
+    <span class="nd">@Inject</span>
+    <span class="k">constructor</span><span class="p">(</span><span class="n">suspendingPluginContainer</span><span class="p">:</span> <span class="n">SuspendingPluginContainer</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">suspendingPluginContainer</span><span class="p">.</span><span class="na">initialize</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Subscribe</span>
+    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onProxyInitialization</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">ProxyInitializeEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Velocity Thread Pool</span>
+        <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+        <span class="n">proxyServer</span><span class="p">.</span><span class="na">eventManager</span><span class="p">.</span><span class="na">registerSuspend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
 </div>
 </div>
 <h3 id="test-the-listener">Test the Listener</h3>
@@ -838,7 +905,7 @@ suspendable functions in your listener. Please notice, that timing measurements 
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.6e54b5cd.min.js"></script>
+      <script src="../assets/javascripts/bundle.748e2769.min.js"></script>
       
     
   </body>
