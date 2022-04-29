@@ -7,10 +7,7 @@ import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.proxy.ProxyServer
 import net.kyori.adventure.text.Component
 
-class AdminCommandExecutor(private val userDataCache: UserDataCache) : SuspendingSimpleCommand {
-    @Inject
-    private lateinit var proxyServer: ProxyServer
-
+class AdminCommandExecutor(private val userDataCache: UserDataCache, private val proxyServer: ProxyServer) : SuspendingSimpleCommand {
     /**
      * Executes the command for the specified invocation.
      *
