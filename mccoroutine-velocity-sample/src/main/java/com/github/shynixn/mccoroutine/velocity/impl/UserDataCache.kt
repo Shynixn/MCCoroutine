@@ -46,8 +46,9 @@ class UserDataCache(private val plugin: PluginContainer, private val fakeDatabas
                 }
             }
 
+            val result = cache[player]!!
             println("[UserDataCache/getUserDataFromPlayerAsync] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
-            cache[player]!!
+            result
         }
     }
 
