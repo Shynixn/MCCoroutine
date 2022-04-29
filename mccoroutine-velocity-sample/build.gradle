@@ -1,3 +1,9 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version ("2.0.4")
+}
+
+// Required to generate the velocity-plugin.json file.
+apply plugin: 'kotlin-kapt'
 
 java {
     toolchain {
@@ -11,6 +17,15 @@ repositories {
     }
 }
 
+
+shadowJar{
+    dependsOn("jar")
+    archiveName = "$baseName-$version.$extension"
+
+    // Change the output folder of the plugin.
+    destinationDirectory = file("C:\\temp\\Velocity\\plugins")
+}
+
 dependencies {
     implementation(project(":mccoroutine-velocity-api"))
     implementation(project(":mccoroutine-velocity-core"))
@@ -20,5 +35,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
 
     compileOnly("com.velocitypowered:velocity-api:3.0.1")
+    kapt("com.velocitypowered:velocity-api:3.0.1")
     testCompile("com.velocitypowered:velocity-api:3.0.1")
 }

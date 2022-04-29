@@ -1,7 +1,6 @@
 package com.github.shynixn.mccoroutine.velocity.dispatcher
 
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
-import com.github.shynixn.mccoroutine.velocity.extension.isPluginEnabled
 import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Runnable
@@ -24,10 +23,6 @@ internal class VelocityCoroutineDispatcher(
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        if (!pluginContainer.isPluginEnabled(suspendingPluginContainer.server.pluginManager)) {
-            return
-        }
-
         suspendingPluginContainer.server.scheduler
             .buildTask(pluginContainer, block)
             .schedule()

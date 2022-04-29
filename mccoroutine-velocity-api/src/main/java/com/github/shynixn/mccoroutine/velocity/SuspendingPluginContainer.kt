@@ -6,9 +6,8 @@ import com.velocitypowered.api.proxy.ProxyServer
 import org.slf4j.Logger
 
 /**
- * When injecting this class into one instance of your plugin, the instance
- * of your plugin automatically becomes a suspending listener, so you can
- * append suspend to any of your startup methods.
+ * When injecting this class into your plugin instance, a new coroutine session is booted.
+ * Calling initialize allows to listen to suspend events in your plugin main class.
  */
 @Suppress("ConvertSecondaryConstructorToPrimary")
 class SuspendingPluginContainer {
@@ -23,12 +22,26 @@ class SuspendingPluginContainer {
     val logger: Logger
 
     /**
+     * PluginContainer.
+     */
+    val pluginContainer: PluginContainer
+
+    /**
      * Initializes the MCCoroutine hook into the plugin.
      */
     @Inject
     constructor(pluginContainer: PluginContainer, server: ProxyServer, logger: Logger) {
         this.server = server
         this.logger = logger
-        mcCoroutine.setupCoroutineSession(pluginContainer, this)
+        this.pluginContainer = pluginContainer
+        mcCoroutine.disableLogging(pluginContainer, this)
+    }
+
+    /**
+     * Needs to be called to listen to suspend events in your plugin main class.
+     */
+    fun initialize(pluginInstance: Any) {
+        mcCoroutine.setupCoroutineSession(pluginInstance, pluginContainer, this)
+        mcCoroutine.getCoroutineSession(pluginInstance).registerSuspendListener(pluginInstance, true)
     }
 }

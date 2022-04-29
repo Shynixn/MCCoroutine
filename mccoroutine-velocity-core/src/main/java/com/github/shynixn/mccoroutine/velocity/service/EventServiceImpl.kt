@@ -4,13 +4,11 @@ import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.github.shynixn.mccoroutine.velocity.extension.invokeSuspend
 import com.github.shynixn.mccoroutine.velocity.launch
 import com.github.shynixn.mccoroutine.velocity.velocityDispatcher
-import com.google.common.base.VerifyException
 import com.velocitypowered.api.event.EventHandler
 import com.velocitypowered.api.event.EventTask
 import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.CoroutineStart
 import java.lang.reflect.Method
-import java.util.*
 import kotlin.coroutines.Continuation
 
 class EventServiceImpl(
@@ -20,12 +18,15 @@ class EventServiceImpl(
     /**
      * Registers the given listener.
      */
-    fun registerListener(listener: Any) {
-        require(pluginContainer != listener) { "The plugin main instance is automatically registered." }
-        registerInternally(listener)
+    fun registerListener(listener: Any, onlyRegisterSuspend : Boolean) {
+        if (!onlyRegisterSuspend) {
+            require(pluginContainer != listener) { "The plugin main instance is automatically registered." }
+        }
+
+        registerInternally(listener, onlyRegisterSuspend)
     }
 
-    private fun registerInternally(listener: Any) {
+    private fun registerInternally(listener: Any, onlyRegisterSuspend: Boolean) {
         val eventManager = suspendingPluginContainer.server.eventManager
 
         val targetClass: Class<*> = listener.javaClass
@@ -126,7 +127,10 @@ class EventServiceImpl(
             val handler = buildHandlerMethod.invoke(untargetedHandler, listener) as EventHandler<Any>
             val handlerRegistration =
                 handlerRegistrationClassConstructor.newInstance(pluginContainer, order, eventType, listener, handler)
-            registrations.add(handlerRegistration)
+
+            if (!onlyRegisterSuspend) {
+                registrations.add(handlerRegistration)
+            }
         }
 
         val registrationMethod = eventManagerClass.getDeclaredMethod("register", List::class.java)

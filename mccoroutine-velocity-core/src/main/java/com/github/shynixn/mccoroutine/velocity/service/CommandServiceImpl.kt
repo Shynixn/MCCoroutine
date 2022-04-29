@@ -4,7 +4,6 @@ import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.github.shynixn.mccoroutine.velocity.SuspendingSimpleCommand
 import com.github.shynixn.mccoroutine.velocity.launch
 import com.github.shynixn.mccoroutine.velocity.velocityDispatcher
-import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandMeta
 import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.plugin.PluginContainer

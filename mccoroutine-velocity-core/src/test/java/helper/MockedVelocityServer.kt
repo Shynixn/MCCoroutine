@@ -1,7 +1,6 @@
 package helper
 
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
-import com.velocitypowered.api.event.EventManager
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.plugin.PluginDescription
 import com.velocitypowered.api.plugin.PluginManager
@@ -15,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import org.mockito.Mockito
 import org.slf4j.Logger
-import java.util.concurrent.CompletableFuture
+import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
@@ -30,9 +29,9 @@ class MockedVelocityServer {
     lateinit var proxyServer: ProxyServer
 
     fun boot(mlogger: Logger? = null): PluginContainer {
-        val logger = if(mlogger == null){
+        val logger = if (mlogger == null) {
             Mockito.mock(org.slf4j.Logger::class.java)
-        }else{
+        } else {
             mlogger
         }
         val server = Mockito.mock(ProxyServer::class.java)
@@ -43,19 +42,23 @@ class MockedVelocityServer {
         val scheduler = Mockito.mock(Scheduler::class.java)
         Mockito.`when`(scheduler.buildTask(Mockito.any(), Mockito.any(java.lang.Runnable::class.java))).thenAnswer {
             val runnable = it.getArgument<Runnable>(1)
-            object : Scheduler.TaskBuilder{
+            object : Scheduler.TaskBuilder {
                 override fun delay(time: Long, unit: TimeUnit?): Scheduler.TaskBuilder {
                     return this
                 }
+
                 override fun repeat(time: Long, unit: TimeUnit?): Scheduler.TaskBuilder {
                     return this
                 }
+
                 override fun clearDelay(): Scheduler.TaskBuilder {
-                   return this
+                    return this
                 }
+
                 override fun clearRepeat(): Scheduler.TaskBuilder {
                     return this
                 }
+
                 override fun schedule(): ScheduledTask {
                     pluginThreadPool.submit(runnable)
                     return Mockito.mock(ScheduledTask::class.java)
@@ -69,14 +72,21 @@ class MockedVelocityServer {
         val commandManager = VelocityCommandManager(eventManager)
         Mockito.`when`(server.commandManager).thenReturn(commandManager)
 
-        val plugin = MockedPlugin(server, logger)
+        val plugin = MockedPluginContainer(server, logger)
         proxyServer = server
+
+        val suspendingPluginContainer = SuspendingPluginContainer(plugin, server, logger)
+        suspendingPluginContainer.initialize(plugin.instance.get())
 
         return plugin
     }
 
-    class MockedPlugin(private val proxyServer: ProxyServer, private val logger: org.slf4j.Logger) : PluginContainer {
-        val suspendingPluginContainer = SuspendingPluginContainer(this, proxyServer, logger)
+    class MockedPlugin {
+    }
+
+    class MockedPluginContainer(private val proxyServer: ProxyServer, private val logger: org.slf4j.Logger) :
+        PluginContainer {
+        private val mockedPlugin = MockedPlugin()
 
         /**
          * Returns the plugin's description.
@@ -87,6 +97,10 @@ class MockedVelocityServer {
             val description = Mockito.mock(PluginDescription::class.java)
             Mockito.`when`(description.id).thenReturn("test")
             return description
+        }
+
+        override fun getInstance(): Optional<*> {
+            return Optional.of(this)
         }
     }
 

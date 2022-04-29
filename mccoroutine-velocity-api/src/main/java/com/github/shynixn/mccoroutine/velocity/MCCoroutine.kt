@@ -2,16 +2,13 @@ package com.github.shynixn.mccoroutine.velocity
 
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandManager
 import com.velocitypowered.api.command.CommandMeta
-import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.event.EventManager
 import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.*
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
-
 
 /**
  * Static session.
@@ -19,7 +16,7 @@ import kotlin.coroutines.CoroutineContext
 internal val mcCoroutine: MCCoroutine by lazy {
     try {
         Class.forName("com.github.shynixn.mccoroutine.velocity.impl.MCCoroutineImpl")
-            .newInstance() as MCCoroutine
+            .getDeclaredConstructor().newInstance() as MCCoroutine
     } catch (e: Exception) {
         throw RuntimeException(
             "Failed to load MCCoroutine implementation. Shade mccoroutine-velocity-core into your plugin.",
@@ -97,22 +94,26 @@ fun PluginContainer.launch(
  * @param plugin Velocity Plugin.
  */
 fun EventManager.registerSuspend(plugin: Any, listener: Any) {
-    require(plugin is PluginContainer)
-    return mcCoroutine.getCoroutineSession(plugin).registerSuspendListener(listener)
+    return mcCoroutine.getCoroutineSession(plugin).registerSuspendListener(listener, false)
 }
 
 /**
  * Allows to register a suspending command.
  */
 fun <S, T : ArgumentBuilder<S, T>> ArgumentBuilder<S, T>.executesSuspend(
-    plugin: PluginContainer,
+    plugin: Any,
     command: suspend (context: CommandContext<S>) -> Int
 ): T {
+    val session = mcCoroutine.getCoroutineSession(plugin)
+    val scope = session.scope
+    val dispatcher = session.dispatcherVelocity
+
     val result = this.executes({ commandContext ->
         // Start unDispatched on the same thread but end up on the velocity dispatcher.
-        plugin.launch(plugin.velocityDispatcher, CoroutineStart.UNDISPATCHED) {
+        scope.launch(dispatcher, CoroutineStart.UNDISPATCHED) {
             command.invoke(commandContext)
         }
+
         com.mojang.brigadier.Command.SINGLE_SUCCESS
     })!!
 
@@ -131,20 +132,29 @@ fun CommandManager.registerSuspend(
     command: SuspendingSimpleCommand,
     plugin: Any
 ) {
-    require(plugin is PluginContainer)
     return mcCoroutine.getCoroutineSession(plugin).registerSuspendCommand(meta, command)
 }
 
 interface MCCoroutine {
     /**
      * Get coroutine session for the given plugin.
+     * @param plugin can be a plugin instance or pluginContainer instance.
      */
-    fun getCoroutineSession(plugin: PluginContainer): CoroutineSession
+    fun getCoroutineSession(plugin: Any): CoroutineSession
 
     /**
      * Configures the suspending plugin container with the real plugin Container.
      */
-    fun setupCoroutineSession(plugin: PluginContainer, suspendingPluginContainer: SuspendingPluginContainer)
+    fun setupCoroutineSession(
+        pluginInstance: Any,
+        pluginContainer: PluginContainer,
+        suspendingPluginContainer: SuspendingPluginContainer
+    )
+
+    /**
+     * Disables logging false positives.
+     */
+    fun disableLogging(plugin: PluginContainer, suspendingPluginContainer: SuspendingPluginContainer)
 
     /**
      * Disables coroutine for the given plugin.

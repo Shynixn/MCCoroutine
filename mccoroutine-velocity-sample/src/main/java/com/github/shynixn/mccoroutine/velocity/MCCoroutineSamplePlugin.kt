@@ -24,6 +24,14 @@ class MCCoroutineSamplePlugin {
     @Inject
     lateinit var proxyServer: ProxyServer
 
+    @Inject
+    lateinit var pluginContainer: PluginContainer
+
+    @Inject
+    constructor(suspendingPluginContainer: SuspendingPluginContainer) {
+        suspendingPluginContainer.initialize(this)
+    }
+
     @Subscribe
     suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
         println("[MCCoroutineSamplePlugin/onProxyInitialization] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
@@ -36,7 +44,7 @@ class MCCoroutineSamplePlugin {
         println("[MCCoroutineSamplePlugin/onProxyInitialization] Is continuing on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
 
         val database = FakeDatabase()
-        val cache = UserDataCache(this as PluginContainer, database)
+        val cache = UserDataCache(pluginContainer, database)
 
         // Extension to traditional registration.
         proxyServer.eventManager.registerSuspend(this, PlayerConnectListener(cache))
@@ -44,7 +52,7 @@ class MCCoroutineSamplePlugin {
 
         val commandExecutor = AdminCommandExecutor(cache)
         val meta = proxyServer.commandManager.metaBuilder("test")
-        proxyServer.commandManager.registerSuspend(meta.build(),commandExecutor, this)
+        proxyServer.commandManager.registerSuspend(meta.build(), commandExecutor, this)
     }
 
     @Subscribe

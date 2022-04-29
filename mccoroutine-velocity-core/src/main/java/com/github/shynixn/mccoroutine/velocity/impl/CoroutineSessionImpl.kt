@@ -7,9 +7,7 @@ import com.github.shynixn.mccoroutine.velocity.SuspendingSimpleCommand
 import com.github.shynixn.mccoroutine.velocity.dispatcher.VelocityCoroutineDispatcher
 import com.github.shynixn.mccoroutine.velocity.service.CommandServiceImpl
 import com.github.shynixn.mccoroutine.velocity.service.EventServiceImpl
-import com.velocitypowered.api.command.Command
 import com.velocitypowered.api.command.CommandMeta
-import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -65,12 +63,11 @@ internal class CoroutineSessionImpl(
         scope = rootCoroutineScope + SupervisorJob() + dispatcherVelocity
     }
 
-
     /**
      * Registers a suspend listener.
      */
-    override fun registerSuspendListener(listener: Any) {
-        eventService.registerListener(listener)
+    override fun registerSuspendListener(listener: Any, onlyRegisterSuspend: Boolean) {
+        eventService.registerListener(listener, onlyRegisterSuspend)
     }
 
     /**
