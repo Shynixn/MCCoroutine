@@ -181,3 +181,9 @@ task generateBungeeCordJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) 
     outputDirectory = "docs/apidocs/bungeecord"
     sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bungeecord-api/src/main/java'))
 }
+
+task generateVelocityJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "docs/apidocs/velocity"
+    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-velocity-api/src/main/java'))
+}

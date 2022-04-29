@@ -69,9 +69,9 @@ use ``plugin.launch``, it is important to understand the execution order.
     "I am fifth"
     ````
 
-=== "BungeeCord"
+=== "BungeeCord and Velocity"
 
-    As BungeeCord does not have a main thread, the execution order is slightly different.
+    As BungeeCord and Velocity do not have a main thread, the execution order is slightly different.
     
     ````kotlin
     class Foo(private val plugin : Plugin) {

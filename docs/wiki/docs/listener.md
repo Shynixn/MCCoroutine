@@ -95,6 +95,40 @@ suspendable functions). You can mix suspendable and non suspendable functions in
     }
     ````
 
+=== "Velocity"
+
+    In Velocity events can be [handled asynchronously](https://velocitypowered.com/wiki/developers/event-api/). This allows full
+    control over consuming, processing and resuming events when performing long running operations. When you create a suspend
+    function using MCCoroutine, they automatically handle ``Continuation`` and ``EventTask``. You do not have to do anything yourself,
+    all suspend functions are automatically processed asynchronously.
+
+    ````kotlin
+    import com.velocitypowered.api.event.Subscribe
+    import com.velocitypowered.api.event.connection.DisconnectEvent
+    import com.velocitypowered.api.event.connection.PostLoginEvent
+    import java.util.*
+    
+    class PlayerDataListener(private val database: Database) {
+        @Subscribe
+        suspend fun onPlayerJoinEvent(event: PostLoginEvent) {
+            val player = event.player
+            val playerData = database.getDataFromPlayer(player)
+            playerData.name = player.username
+            playerData.lastJoinDate = Date()
+            database.saveData(player, playerData)
+        }
+    
+        @Subscribe
+        suspend fun onPlayerQuitEvent(event: DisconnectEvent) {
+            val player = event.player
+            val playerData = database.getDataFromPlayer(player)
+            playerData.name = player.username
+            playerData.lastQuitDate = Date()
+            database.saveData(player, playerData)
+        }
+    }
+    ````
+
 ### Register the Listener 
 
 === "Bukkit"
@@ -183,6 +217,44 @@ suspendable functions). You can mix suspendable and non suspendable functions in
         @Listener
         suspend fun onDisable(event: GameStoppingServerEvent) {
             // Minecraft Main Thread
+        }
+    }
+    ````
+=== "Velocity"
+
+     Instead of using ``register``, use the provided extension method ``registerSuspend`` to allow
+    suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.
+
+    ````kotlin
+    import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
+    import com.github.shynixn.mccoroutine.velocity.registerSuspend
+    import com.google.inject.Inject
+    import com.velocitypowered.api.event.Subscribe
+    import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
+    import com.velocitypowered.api.plugin.Plugin
+    import com.velocitypowered.api.proxy.ProxyServer
+    
+    @Plugin(
+        id = "mccoroutinesample",
+        name = "MCCoroutineSample",
+        description = "MCCoroutineSample is sample plugin to use MCCoroutine in Velocity."
+    )
+    class MCCoroutineSamplePlugin {
+        private val database = Database()
+    
+        @Inject
+        lateinit var proxyServer: ProxyServer
+    
+        @Inject
+        constructor(suspendingPluginContainer: SuspendingPluginContainer) {
+            suspendingPluginContainer.initialize(this)
+        }
+    
+        @Subscribe
+        suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
+            // Velocity Thread Pool
+            database.createDbIfNotExist()
+            proxyServer.eventManager.registerSuspend(this, PlayerDataListener(database))
         }
     }
     ````

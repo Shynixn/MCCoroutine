@@ -157,6 +157,40 @@ jobs:
           asset_name: MCCoroutine-BungeeCord-Plugin-Sample.jar
           asset_content_type: application/jar
 
+      - name: Upload Velocity Api to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-velocity-api/build/libs/mccoroutine-velocity-api-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Velocity-Api.jar
+          asset_content_type: application/jar
+
+      - name: Upload Velocity Core to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-velocity-core/build/libs/mccoroutine-velocity-core-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Velocity-Core.jar
+          asset_content_type: application/jar
+
+      - name: Upload Velocity Sample Plugin to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-velocity-sample/build/libs/mccoroutine-velocity-sample-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Velocity-Plugin-Sample.jar
+          asset_content_type: application/jar
+
+
   Documentation:
     runs-on: ubuntu-latest
     if: "contains(github.ref, 'master')"
@@ -180,6 +214,7 @@ jobs:
           ./gradlew generateBukkitJavaDocPages > /dev/null
           ./gradlew generateSpongeJavaDocPages > /dev/null
           ./gradlew generateBungeeCordJavaDocPages > /dev/null
+          ./gradlew generateVelocityJavaDocPages > /dev/null
           sudo apt-get install -y mkdocs
           pip install mkdocs-material
           pip install Pygments

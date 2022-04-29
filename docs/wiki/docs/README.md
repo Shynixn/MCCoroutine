@@ -27,6 +27,7 @@ the existing APIs with suspendable commands, events and schedules.
 
 * BungeeCord
 * Waterfall
+* Velocity
 
 ## Features
 

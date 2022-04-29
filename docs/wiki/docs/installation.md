@@ -31,6 +31,14 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
     }
     ```
 
+=== "Velocity"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.0.1")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.0.1")
+    }
+    ```
 
 ## Add Kotlin Coroutines Libraries
 
