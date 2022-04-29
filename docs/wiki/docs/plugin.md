@@ -104,6 +104,31 @@ disposed automatically when you reload your plugin.
     }
     ````
 
+=== "Velocity"
+
+    MCCoroutine requires to initialize the plugin coroutine scope manually in your plugin main class. This 
+    also allows to call suspending functions in your plugin main class.
+
+    ````kotlin
+    import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
+    @Plugin(
+        id = "mccoroutinesample",
+        name = "MCCoroutineSample",
+        description = "MCCoroutineSample is sample plugin to use MCCoroutine in Velocity."
+    )
+    class MCCoroutineSamplePlugin {
+         @Inject
+        constructor(suspendingPluginContainer: SuspendingPluginContainer) {
+            suspendingPluginContainer.initialize(this)
+        }
+
+        @Subscribe
+        suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
+            // Velocity Thread Pool
+        }
+    }
+    ````
+
 ## Calling a Database from Plugin Main class
 
 Create a class containing properties of data, which we want to store into a database.
@@ -249,6 +274,53 @@ Here, it is important that we perform all IO calls on async threads and returns 
     }
     ````
 
+=== "Velocity"
+
+    !!! note "Important"
+        Velocity does not have a main thread or minecraft thread. Instead it operates on different types of [thread pools](https://docs.oracle.com/javase/tutorial/essential/concurrency/pools.html).
+        This means, the thread id is not always the same if we suspend an operation. Therefore, it is recommend to print the name of the thread instead of the id to see which threadpool you are currently on.
+
+    ````kotlin
+    import com.velocitypowered.api.proxy.Player
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on any thread " + Thread.currentThread().name)
+            withContext(Dispatchers.IO) {
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().name)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on velocity plugin threadpool " + Thread.currentThread().name)
+        }
+    
+        suspend fun getDataFromPlayer(player: Player): PlayerData {
+            println("[getDataFromPlayer] Start on any thread " + Thread.currentThread().name)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().name)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uniqueId, player.username, Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on velocity plugin threadpool " + Thread.currentThread().name)
+            return playerData;
+        }
+    
+        suspend fun saveData(player: Player, playerData: PlayerData) {
+            println("[saveData] Start on any thread " + Thread.currentThread().name)
+    
+            withContext(Dispatchers.IO) {
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().name)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on velocity plugin threadpool " + Thread.currentThread().name)
+        }
+    }
+    ````
+
 Create a new instance of the database and call it in your main class.
 
 === "Bukkit"
@@ -315,6 +387,33 @@ Create a new instance of the database and call it in your main class.
     }
     ````
 
+=== "Velocity"
+
+    MCCoroutine requires to initialize the plugin coroutine scope manually in your plugin main class. This 
+    also allows to call suspending functions in your plugin main class.
+
+    ````kotlin
+    import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
+    @Plugin(
+        id = "mccoroutinesample",
+        name = "MCCoroutineSample",
+        description = "MCCoroutineSample is sample plugin to use MCCoroutine in Velocity."
+    )
+    class MCCoroutineSamplePlugin {
+        private val database = Database()
+
+         @Inject
+        constructor(suspendingPluginContainer: SuspendingPluginContainer) {
+            suspendingPluginContainer.initialize(this)
+        }
+
+        @Subscribe
+        suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
+            // Velocity Thread Pool
+            database.createDbIfNotExist()
+        }
+    }
+    ````
 
 ## Test the Plugin
 

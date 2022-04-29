@@ -41,7 +41,7 @@ tasks.register("printVersion") {
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '2.0.1'
+    version '2.1.0'
 
     sourceCompatibility = 1.8
 
@@ -180,4 +180,10 @@ task generateBungeeCordJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) 
     outputFormat = 'javadoc'
     outputDirectory = "docs/apidocs/bungeecord"
     sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bungeecord-api/src/main/java'))
+}
+
+task generateVelocityJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "docs/apidocs/velocity"
+    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-velocity-api/src/main/java'))
 }

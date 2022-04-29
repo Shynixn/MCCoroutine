@@ -91,6 +91,41 @@ This page explains how you can use Kotlin Coroutines using the suspend key word 
     }
     ````
 
+=== "Velocity"
+
+    There are multiple ways to create command executors in Velocity. MCCoroutine provides extensions for both the ``SimpleCommand`` and
+    the ``BrigadierCommand`` to allow flexibility. 
+
+    A ``SimpleCommand`` can  be created by implementing ``SuspendingSimpleCommand`` instead of ``SimpleCommand``
+
+    ````kotlin
+    import com.github.shynixn.mccoroutine.velocity.SuspendingSimpleCommand
+    import com.velocitypowered.api.command.SimpleCommand
+    import com.velocitypowered.api.proxy.Player
+    
+    class PlayerDataCommandExecutor(private val database: Database) : SuspendingSimpleCommand {
+        override suspend fun execute(invocation: SimpleCommand.Invocation) {
+            val source = invocation.source()
+    
+            if (source !is Player) {
+                return
+            }
+    
+            val args = invocation.arguments()
+    
+            if (args.size == 2 && args[0].equals("rename", true)) {
+                val name = args[1]
+                val playerData = database.getDataFromPlayer(source)
+                playerData.name = name
+                database.saveData(source, playerData)
+                return
+            }
+        }
+    }
+    ````
+
+    A ``BrigadierCommand`` can be executed asynchronously using the ``executesSuspend`` extension function. More details below.
+
 ## Register the CommandExecutor
 
 === "Bukkit"
@@ -200,6 +235,51 @@ This page explains how you can use Kotlin Coroutines using the suspend key word 
         @Listener
         suspend fun onDisable(event: GameStoppingServerEvent) {
             // Minecraft Main Thread
+        }
+    }
+    ````
+
+=== "Velocity"
+
+    Instead of using ``register``, use the provided extension method ``registerSuspend`` to register a simple command executor.
+
+    ````kotlin
+    @Plugin(
+        id = "mccoroutinesample",
+        name = "MCCoroutineSample",
+        description = "MCCoroutineSample is sample plugin to use MCCoroutine in Velocity."
+    )
+    class MCCoroutineSamplePlugin {
+        private val database = Database()
+    
+        @Inject
+        lateinit var proxyServer: ProxyServer
+    
+        @Inject
+        constructor(suspendingPluginContainer: SuspendingPluginContainer) {
+            suspendingPluginContainer.initialize(this)
+        }
+    
+        @Subscribe
+        suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
+            // Velocity Thread Pool
+            database.createDbIfNotExist()
+            proxyServer.eventManager.registerSuspend(this, PlayerDataListener(database))
+            val meta = proxyServer.commandManager.metaBuilder("playerdata").build()
+    
+            // Register SimpleCommand
+            proxyServer.commandManager.registerSuspend(meta, PlayerDataCommandExecutor(database), this)
+    
+            // Register BrigadierCommand
+            val helloCommand =
+                LiteralArgumentBuilder.literal<CommandSource>("test")
+                    .executesSuspend(this, { context: CommandContext<CommandSource> ->
+                        val message = Component.text("Hello World", NamedTextColor.AQUA)
+                        context.getSource().sendMessage(message)
+                        1 // indicates success
+                    })
+                    .build()
+            proxyServer.commandManager.register(BrigadierCommand(helloCommand))
         }
     }
     ````

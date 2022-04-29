@@ -10,3 +10,7 @@ include("mccoroutine-bungeecord-sample")
 include("mccoroutine-sponge-api")
 include("mccoroutine-sponge-core")
 include("mccoroutine-sponge-sample")
+
+include("mccoroutine-velocity-api")
+include("mccoroutine-velocity-core")
+include("mccoroutine-velocity-sample")
