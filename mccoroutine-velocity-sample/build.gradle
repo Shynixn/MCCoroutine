@@ -20,6 +20,7 @@ repositories {
 
 shadowJar{
     dependsOn("jar")
+    classifier = "shadowJar"
     archiveName = "$baseName-$version.$extension"
 
     // Change the output folder of the plugin.

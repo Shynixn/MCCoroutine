@@ -12,6 +12,7 @@ publishing {
 
 tasks.withType<ShadowJar> {
     dependsOn("jar")
+    classifier = "shadowJar"
     archiveName = "$baseName-$version.$extension"
 
     // Change the output folder of the plugin.
