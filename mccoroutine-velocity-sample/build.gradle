@@ -23,7 +23,7 @@ shadowJar{
     archiveName = "$baseName-$version.$extension"
 
     // Change the output folder of the plugin.
-    destinationDirectory = file("C:\\temp\\Velocity\\plugins")
+    // destinationDirectory = file("C:\\temp\\Velocity\\plugins")
 }
 
 dependencies {

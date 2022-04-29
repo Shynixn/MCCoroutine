@@ -41,7 +41,7 @@ tasks.register("printVersion") {
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '2.0.1'
+    version '2.1.0'
 
     sourceCompatibility = 1.8
 
