@@ -1,5 +1,7 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
+plugins {
+    id("com.github.johnrengelman.shadow") version ("2.0.4")
+}
+
 
 apply plugin: 'kotlin-platform-jvm'
 
@@ -13,6 +15,17 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(11)
     }
+}
+
+publishing {
+    publications {
+        (it.findByName("mavenJava") as MavenPublication).artifact(tasks.findByName("shadowJar"))
+    }
+}
+
+shadowJar{
+    dependsOn("jar")
+    archiveName = "$baseName-$version.$extension"
 }
 
 dependencies {
