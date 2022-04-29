@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: '1.3.72'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
     }
 }
 
@@ -19,7 +19,9 @@ plugins {
     id "de.marcphilipp.nexus-publish" version '0.2.0'
 }
 
-apply plugin: 'org.jetbrains.dokka'
+allprojects {
+    apply plugin: 'org.jetbrains.dokka'
+}
 
 repositories {
     mavenCentral()
@@ -78,14 +80,13 @@ subprojects {
         classifier = 'sources'
     }
 
-    task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-        outputFormat = 'javadoc'
-        outputDirectory = javadoc.destinationDir
+    tasks.named("dokkaHtml") {
+        outputDirectory = file("$buildDir/javadoc")
     }
 
-    task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    task javadocJar(type: Jar, dependsOn: dokkaHtml) {
+        from dokkaHtml.outputDirectory
         classifier = 'javadoc'
-        from javadoc.destinationDir
     }
 
     publishing {
@@ -161,29 +162,37 @@ gradle.taskGraph.whenReady { taskGraph ->
 }
 
 task generateBukkitJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "docs/apidocs/bukkit"
-    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bukkit-api/src/main/java'))
-    externalDocumentationLink {
-        url = new URL("https://hub.spigotmc.org/javadocs/spigot/")
-        packageListUrl = new URL("https://hub.spigotmc.org/javadocs/spigot/element-list")
+    dokkaSourceSets {
+        named("main") {
+            outputDirectory = file("docs/apidocs")
+            sourceRoots.from(file("mccoroutine-bukkit-api/src/main/java"))
+        }
     }
 }
 
 task generateSpongeJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "docs/apidocs/sponge"
-    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-sponge-api/src/main/java'))
+    dokkaSourceSets {
+        named("main") {
+            outputDirectory = file("docs/apidocs")
+            sourceRoots.from(file("mccoroutine-sponge-api/src/main/java"))
+        }
+    }
 }
 
 task generateBungeeCordJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "docs/apidocs/bungeecord"
-    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-bungeecord-api/src/main/java'))
+    dokkaSourceSets {
+        named("main") {
+            outputDirectory = file("docs/apidocs")
+            sourceRoots.from(file("mccoroutine-bungeecord-api/src/main/java"))
+        }
+    }
 }
 
 task generateVelocityJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "docs/apidocs/velocity"
-    sourceDirs = files(new File(this.projectDir as File, '/mccoroutine-velocity-api/src/main/java'))
+    dokkaSourceSets {
+        named("main") {
+            outputDirectory = file("docs/apidocs")
+            sourceRoots.from(file("mccoroutine-velocity-api/src/main/java"))
+        }
+    }
 }
