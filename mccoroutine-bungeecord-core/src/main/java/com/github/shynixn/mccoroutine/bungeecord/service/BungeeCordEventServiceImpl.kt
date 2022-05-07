@@ -6,6 +6,7 @@ import com.github.shynixn.mccoroutine.bungeecord.launch
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Multimap
 import kotlinx.coroutines.CoroutineStart
+import net.md_5.bungee.api.event.AsyncEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.api.plugin.PluginManager
@@ -153,12 +154,22 @@ internal class BungeeCordEventServiceImpl(private val plugin: Plugin) {
 
         override fun invoke(event: Any?) {
             plugin.launch(plugin.bungeeCordDispatcher, CoroutineStart.UNDISPATCHED) {
+                if (event is AsyncEvent<*>) {
+                    event.registerIntent(plugin)
+                }
+
                 try {
-                    // Try as suspension function.
-                    method.invokeSuspend(listener, event)
-                } catch (e: IllegalArgumentException) {
-                    // Try as ordinary function.
-                    method.invoke(listener, event)
+                    try {
+                        // Try as suspension function.
+                        method.invokeSuspend(listener, event)
+                    } catch (e: IllegalArgumentException) {
+                        // Try as ordinary function.
+                        method.invoke(listener, event)
+                    }
+                } finally {
+                    if (event is AsyncEvent<*>) {
+                        event.completeIntent(plugin)
+                    }
                 }
             }
         }
