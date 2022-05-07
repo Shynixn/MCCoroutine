@@ -67,6 +67,12 @@ private suspend fun bob() {
 * [MCCoroutine JavaDocs for the Velocity-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.velocity/index.html)
 * [Article on custom frameworks](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md)
    
+## Donation 
+
+Support development with a small tip :heart: :coffee:.
+
+* Dogecoin Address: ``DAzt6RGAapkhbKD9uFKJgSR5vpfT9nSvKi``   
+   
 ## Features
 
 * Full implementation of Kotlin Coroutines (async/await)
