@@ -632,6 +632,10 @@ suspendable functions). You can mix suspendable and non suspendable functions in
 </code></pre></div>
 </div>
 <div class="tabbed-block">
+<p>In BungeeCord some events can be <a href="https://www.spigotmc.org/wiki/common-development-pitfalls-bungeecord/#blocking-the-i-o-threads">handled asynchronously</a>. This allows full
+control over consuming, processing and resuming events when performing long running operations. When you create a suspend
+function using MCCoroutine, they automatically handle <code>registerIntent</code> and <code>completeIntent</code>. You do not have to do anything yourself,
+all suspend functions are automatically processed asynchronously.</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.event.PostLoginEvent</span><span class="w"></span>
 <span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.event.ServerDisconnectEvent</span><span class="w"></span>
 <span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.plugin.Listener</span><span class="w"></span>
