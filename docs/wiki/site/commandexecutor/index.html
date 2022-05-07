@@ -11,7 +11,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
     
     
       
@@ -19,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.8c5ef100.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.e411adfe.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.9647289d.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cc9b2e1e.min.css">
         
       
     
@@ -592,108 +592,108 @@
 <div class="tabbed-block">
 <p>Create a traditional command executor but implement <code>SuspendingCommandExecutor</code> instead of <code>CommandExecutor</code>. Please
 consider, that the return value <code>true</code> is automatically assumed, if the function is suspended in one branch.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingCommandExecutor</span>
-<span class="k">import</span> <span class="nn">org.bukkit.command.Command</span>
-<span class="k">import</span> <span class="nn">org.bukkit.command.CommandSender</span>
-<span class="k">import</span> <span class="nn">org.bukkit.entity.Player</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingCommandExecutor</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.command.Command</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.command.CommandSender</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">SuspendingCommandExecutor</span> <span class="p">{</span>
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onCommand</span><span class="p">(</span><span class="n">sender</span><span class="p">:</span> <span class="n">CommandSender</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">Command</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="o">&lt;</span><span class="k">out</span> <span class="kt">String</span><span class="o">&gt;</span><span class="p">):</span> <span class="kt">Boolean</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">sender</span> <span class="k">!is</span> <span class="n">Player</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">false</span>
-        <span class="p">}</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingCommandExecutor</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCommand</span><span class="p">(</span><span class="n">sender</span><span class="p">:</span><span class="w"> </span><span class="n">CommandSender</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p">:</span><span class="w"> </span><span class="n">Command</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="n">Array</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="kt">String</span><span class="o">&gt;</span><span class="p">):</span><span class="w"> </span><span class="kt">Boolean</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sender</span><span class="w"> </span><span class="k">!is</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">size</span> <span class="o">==</span> <span class="m">2</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;rename&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span> <span class="p">{</span>
-            <span class="kd">val</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="m">1</span><span class="o">]</span>
-            <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">sender</span><span class="p">)</span>
-            <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span>
-            <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">true</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">size</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">args</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;rename&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="o">[</span><span class="m">1</span><span class="o">]</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">sender</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="w">            </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="k">return</span> <span class="kc">false</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>Create a traditional command executor but extend from <code>SuspendingCommand</code> instead of <code>Command</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bungeecord.SuspendingCommand</span>
-<span class="k">import</span> <span class="nn">net.md_5.bungee.api.CommandSender</span>
-<span class="k">import</span> <span class="nn">net.md_5.bungee.api.connection.ProxiedPlayer</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.SuspendingCommand</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.CommandSender</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.connection.ProxiedPlayer</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">SuspendingCommand</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">execute</span><span class="p">(</span><span class="n">sender</span><span class="p">:</span> <span class="n">CommandSender</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="o">&lt;</span><span class="k">out</span> <span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">sender</span> <span class="k">!is</span> <span class="n">ProxiedPlayer</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingCommand</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="n">sender</span><span class="p">:</span><span class="w"> </span><span class="n">CommandSender</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="n">Array</span><span class="o">&lt;</span><span class="k">out</span><span class="w"> </span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sender</span><span class="w"> </span><span class="k">!is</span><span class="w"> </span><span class="n">ProxiedPlayer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">size</span> <span class="o">==</span> <span class="m">2</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;rename&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span> <span class="p">{</span>
-            <span class="kd">val</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="m">1</span><span class="o">]</span>
-            <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">sender</span><span class="p">)</span>
-            <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span>
-            <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">size</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">args</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;rename&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="o">[</span><span class="m">1</span><span class="o">]</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">sender</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="w">            </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>Create a traditional command executor but extend from <code>SuspendingCommandExecutor</code> instead of <code>CommandExecutor</code>. Please
 consider, that the return value <code>CommandResult.success()</code> is automatically assumed, if the function is suspended in one branch.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.sponge.SuspendingCommandExecutor</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.command.CommandResult</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.command.CommandSource</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.command.args.CommandContext</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.entity.living.player.Player</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.SuspendingCommandExecutor</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.command.CommandResult</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.command.CommandSource</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.command.args.CommandContext</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.entity.living.player.Player</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">SuspendingCommandExecutor</span> <span class="p">{</span>
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">execute</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">CommandSource</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">CommandContext</span><span class="p">):</span> <span class="n">CommandResult</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">src</span> <span class="k">!is</span> <span class="n">Player</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">CommandResult</span><span class="p">.</span><span class="na">empty</span><span class="p">()</span>
-        <span class="p">}</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingCommandExecutor</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="n">src</span><span class="p">:</span><span class="w"> </span><span class="n">CommandSource</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="n">CommandContext</span><span class="p">):</span><span class="w"> </span><span class="n">CommandResult</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">src</span><span class="w"> </span><span class="k">!is</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">CommandResult</span><span class="p">.</span><span class="na">empty</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">hasAny</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">))</span> <span class="p">{</span>
-            <span class="kd">val</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="na">getOne</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">).</span><span class="na">get</span><span class="p">()</span>
-            <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-            <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span>
-            <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">CommandResult</span><span class="p">.</span><span class="na">success</span><span class="p">()</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">hasAny</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="na">getOne</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">).</span><span class="na">get</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">src</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="w">            </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">CommandResult</span><span class="p">.</span><span class="na">success</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="k">return</span> <span class="n">CommandResult</span><span class="p">.</span><span class="na">empty</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">CommandResult</span><span class="p">.</span><span class="na">empty</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>There are multiple ways to create command executors in Velocity. MCCoroutine provides extensions for both the <code>SimpleCommand</code> and
 the <code>BrigadierCommand</code> to allow flexibility. </p>
 <p>A <code>SimpleCommand</code> can  be created by implementing <code>SuspendingSimpleCommand</code> instead of <code>SimpleCommand</code></p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.velocity.SuspendingSimpleCommand</span>
-<span class="k">import</span> <span class="nn">com.velocitypowered.api.command.SimpleCommand</span>
-<span class="k">import</span> <span class="nn">com.velocitypowered.api.proxy.Player</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.velocity.SuspendingSimpleCommand</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.command.SimpleCommand</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.proxy.Player</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="p">:</span> <span class="n">SuspendingSimpleCommand</span> <span class="p">{</span>
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">execute</span><span class="p">(</span><span class="n">invocation</span><span class="p">:</span> <span class="n">SimpleCommand</span><span class="p">.</span><span class="na">Invocation</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">val</span> <span class="nv">source</span> <span class="o">=</span> <span class="n">invocation</span><span class="p">.</span><span class="na">source</span><span class="p">()</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataCommandExecutor</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingSimpleCommand</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="n">invocation</span><span class="p">:</span><span class="w"> </span><span class="n">SimpleCommand</span><span class="p">.</span><span class="na">Invocation</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">invocation</span><span class="p">.</span><span class="na">source</span><span class="p">()</span><span class="w"></span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">source</span> <span class="k">!is</span> <span class="n">Player</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">source</span><span class="w"> </span><span class="k">!is</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="kd">val</span> <span class="nv">args</span> <span class="o">=</span> <span class="n">invocation</span><span class="p">.</span><span class="na">arguments</span><span class="p">()</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">args</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">invocation</span><span class="p">.</span><span class="na">arguments</span><span class="p">()</span><span class="w"></span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">size</span> <span class="o">==</span> <span class="m">2</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;rename&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span> <span class="p">{</span>
-            <span class="kd">val</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="m">1</span><span class="o">]</span>
-            <span class="kd">val</span> <span class="nv">playerData</span> <span class="o">=</span> <span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
-            <span class="n">playerData</span><span class="p">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span>
-            <span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">playerData</span><span class="p">)</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">size</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">args</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;rename&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="o">[</span><span class="m">1</span><span class="o">]</span><span class="w"></span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="w">            </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">source</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>A <code>BrigadierCommand</code> can be executed asynchronously using the <code>executesSuspend</code> extension function. More details below.</p>
 </div>
@@ -708,24 +708,24 @@ the <code>BrigadierCommand</code> to allow flexibility. </p>
 <p class="admonition-title">Important</p>
 <p>Do not forget to declare the <code>playerdata</code> command in your plugin.yml.</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin</span>
-<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents</span>
-<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bukkit.setSuspendingExecutor</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.setSuspendingExecutor</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingJavaPlugin</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingJavaPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
 
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onEnableAsync</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// Minecraft Main Thread</span>
-        <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-        <span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span> <span class="k">this</span><span class="p">)</span>
-        <span class="n">getCommand</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">)</span><span class="o">!!</span><span class="p">.</span><span class="na">setSuspendingExecutor</span><span class="p">(</span><span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span><span class="w"> </span><span class="k">this</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">getCommand</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">)</span><span class="o">!!</span><span class="p">.</span><span class="na">setSuspendingExecutor</span><span class="p">(</span><span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onDisableAsync</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// Minecraft Main Thread</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -734,118 +734,118 @@ the <code>BrigadierCommand</code> to allow flexibility. </p>
 <p class="admonition-title">Important</p>
 <p>Do not forget to declare the <code>playerdata</code> command in your plugin.yml.</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bungeecord.SuspendingPlugin</span>
-<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bungeecord.registerSuspendingCommand</span>
-<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bungeecord.registerSuspendingListener</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.SuspendingPlugin</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.registerSuspendingCommand</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.registerSuspendingListener</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingPlugin</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
 
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onEnableAsync</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// BungeeCord Startup Thread</span>
-        <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-        <span class="n">proxy</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingListener</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
-        <span class="n">proxy</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingCommand</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// BungeeCord Startup Thread</span><span class="w"></span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">proxy</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingListener</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="n">proxy</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingCommand</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onDisableAsync</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// BungeeCord Shutdown Thread (Not the same as the startup thread)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// BungeeCord Shutdown Thread (Not the same as the startup thread)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>Instead of using <code>executor</code>, use the provided extension method <code>suspendingExecutor</code> to register a command executor.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.sponge.SuspendingPluginContainer</span>
-<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.sponge.registerSuspendingListeners</span>
-<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.sponge.suspendingExecutor</span>
-<span class="k">import</span> <span class="nn">com.google.inject.Inject</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.Sponge</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.command.args.GenericArguments</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.command.spec.CommandSpec</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.event.Listener</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.event.game.state.GameStartedServerEvent</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.event.game.state.GameStoppingServerEvent</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.plugin.Plugin</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.plugin.PluginContainer</span>
-<span class="k">import</span> <span class="nn">org.spongepowered.api.text.Text</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.SuspendingPluginContainer</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.registerSuspendingListeners</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.suspendingExecutor</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.google.inject.Inject</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.Sponge</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.command.args.GenericArguments</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.command.spec.CommandSpec</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.Listener</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.game.state.GameStartedServerEvent</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.game.state.GameStoppingServerEvent</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.plugin.Plugin</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.plugin.PluginContainer</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.text.Text</span><span class="w"></span>
 
-<span class="nd">@Plugin</span><span class="p">(</span>
-    <span class="n">id</span> <span class="o">=</span> <span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Sponge.&quot;</span>
-<span class="p">)</span>
-<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<span class="nd">@Plugin</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Sponge.&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="kd">lateinit</span> <span class="kd">var</span> <span class="nv">suspendingPluginContainer</span><span class="p">:</span> <span class="n">SuspendingPluginContainer</span>
+<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">suspendingPluginContainer</span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPluginContainer</span><span class="w"></span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="kd">lateinit</span> <span class="kd">var</span> <span class="nv">pluginContainer</span><span class="p">:</span> <span class="n">PluginContainer</span>
+<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">pluginContainer</span><span class="p">:</span><span class="w"> </span><span class="n">PluginContainer</span><span class="w"></span>
 
-    <span class="nd">@Listener</span>
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onEnable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">GameStartedServerEvent</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// Minecraft Main Thread</span>
-        <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-        <span class="n">Sponge</span><span class="p">.</span><span class="na">getEventManager</span><span class="p">().</span><span class="na">registerSuspendingListeners</span><span class="p">(</span><span class="n">pluginContainer</span><span class="p">,</span> <span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
-        <span class="kd">val</span> <span class="nv">commandSpec</span> <span class="o">=</span> <span class="n">CommandSpec</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span>
-            <span class="p">.</span><span class="na">description</span><span class="p">(</span><span class="n">Text</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;Command for operations.&quot;</span><span class="p">))</span>
-            <span class="p">.</span><span class="na">permission</span><span class="p">(</span><span class="s">&quot;mccoroutine.sample&quot;</span><span class="p">)</span>
-            <span class="p">.</span><span class="na">arguments</span><span class="p">(</span>
-                <span class="n">GenericArguments</span><span class="p">.</span><span class="na">onlyOne</span><span class="p">(</span><span class="n">GenericArguments</span><span class="p">.</span><span class="na">string</span><span class="p">(</span><span class="n">Text</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)))</span>
-            <span class="p">)</span>
-            <span class="p">.</span><span class="na">suspendingExecutor</span><span class="p">(</span><span class="n">pluginContainer</span><span class="p">,</span> <span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
-        <span class="n">Sponge</span><span class="p">.</span><span class="na">getCommandManager</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="n">pluginContainer</span><span class="p">,</span> <span class="n">commandSpec</span><span class="p">.</span><span class="na">build</span><span class="p">(),</span> <span class="n">listOf</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">))</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="nd">@Listener</span><span class="w"></span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">GameStartedServerEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">Sponge</span><span class="p">.</span><span class="na">getEventManager</span><span class="p">().</span><span class="na">registerSuspendingListeners</span><span class="p">(</span><span class="n">pluginContainer</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">commandSpec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CommandSpec</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="p">.</span><span class="na">description</span><span class="p">(</span><span class="n">Text</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;Command for operations.&quot;</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="p">.</span><span class="na">permission</span><span class="p">(</span><span class="s">&quot;mccoroutine.sample&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="p">.</span><span class="na">arguments</span><span class="p">(</span><span class="w"></span>
+<span class="w">                </span><span class="n">GenericArguments</span><span class="p">.</span><span class="na">onlyOne</span><span class="p">(</span><span class="n">GenericArguments</span><span class="p">.</span><span class="na">string</span><span class="p">(</span><span class="n">Text</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)))</span><span class="w"></span>
+<span class="w">            </span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="p">.</span><span class="na">suspendingExecutor</span><span class="p">(</span><span class="n">pluginContainer</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="n">Sponge</span><span class="p">.</span><span class="na">getCommandManager</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="n">pluginContainer</span><span class="p">,</span><span class="w"> </span><span class="n">commandSpec</span><span class="p">.</span><span class="na">build</span><span class="p">(),</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="nd">@Listener</span>
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onDisable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">GameStoppingServerEvent</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// Minecraft Main Thread</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="nd">@Listener</span><span class="w"></span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">GameStoppingServerEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>Instead of using <code>register</code>, use the provided extension method <code>registerSuspend</code> to register a simple command executor.</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Plugin</span><span class="p">(</span>
-    <span class="n">id</span> <span class="o">=</span> <span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Velocity.&quot;</span>
-<span class="p">)</span>
-<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Plugin</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Velocity.&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
 
-    <span class="nd">@Inject</span>
-    <span class="kd">lateinit</span> <span class="kd">var</span> <span class="nv">proxyServer</span><span class="p">:</span> <span class="n">ProxyServer</span>
+<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
+<span class="w">    </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">proxyServer</span><span class="p">:</span><span class="w"> </span><span class="n">ProxyServer</span><span class="w"></span>
 
-    <span class="nd">@Inject</span>
-    <span class="k">constructor</span><span class="p">(</span><span class="n">suspendingPluginContainer</span><span class="p">:</span> <span class="n">SuspendingPluginContainer</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">suspendingPluginContainer</span><span class="p">.</span><span class="na">initialize</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
+<span class="w">    </span><span class="k">constructor</span><span class="p">(</span><span class="n">suspendingPluginContainer</span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPluginContainer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">suspendingPluginContainer</span><span class="p">.</span><span class="na">initialize</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="nd">@Subscribe</span>
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onProxyInitialization</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">ProxyInitializeEvent</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// Velocity Thread Pool</span>
-        <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-        <span class="n">proxyServer</span><span class="p">.</span><span class="na">eventManager</span><span class="p">.</span><span class="na">registerSuspend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
-        <span class="kd">val</span> <span class="nv">meta</span> <span class="o">=</span> <span class="n">proxyServer</span><span class="p">.</span><span class="na">commandManager</span><span class="p">.</span><span class="na">metaBuilder</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">()</span>
+<span class="w">    </span><span class="nd">@Subscribe</span><span class="w"></span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onProxyInitialization</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ProxyInitializeEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Velocity Thread Pool</span><span class="w"></span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">proxyServer</span><span class="p">.</span><span class="na">eventManager</span><span class="p">.</span><span class="na">registerSuspend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">meta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">proxyServer</span><span class="p">.</span><span class="na">commandManager</span><span class="p">.</span><span class="na">metaBuilder</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">()</span><span class="w"></span>
 
-        <span class="c1">// Register SimpleCommand</span>
-        <span class="n">proxyServer</span><span class="p">.</span><span class="na">commandManager</span><span class="p">.</span><span class="na">registerSuspend</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">),</span> <span class="k">this</span><span class="p">)</span>
+<span class="w">        </span><span class="c1">// Register SimpleCommand</span><span class="w"></span>
+<span class="w">        </span><span class="n">proxyServer</span><span class="p">.</span><span class="na">commandManager</span><span class="p">.</span><span class="na">registerSuspend</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">),</span><span class="w"> </span><span class="k">this</span><span class="p">)</span><span class="w"></span>
 
-        <span class="c1">// Register BrigadierCommand</span>
-        <span class="kd">val</span> <span class="nv">helloCommand</span> <span class="o">=</span>
-            <span class="n">LiteralArgumentBuilder</span><span class="p">.</span><span class="na">literal</span><span class="o">&lt;</span><span class="n">CommandSource</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">)</span>
-                <span class="p">.</span><span class="na">executesSuspend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span> <span class="n">context</span><span class="p">:</span> <span class="n">CommandContext</span><span class="o">&lt;</span><span class="n">CommandSource</span><span class="o">&gt;</span> <span class="o">-&gt;</span>
-                    <span class="kd">val</span> <span class="nv">message</span> <span class="o">=</span> <span class="n">Component</span><span class="p">.</span><span class="na">text</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span> <span class="n">NamedTextColor</span><span class="p">.</span><span class="na">AQUA</span><span class="p">)</span>
-                    <span class="n">context</span><span class="p">.</span><span class="na">getSource</span><span class="p">().</span><span class="na">sendMessage</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-                    <span class="m">1</span> <span class="c1">// indicates success</span>
-                <span class="p">})</span>
-                <span class="p">.</span><span class="na">build</span><span class="p">()</span>
-        <span class="n">proxyServer</span><span class="p">.</span><span class="na">commandManager</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">BrigadierCommand</span><span class="p">(</span><span class="n">helloCommand</span><span class="p">))</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="c1">// Register BrigadierCommand</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">helloCommand</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">            </span><span class="n">LiteralArgumentBuilder</span><span class="p">.</span><span class="na">literal</span><span class="o">&lt;</span><span class="n">CommandSource</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="na">executesSuspend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">context</span><span class="p">:</span><span class="w"> </span><span class="n">CommandContext</span><span class="o">&lt;</span><span class="n">CommandSource</span><span class="o">&gt;</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"></span>
+<span class="w">                    </span><span class="kd">val</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Component</span><span class="p">.</span><span class="na">text</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">NamedTextColor</span><span class="p">.</span><span class="na">AQUA</span><span class="p">)</span><span class="w"></span>
+<span class="w">                    </span><span class="n">context</span><span class="p">.</span><span class="na">getSource</span><span class="p">().</span><span class="na">sendMessage</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"></span>
+<span class="w">                    </span><span class="m">1</span><span class="w"> </span><span class="c1">// indicates success</span><span class="w"></span>
+<span class="w">                </span><span class="p">})</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">proxyServer</span><span class="p">.</span><span class="na">commandManager</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">BrigadierCommand</span><span class="p">(</span><span class="n">helloCommand</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 </div>
 </div>
@@ -915,7 +915,7 @@ the <code>BrigadierCommand</code> to allow flexibility. </p>
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.748e2769.min.js"></script>
+      <script src="../assets/javascripts/bundle.ed9748b7.min.js"></script>
       
     
   </body>

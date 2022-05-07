@@ -11,7 +11,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.11">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
     
     
       
@@ -19,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.8c5ef100.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.e411adfe.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.9647289d.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cc9b2e1e.min.css">
         
       
     
@@ -680,265 +680,265 @@ documentation for details, however essentially <code>Thread.sleep()</code> block
 <code>delay()</code> suspends the thread for a given time. When a thread is suspended, it can do other work (e.g. server handles
 other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g. server appears frozen).</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">sayHello</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello in 2 seconds&quot;</span><span class="p">)</span>
-    <span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span> <span class="c1">// Delay for 2000 milliseconds</span>
-    <span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">sayHello</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello in 2 seconds&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span><span class="w"> </span><span class="c1">// Delay for 2000 milliseconds</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>If you are not in a <code>suspend</code> function, use <code>plugin.launch</code> together with <code>delay</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">fun</span> <span class="nf">sayHello</span><span class="p">()</span> <span class="p">{</span>
-   <span class="n">plugin</span><span class="p">.</span><span class="na">launch</span> <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello in 2 seconds&quot;</span><span class="p">)</span>
-        <span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span> <span class="c1">// Delay for 2000 milliseconds</span>
-        <span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">sayHello</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello in 2 seconds&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span><span class="w"> </span><span class="c1">// Delay for 2000 milliseconds</span><span class="w"></span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h2 id="repeating-tasks">Repeating tasks</h2>
 <p>If you are already in a <code>suspend</code> function, you can simply use traditional loops with <code>delay</code> to repeat tasks.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">sayHello</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello 10 times every 2 seconds&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">sayHello</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello 10 times every 2 seconds&quot;</span><span class="p">)</span><span class="w"></span>
 
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="m">0</span> <span class="n">until</span> <span class="m">10</span><span class="p">){</span>
-        <span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span> <span class="c1">// Delay for 2000 milliseconds</span>
-        <span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="m">10</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span><span class="w"> </span><span class="c1">// Delay for 2000 milliseconds</span><span class="w"></span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>If you are not in a <code>suspend</code> function, use <code>plugin.launch</code> together with <code>delay</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">fun</span> <span class="nf">sayHello</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">plugin</span><span class="p">.</span><span class="na">launch</span> <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello 10 times every 2 seconds&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">sayHello</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello 10 times every 2 seconds&quot;</span><span class="p">)</span><span class="w"></span>
 
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="m">0</span> <span class="n">until</span> <span class="m">10</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span> <span class="c1">// Delay for 2000 milliseconds</span>
-            <span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span><span class="w"> </span><span class="c1">// Delay for 2000 milliseconds</span><span class="w"></span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h2 id="creating-a-minigame-using-delay-bukkit">Creating a Minigame using delay (Bukkit)</h2>
 <p>One example where <code>delay</code> is really useful is when creating minigames. It makes the
 contract of minigame classes very easy to understand. Let's start by implementing a basic minigame class.</p>
 <p>The first example shows a countdown in the start function of the minigame.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">kotlinx.coroutines.delay</span>
-<span class="k">import</span> <span class="nn">org.bukkit.entity.Player</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.delay</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">MiniGame</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">isStarted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">players</span> <span class="o">=</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Player</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MiniGame</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">players</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Player</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
 
-    <span class="kd">fun</span> <span class="nf">join</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">join</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">players</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="n">players</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">start</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">start</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">isStarted</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="w">        </span><span class="n">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
 
-        <span class="c1">// This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="m">0</span> <span class="n">until</span> <span class="m">20</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is starting in </span><span class="si">${</span><span class="m">20</span> <span class="o">-</span> <span class="n">i</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="c1">// This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is starting in </span><span class="si">${</span><span class="m">20</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="c1">// ... Teleport players to game.</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="c1">// ... Teleport players to game.</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">private</span> <span class="kd">fun</span> <span class="nf">sendMessageToPlayers</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">players</span><span class="p">.</span><span class="na">forEach</span> <span class="p">{</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="p">.</span><span class="na">sendMessage</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">sendMessageToPlayers</span><span class="p">(</span><span class="n">message</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">players</span><span class="p">.</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="na">sendMessage</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="add-a-run-function-to-the-minigame-class">Add a run function to the MiniGame class</h3>
 <p>We can extend the start method to call <code>run</code> which contains a loop to tick the miniGame every 1 second.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">kotlinx.coroutines.delay</span>
-<span class="k">import</span> <span class="nn">org.bukkit.entity.Player</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.delay</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">MiniGame</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">isStarted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">players</span> <span class="o">=</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Player</span><span class="o">&gt;</span><span class="p">()</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">remainingTime</span> <span class="o">=</span> <span class="m">0</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MiniGame</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">players</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Player</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">remainingTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w"></span>
 
-    <span class="c1">//...</span>
+<span class="w">    </span><span class="c1">//...</span><span class="w"></span>
 
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">start</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">start</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">isStarted</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="w">        </span><span class="n">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
 
-        <span class="c1">// This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="m">0</span> <span class="n">until</span> <span class="m">20</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is starting in </span><span class="si">${</span><span class="m">20</span> <span class="o">-</span> <span class="n">i</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="c1">// This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is starting in </span><span class="si">${</span><span class="m">20</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="c1">// ... Teleport players to game.</span>
-        <span class="n">run</span><span class="p">()</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="c1">// ... Teleport players to game.</span><span class="w"></span>
+<span class="w">        </span><span class="n">run</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">private</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">remainingTime</span> <span class="o">=</span> <span class="m">300</span> <span class="c1">// 300 seconds</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">remainingTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="c1">// 300 seconds</span><span class="w"></span>
 
-        <span class="k">while</span> <span class="p">(</span><span class="n">isStarted</span> <span class="o">&amp;&amp;</span> <span class="n">remainingTime</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is over in </span><span class="si">${</span><span class="n">remainingTime</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-            <span class="n">remainingTime</span><span class="o">--</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">isStarted</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">remainingTime</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is over in </span><span class="si">${</span><span class="n">remainingTime</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">remainingTime</span><span class="o">--</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="c1">//...</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="c1">//...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="add-a-function-to-stop-the-game">Add a function to stop the game.</h3>
 <p>An admin should be able to cancel the minigame, which we can implement by a <code>stop</code> function.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">kotlinx.coroutines.delay</span>
-<span class="k">import</span> <span class="nn">org.bukkit.entity.Player</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.delay</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">MiniGame</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">isStarted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">players</span> <span class="o">=</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Player</span><span class="o">&gt;</span><span class="p">()</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">remainingTime</span> <span class="o">=</span> <span class="m">0</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MiniGame</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">players</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Player</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">remainingTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w"></span>
 
-    <span class="c1">//...</span>
+<span class="w">    </span><span class="c1">//...</span><span class="w"></span>
 
-    <span class="kd">private</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">remainingTime</span> <span class="o">=</span> <span class="m">300</span> <span class="c1">// 300 seconds</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">remainingTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="c1">// 300 seconds</span><span class="w"></span>
 
-        <span class="k">while</span> <span class="p">(</span><span class="n">isStarted</span> <span class="o">&amp;&amp;</span> <span class="n">remainingTime</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is over in </span><span class="si">${</span><span class="n">remainingTime</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-            <span class="n">remainingTime</span><span class="o">--</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">isStarted</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">remainingTime</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is over in </span><span class="si">${</span><span class="n">remainingTime</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">remainingTime</span><span class="o">--</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game was cancelled by external stop.&quot;</span><span class="p">)</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game was cancelled by external stop.&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">isStarted</span> <span class="o">=</span> <span class="kc">false</span>
-        <span class="c1">// ... Teleport players back to lobby.</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="n">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ... Teleport players back to lobby.</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">fun</span> <span class="nf">stop</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">stop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">isStarted</span> <span class="o">=</span> <span class="kc">false</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="n">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="c1">//...</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="c1">//...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="the-full-minigame-class">The full MiniGame class:</h3>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">kotlinx.coroutines.delay</span>
-<span class="k">import</span> <span class="nn">org.bukkit.entity.Player</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.delay</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">MiniGame</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">isStarted</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">players</span> <span class="o">=</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Player</span><span class="o">&gt;</span><span class="p">()</span>
-    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">remainingTime</span> <span class="o">=</span> <span class="m">0</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MiniGame</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">players</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="n">Player</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">remainingTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w"></span>
 
-    <span class="kd">fun</span> <span class="nf">join</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">join</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">players</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="n">players</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">start</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">start</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">isStarted</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="w">        </span><span class="n">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
 
-        <span class="c1">// This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="m">0</span> <span class="n">until</span> <span class="m">20</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is starting in </span><span class="si">${</span><span class="m">20</span> <span class="o">-</span> <span class="n">i</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="c1">// This loop represents a traditional repeating task which ticks every 1 second and is called 20 times.</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is starting in </span><span class="si">${</span><span class="m">20</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="c1">// ... Teleport players to game.</span>
-        <span class="n">run</span><span class="p">()</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="c1">// ... Teleport players to game.</span><span class="w"></span>
+<span class="w">        </span><span class="n">run</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">private</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">remainingTime</span> <span class="o">=</span> <span class="m">300</span> <span class="c1">// 300 seconds</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">remainingTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="c1">// 300 seconds</span><span class="w"></span>
 
-        <span class="k">while</span> <span class="p">(</span><span class="n">isStarted</span> <span class="o">&amp;&amp;</span> <span class="n">remainingTime</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is over in </span><span class="si">${</span><span class="n">remainingTime</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span>
-            <span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
-            <span class="n">remainingTime</span><span class="o">--</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">isStarted</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">remainingTime</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game is over in </span><span class="si">${</span><span class="n">remainingTime</span><span class="si">}</span><span class="s"> seconds.&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">remainingTime</span><span class="o">--</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game was cancelled by external stop.&quot;</span><span class="p">)</span>
-        <span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sendMessageToPlayers</span><span class="p">(</span><span class="s">&quot;Game was cancelled by external stop.&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">isStarted</span> <span class="o">=</span> <span class="kc">false</span>
-        <span class="c1">// ... Teleport players back to lobby.</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="n">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ... Teleport players back to lobby.</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">fun</span> <span class="nf">stop</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isStarted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">stop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isStarted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
 
-        <span class="n">isStarted</span> <span class="o">=</span> <span class="kc">false</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="n">isStarted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">private</span> <span class="kd">fun</span> <span class="nf">sendMessageToPlayers</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">players</span><span class="p">.</span><span class="na">forEach</span> <span class="p">{</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="p">.</span><span class="na">sendMessage</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">sendMessageToPlayers</span><span class="p">(</span><span class="n">message</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">players</span><span class="p">.</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="na">sendMessage</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="connect-javaplugin-listener-and-minigame">Connect JavaPlugin, Listener and MiniGame</h3>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">org.bukkit.event.EventHandler</span>
-<span class="k">import</span> <span class="nn">org.bukkit.event.Listener</span>
-<span class="k">import</span> <span class="nn">org.bukkit.event.player.PlayerJoinEvent</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.EventHandler</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.Listener</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.player.PlayerJoinEvent</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">MiniGameListener</span><span class="p">(</span><span class="kd">private</span> <span class="kd">val</span> <span class="nv">miniGame</span><span class="p">:</span> <span class="n">MiniGame</span><span class="p">)</span> <span class="p">:</span> <span class="n">Listener</span> <span class="p">{</span>
-    <span class="nd">@EventHandler</span>
-    <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span> <span class="n">PlayerJoinEvent</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">miniGame</span><span class="p">.</span><span class="na">join</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MiniGameListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">miniGame</span><span class="p">:</span><span class="w"> </span><span class="n">MiniGame</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Listener</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@EventHandler</span><span class="w"></span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerJoinEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">miniGame</span><span class="p">.</span><span class="na">join</span><span class="p">(</span><span class="n">playerJoinEvent</span><span class="p">.</span><span class="na">player</span><span class="p">)</span><span class="w"></span>
 
-        <span class="c1">// Just for testing purposes</span>
-        <span class="n">miniGame</span><span class="p">.</span><span class="na">start</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">        </span><span class="c1">// Just for testing purposes</span><span class="w"></span>
+<span class="w">        </span><span class="n">miniGame</span><span class="p">.</span><span class="na">start</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin</span>
-<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents</span>
-<span class="k">import</span> <span class="nn">com.github.shynixn.mccoroutine.bukkit.setSuspendingExecutor</span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.setSuspendingExecutor</span><span class="w"></span>
 
-<span class="kd">class</span> <span class="nc">MCCoroutineSamplePlugin</span> <span class="p">:</span> <span class="n">SuspendingJavaPlugin</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
-    <span class="kd">private</span> <span class="kd">val</span> <span class="nv">miniGame</span> <span class="o">=</span> <span class="n">MiniGame</span><span class="p">()</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingJavaPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">miniGame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MiniGame</span><span class="p">()</span><span class="w"></span>
 
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onEnableAsync</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// Minecraft Main Thread</span>
-        <span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-        <span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span> <span class="k">this</span><span class="p">)</span>
-        <span class="n">getCommand</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">)</span><span class="o">!!</span><span class="p">.</span><span class="na">setSuspendingExecutor</span><span class="p">(</span><span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
-        <span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">MiniGameListener</span><span class="p">(</span><span class="n">miniGame</span><span class="p">),</span> <span class="k">this</span><span class="p">)</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span><span class="w"> </span><span class="k">this</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">getCommand</span><span class="p">(</span><span class="s">&quot;playerdata&quot;</span><span class="p">)</span><span class="o">!!</span><span class="p">.</span><span class="na">setSuspendingExecutor</span><span class="p">(</span><span class="n">PlayerDataCommandExecutor</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">MiniGameListener</span><span class="p">(</span><span class="n">miniGame</span><span class="p">),</span><span class="w"> </span><span class="k">this</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-    <span class="kd">override</span> <span class="kd">suspend</span> <span class="kd">fun</span> <span class="nf">onDisableAsync</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// Minecraft Main Thread</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="test-the-minigame">Test the MiniGame</h3>
 <p>Join your server to observe Minigame messages getting printed to your server log.</p>
@@ -1005,7 +1005,7 @@ contract of minigame classes very easy to understand. Let's start by implementin
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.748e2769.min.js"></script>
+      <script src="../assets/javascripts/bundle.ed9748b7.min.js"></script>
       
     
   </body>
