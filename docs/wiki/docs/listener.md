@@ -39,6 +39,11 @@ suspendable functions). You can mix suspendable and non suspendable functions in
 
 === "BungeeCord"
 
+    In BungeeCord some events can be [handled asynchronously](https://www.spigotmc.org/wiki/common-development-pitfalls-bungeecord/#blocking-the-i-o-threads). This allows full
+    control over consuming, processing and resuming events when performing long running operations. When you create a suspend
+    function using MCCoroutine, they automatically handle ``registerIntent`` and ``completeIntent``. You do not have to do anything yourself,
+    all suspend functions are automatically processed asynchronously.
+
     ````kotlin
     import net.md_5.bungee.api.event.PostLoginEvent
     import net.md_5.bungee.api.event.ServerDisconnectEvent
