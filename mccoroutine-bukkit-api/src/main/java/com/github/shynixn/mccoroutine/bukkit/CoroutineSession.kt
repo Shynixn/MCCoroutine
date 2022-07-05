@@ -34,12 +34,20 @@ interface CoroutineSession {
     /**
      * Registers a suspend command executor.
      */
-    fun registerSuspendCommandExecutor(pluginCommand: PluginCommand, commandExecutor: SuspendingCommandExecutor)
+    fun registerSuspendCommandExecutor(
+        context: CoroutineContext,
+        pluginCommand: PluginCommand,
+        commandExecutor: SuspendingCommandExecutor
+    )
 
     /**
      * Registers a suspend tab completer.
      */
-    fun registerSuspendTabCompleter(pluginCommand: PluginCommand, tabCompleter: SuspendingTabCompleter)
+    fun registerSuspendTabCompleter(
+        context: CoroutineContext,
+        pluginCommand: PluginCommand,
+        tabCompleter: SuspendingTabCompleter
+    )
 
     /**
      * Registers a suspend listener.
@@ -52,6 +60,6 @@ interface CoroutineSession {
      */
     fun fireSuspendingEvent(
         event: Event,
-        eventExecutionType: com.github.shynixn.mccoroutine.bukkit.EventExecutionType
+        eventExecutionType: EventExecutionType
     ): Collection<Job>
 }
