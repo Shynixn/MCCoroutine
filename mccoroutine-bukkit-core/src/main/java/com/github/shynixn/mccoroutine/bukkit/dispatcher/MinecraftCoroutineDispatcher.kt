@@ -1,5 +1,6 @@
 package com.github.shynixn.mccoroutine.bukkit.dispatcher
 
+import com.github.shynixn.mccoroutine.bukkit.CoroutineTimings
 import com.github.shynixn.mccoroutine.bukkit.service.WakeUpBlockServiceImpl
 import kotlinx.coroutines.CoroutineDispatcher
 import org.bukkit.plugin.Plugin
@@ -31,6 +32,14 @@ internal open class MinecraftCoroutineDispatcher(
             return
         }
 
-        plugin.server.scheduler.runTask(plugin, block)
+        val timedRunnable = context[CoroutineTimings.Key]
+
+        if (timedRunnable == null) {
+            plugin.server.scheduler.runTask(plugin, block)
+            return
+        }
+
+        timedRunnable.queue.add(block)
+        plugin.server.scheduler.runTask(plugin, timedRunnable)
     }
 }

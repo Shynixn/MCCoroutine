@@ -12,7 +12,8 @@ nav:
     - 'Suspending Delayed, Repeating Tasks': tasks.md
     - 'Suspending API Functions': bridge.md
     - 'Suspending Caches, Background Repeating Tasks': caching.md
-    - 'Suspending Exceptions': exception.md
+    - 'Exception Handling': exception.md
+    - 'Timing Measurements': timings.md
   - 'FAQ': faq.md
 theme:
   name: material

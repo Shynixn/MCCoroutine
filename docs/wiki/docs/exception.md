@@ -1,4 +1,4 @@
-# Suspending Exceptions
+# Exception Handling
 
 MCCoroutine implements exception handling as explained by the official [Coroutine docs](https://kotlinlang.org/docs/exception-handling.html).
 

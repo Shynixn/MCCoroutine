@@ -99,17 +99,22 @@ internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSessi
      * Registers a suspend command executor.
      */
     override fun registerSuspendCommandExecutor(
+        context: CoroutineContext,
         pluginCommand: PluginCommand,
         commandExecutor: SuspendingCommandExecutor
     ) {
-        commandService.registerSuspendCommandExecutor(pluginCommand, commandExecutor)
+        commandService.registerSuspendCommandExecutor(context, pluginCommand, commandExecutor)
     }
 
     /**
      * Registers a suspend tab completer.
      */
-    override fun registerSuspendTabCompleter(pluginCommand: PluginCommand, tabCompleter: SuspendingTabCompleter) {
-        commandService.registerSuspendTabCompleter(pluginCommand, tabCompleter)
+    override fun registerSuspendTabCompleter(
+        context: CoroutineContext,
+        pluginCommand: PluginCommand,
+        tabCompleter: SuspendingTabCompleter
+    ) {
+        commandService.registerSuspendTabCompleter(context, pluginCommand, tabCompleter)
     }
 
     /**

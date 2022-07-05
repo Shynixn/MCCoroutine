@@ -15,7 +15,7 @@ import kotlin.coroutines.CoroutineContext
 internal val mcCoroutine: MCCoroutine by lazy {
     try {
         Class.forName("com.github.shynixn.mccoroutine.bukkit.impl.MCCoroutineImpl")
-            .newInstance() as MCCoroutine
+            .getDeclaredConstructor().newInstance() as MCCoroutine
     } catch (e: Exception) {
         throw RuntimeException(
             "Failed to load MCCoroutine implementation. Shade mccoroutine-bukkit-core into your plugin.",
@@ -140,13 +140,30 @@ fun PluginManager.callSuspendingEvent(
 }
 
 /**
- * Registers an command executor with suspending function.
+ * Registers a command executor with suspending function.
  * Does exactly the same as PluginCommand.setExecutor.
  */
 fun PluginCommand.setSuspendingExecutor(
     suspendingCommandExecutor: SuspendingCommandExecutor
 ) {
     return mcCoroutine.getCoroutineSession(plugin).registerSuspendCommandExecutor(
+        plugin.minecraftDispatcher,
+        this,
+        suspendingCommandExecutor
+    )
+}
+
+/**
+ * Registers a command executor with suspending function.
+ * Does exactly the same as PluginCommand.setExecutor.
+ * @param context The coroutine context to start. Should almost be always be [Plugin.minecraftDispatcher].
+ */
+fun PluginCommand.setSuspendingExecutor(
+    context: CoroutineContext,
+    suspendingCommandExecutor: SuspendingCommandExecutor
+) {
+    return mcCoroutine.getCoroutineSession(plugin).registerSuspendCommandExecutor(
+        context,
         this,
         suspendingCommandExecutor
     )
@@ -158,6 +175,21 @@ fun PluginCommand.setSuspendingExecutor(
  */
 fun PluginCommand.setSuspendingTabCompleter(suspendingTabCompleter: SuspendingTabCompleter) {
     return mcCoroutine.getCoroutineSession(plugin).registerSuspendTabCompleter(
+        plugin.minecraftDispatcher,
+        this,
+        suspendingTabCompleter
+    )
+}
+
+
+/**
+ * Registers a tab completer with suspending function.
+ * Does exactly the same as PluginCommand.setExecutor.
+ * @param context The coroutine context to start. Should almost be always be [Plugin.minecraftDispatcher].
+ */
+fun PluginCommand.setSuspendingTabCompleter(context: CoroutineContext, suspendingTabCompleter: SuspendingTabCompleter) {
+    return mcCoroutine.getCoroutineSession(plugin).registerSuspendTabCompleter(
+        context,
         this,
         suspendingTabCompleter
     )
