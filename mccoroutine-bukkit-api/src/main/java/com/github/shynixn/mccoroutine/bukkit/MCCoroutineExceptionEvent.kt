@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList
 import org.bukkit.plugin.Plugin
 
 /**
- * A BungeeCord event which is called when an exception is raised in one of the coroutines managed by MCCoroutine.
+ * A Bukkit event which is called when an exception is raised in one of the coroutines managed by MCCoroutine.
  * Cancelling this exception causes the error to not get logged and offers to possibility for custom logging.
  */
 class MCCoroutineExceptionEvent(
