@@ -11,7 +11,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.9">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.3.9">
     
     
       
@@ -435,6 +435,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#delay-ticks" class="md-nav__link">
+    Delay Ticks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#repeating-tasks" class="md-nav__link">
     Repeating tasks
   </a>
@@ -609,6 +616,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#delay-ticks" class="md-nav__link">
+    Delay Ticks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#repeating-tasks" class="md-nav__link">
     Repeating tasks
   </a>
@@ -693,7 +707,7 @@ given time.</p>
 <p>There is a big difference with <code>delay()</code> and <code>Thread.sleep()</code>. Consult the official Kotlin Coroutines
 documentation for details, however essentially <code>Thread.sleep()</code> blocks the thread for a given time and
 <code>delay()</code> suspends the thread for a given time. When a thread is suspended, it can do other work (e.g. server handles
-other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g. server appears frozen).</p>
+other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g.  server appears frozen).</p>
 </div>
 <div class="highlight"><pre><span></span><code><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">sayHello</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello in 2 seconds&quot;</span><span class="p">)</span><span class="w"></span>
@@ -703,19 +717,25 @@ other operations like players joining or commands) compared to when a thread is 
 </code></pre></div>
 <p>If you are not in a <code>suspend</code> function, use <code>plugin.launch</code> together with <code>delay</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">sayHello</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">   </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello in 2 seconds&quot;</span><span class="p">)</span><span class="w"></span>
 <span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span><span class="w"> </span><span class="c1">// Delay for 2000 milliseconds</span><span class="w"></span>
 <span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
+<h2 id="delay-ticks">Delay Ticks</h2>
+<p>MCCoroutine offers an extension method to use delay together with Bukkit and Sponge ticks.</p>
+<div class="highlight"><pre><span></span><code><span class="n">delay</span><span class="p">(</span><span class="m">1.</span><span class="n">ticks</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+<p>Prefer using <code>delay(1.ticks)</code> when delaying on the minecraft main thread instead of <code>delay(50)</code>. The tick extension function is more accurate than using
+milliseconds directly. The technical details are explained in this <a href="https://github.com/Shynixn/MCCoroutine/issues/72">github issue</a>.</p>
 <h2 id="repeating-tasks">Repeating tasks</h2>
 <p>If you are already in a <code>suspend</code> function, you can simply use traditional loops with <code>delay</code> to repeat tasks.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">sayHello</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Please say hello 10 times every 2 seconds&quot;</span><span class="p">)</span><span class="w"></span>
 
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="m">10</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">2000</span><span class="p">)</span><span class="w"> </span><span class="c1">// Delay for 2000 milliseconds</span><span class="w"></span>
 <span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
