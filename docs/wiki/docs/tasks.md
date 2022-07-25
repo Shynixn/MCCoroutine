@@ -14,8 +14,7 @@ given time.
     There is a big difference with ``delay()`` and ``Thread.sleep()``. Consult the official Kotlin Coroutines
     documentation for details, however essentially ``Thread.sleep()`` blocks the thread for a given time and
     ``delay()`` suspends the thread for a given time. When a thread is suspended, it can do other work (e.g. server handles
-    other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g. server appears frozen).
-
+    other operations like players joining or commands) compared to when a thread is blocked, it cannot do other work (e.g.  server appears frozen).
 
 ````kotlin
 suspend fun sayHello() {
@@ -29,13 +28,24 @@ If you are not in a ``suspend`` function, use ``plugin.launch`` together with ``
 
 ````kotlin
 fun sayHello() {
-   plugin.launch {
+    plugin.launch {
         println("Please say hello in 2 seconds")
         delay(2000) // Delay for 2000 milliseconds
         println("hello")
-   }
+    }
 }
 ````
+
+## Delay Ticks
+
+MCCoroutine offers an extension method to use delay together with Bukkit and Sponge ticks.
+
+```kotlin
+delay(1.ticks)
+```
+
+Prefer using ``delay(1.ticks)`` when delaying on the minecraft main thread instead of ``delay(50)``. The tick extension function is more accurate than using
+milliseconds directly. The technical details are explained in this [github issue](https://github.com/Shynixn/MCCoroutine/issues/72).
 
 ## Repeating tasks
 
@@ -44,8 +54,8 @@ If you are already in a ``suspend`` function, you can simply use traditional loo
 ````kotlin
 suspend fun sayHello() {
     println("Please say hello 10 times every 2 seconds")
-    
-    for (i in 0 until 10){
+
+    for (i in 0 until 10) {
         delay(2000) // Delay for 2000 milliseconds
         println("hello")
     }

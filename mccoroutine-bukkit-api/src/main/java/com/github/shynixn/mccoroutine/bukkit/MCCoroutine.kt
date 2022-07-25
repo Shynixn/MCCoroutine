@@ -195,6 +195,20 @@ fun PluginCommand.setSuspendingTabCompleter(context: CoroutineContext, suspendin
     )
 }
 
+/**
+ * Converts the number to ticks for being used together with delay(..).
+ * E.g. delay(1.ticks).
+ * Minecraft ticks 20 times per second, which means a tick appears every 50 milliseconds. However,
+ * delay() does not directly work with the BukkitScheduler and needs millisecond manipulation to
+ * work as expected. Therefore, 1 tick does not equal 50 milliseconds when using this method standalone and only
+ * sums up to 50 milliseconds if you use it together with delay.
+ */
+val Int.ticks: Long
+    get() {
+        return (this * 50L - 25)
+    }
+
+
 interface MCCoroutine {
     /**
      * Get coroutine session for the given plugin.
