@@ -36,7 +36,7 @@ internal class CommandServiceImpl(private val plugin: Plugin) {
         tabCompleter: SuspendingTabCompleter
     ) {
         pluginCommand.setTabCompleter { sender, command, alias, args ->
-            var result = emptyList<String>()
+            var result : List<String>? = null
 
             // Tab Completes in spigot always arrive synchronously. Therefore, we can simply use the default properties.
             plugin.launch(context) {
