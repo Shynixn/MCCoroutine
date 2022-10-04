@@ -1,7 +1,7 @@
 package com.github.shynixn.mccoroutine.bukkit
 
 import org.bukkit.event.Cancellable
-import org.bukkit.event.Event
+import org.bukkit.event.server.PluginEvent
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.Plugin
 
@@ -13,12 +13,12 @@ class MCCoroutineExceptionEvent(
     /**
      * Plugin causing the exception.
      */
-    val plugin: Plugin,
+    plugin: Plugin,
     /**
      * The exception to be logged.
      */
     val exception: Throwable
-) : Event(), Cancellable {
+) : PluginEvent(plugin), Cancellable {
     private var cancelled: Boolean = false
 
     /**
