@@ -40,6 +40,7 @@ jobs:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         run: |
+          echo ${{ secrets.SECRET_KEY_FILE_CONTENTS }} > travis_secret_key.gpg
           gpg2 --batch --cipher-algo AES256 --passphrase ${{ secrets.SIGNING_KEY_PASSWORD }} travis_secret_key.gpg
           echo "RELEASE_VERSION=$(./gradlew -q printVersion)" >> $GITHUB_ENV
           ./gradlew clean publishToNexus
