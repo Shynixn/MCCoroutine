@@ -20,6 +20,9 @@ internal open class MinecraftCoroutineDispatcher(
      * may leave the coroutines that use this dispatcher in the inconsistent and hard to debug state.
      */
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
+        if (!plugin.isEnabled) {
+            return false
+        }
         wakeUpBlockService.ensureWakeup()
         return !plugin.server.isPrimaryThread
     }
@@ -28,10 +31,6 @@ internal open class MinecraftCoroutineDispatcher(
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        if (!plugin.isEnabled) {
-            return
-        }
-
         val timedRunnable = context[CoroutineTimings.Key]
 
         if (timedRunnable == null) {
