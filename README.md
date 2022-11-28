@@ -60,18 +60,15 @@ private suspend fun bob() {
 
 ## Getting started
 
-* [User Guide](https://shynixn.github.io/MCCoroutine/wiki/site/)
+* [Wiki and User Guide](https://shynixn.github.io/MCCoroutine/wiki/site/)
+
+## Resources
+
 * [MCCoroutine JavaDocs for the Bukkit-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.bukkit/index.html)
 * [MCCoroutine JavaDocs for the Sponge-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.sponge/index.html)
 * [MCCoroutine JavaDocs for the BungeeCord-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.bungeecord/index.html)
 * [MCCoroutine JavaDocs for the Velocity-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.velocity/index.html)
 * [Article on custom frameworks](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md)
-   
-## Donation 
-
-Support development with a small tip :heart: :coffee:.
-
-* Dogecoin Address: ``DAzt6RGAapkhbKD9uFKJgSR5vpfT9nSvKi``   
    
 ## Features
 

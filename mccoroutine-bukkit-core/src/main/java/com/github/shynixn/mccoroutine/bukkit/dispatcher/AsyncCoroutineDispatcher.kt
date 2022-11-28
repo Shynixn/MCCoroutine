@@ -20,17 +20,13 @@ internal open class AsyncCoroutineDispatcher(
      */
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
         wakeUpBlockService.ensureWakeup()
-        return plugin.server.isPrimaryThread
+        return plugin.server.isPrimaryThread && plugin.isEnabled
     }
 
     /**
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        if (!plugin.isEnabled) {
-            return
-        }
-
         plugin.server.scheduler.runTaskAsynchronously(plugin, block)
     }
 }
