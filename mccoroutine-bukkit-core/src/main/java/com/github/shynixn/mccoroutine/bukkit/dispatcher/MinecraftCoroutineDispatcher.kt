@@ -21,7 +21,7 @@ internal open class MinecraftCoroutineDispatcher(
      */
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
         wakeUpBlockService.ensureWakeup()
-        return !plugin.server.isPrimaryThread
+        return !plugin.server.isPrimaryThread && plugin.isEnabled
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.github.shynixn.mccoroutine.bukkit
 
 import org.bukkit.event.Cancellable
-import org.bukkit.event.server.PluginEvent
 import org.bukkit.event.HandlerList
+import org.bukkit.event.server.ServerEvent
 import org.bukkit.plugin.Plugin
 
 /**
@@ -13,12 +13,13 @@ class MCCoroutineExceptionEvent(
     /**
      * Plugin causing the exception.
      */
-    plugin: Plugin,
+    val plugin: Plugin,
     /**
      * The exception to be logged.
      */
     val exception: Throwable
-) : PluginEvent(plugin), Cancellable {
+    // Paper requires explicit isAsync false flag.
+) : ServerEvent(false), Cancellable {
     private var cancelled: Boolean = false
 
     /**

@@ -13,6 +13,7 @@ nav:
     - 'Suspending Delayed, Repeating Tasks': tasks.md
     - 'Suspending API Functions': bridge.md
     - 'Suspending Caches, Background Repeating Tasks': caching.md
+  #  - 'Launching coroutines in onDisable': plugindisable.md
     - 'Exception Handling': exception.md
     - 'Timing Measurements': timings.md
   - 'FAQ': faq.md
