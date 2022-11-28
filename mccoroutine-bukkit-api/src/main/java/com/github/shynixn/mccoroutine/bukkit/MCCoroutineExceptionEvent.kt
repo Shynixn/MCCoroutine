@@ -18,6 +18,7 @@ class MCCoroutineExceptionEvent(
      * The exception to be logged.
      */
     val exception: Throwable
+    // Paper requires explicit isAsync false flag.
 ) : ServerEvent(false), Cancellable {
     private var cancelled: Boolean = false
 
