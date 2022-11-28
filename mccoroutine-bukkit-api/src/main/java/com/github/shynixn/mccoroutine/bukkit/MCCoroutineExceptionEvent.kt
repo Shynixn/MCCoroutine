@@ -1,6 +1,5 @@
 package com.github.shynixn.mccoroutine.bukkit
 
-import org.bukkit.Bukkit
 import org.bukkit.event.Cancellable
 import org.bukkit.event.HandlerList
 import org.bukkit.event.server.ServerEvent
@@ -19,7 +18,7 @@ class MCCoroutineExceptionEvent(
      * The exception to be logged.
      */
     val exception: Throwable
-) : ServerEvent(!Bukkit.isPrimaryThread()), Cancellable {
+) : ServerEvent(false), Cancellable {
     private var cancelled: Boolean = false
 
     /**
