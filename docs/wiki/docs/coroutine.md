@@ -27,10 +27,11 @@ Later in the [Coroutines in Kotlin](https://kotlinlang.org/docs/coroutine-contex
 A dispatcher determines what thread or threads the corresponding coroutine uses for its execution. Therefore, MCCoroutine offers 2 custom dispatchers:
 
 * minecraftDispatcher (Allows to execute coroutines on the main minecraft thread)
-* ~~asyncDispatcher~~ (Allows to execute coroutines on the async minecraft threadpool)
+* asyncDispatcher (Allows to execute coroutines on the async minecraft threadpool)
 
-**However, it is highly recommend to use ``Dispatchers.IO`` instead of asyncDispatcher because the scheduling is more accurate. :exclamation:** 
-Additional technical details can be found here: [GitHub Issue](https://github.com/Shynixn/MCCoroutine/issues/87).
+!!! note "Important"
+    **However, it is highly recommend to use ``Dispatchers.IO`` instead of asyncDispatcher because the scheduling is more accurate.**
+    Additional technical details can be found here: [GitHub Issue](https://github.com/Shynixn/MCCoroutine/issues/87).
 
 An example how this works is shown below:
 
@@ -62,7 +63,6 @@ fun foo() {
 Normally, you do not need to call ``plugin.minecraftDispatcher`` in your code. Instead, you are guaranteed to be always on the minecraft main thread
 in the ``plugin.launch{}`` scope and use sub coroutines (e.g. withContext) to perform asynchronous operations. Such a case can be found below:
 
-
 ```kotlin
 @EventHandler
 fun onPlayerJoinEvent(event: PlayerJoinEvent) {
@@ -71,7 +71,7 @@ fun onPlayerJoinEvent(event: PlayerJoinEvent) {
         val name = event.player.name
         val listOfFriends = withContext(Dispatchers.IO) {
             // IO Thread
-            val friendNames = Files.readAllLines(Paths.get("$name.json"))
+            val friendNames = Files.readAllLines(Paths.get("$name.txt"))
             friendNames
         }
         
@@ -82,6 +82,42 @@ fun onPlayerJoinEvent(event: PlayerJoinEvent) {
 }
 
 ```
+
+### Plugin launch Execution order
+
+If you use ``plugin.launch``, it is important to understand the execution order.
+
+````kotlin
+class Foo(private val plugin : Plugin) {
+
+    fun bar() {
+        // Main Thread
+        println("I am first")
+        
+        val job = plugin.launch {
+            println("I am second") // The context is not suspended when switching to the same suspendable context.
+            delay(1000)
+            println("I am fourth") // The context is given back after 1000 milliseconds and continuous here.
+            bob()
+        }
+        
+        // When calling delay the suspendable context is suspended and the original context immediately continuous here.
+        println("I am third")
+    }
+
+    private suspend fun bob(){
+        println("I am fifth")
+    }
+}
+````
+
+````kotlin
+"I am first"
+"I am second"
+"I am third"
+"I am fourth"
+"I am fifth"
+````
 
 ###  Coroutines everywhere
 
