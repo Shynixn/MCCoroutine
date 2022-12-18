@@ -5,7 +5,7 @@ import com.github.shynixn.mccoroutine.bukkit.MCCoroutineConfiguration
 import com.github.shynixn.mccoroutine.bukkit.ShutdownStrategy
 import org.bukkit.plugin.Plugin
 
-class MCCoroutineConfigurationImpl(private val plugin : Plugin, private val mcCoroutine: MCCoroutine) : MCCoroutineConfiguration {
+internal class MCCoroutineConfigurationImpl(private val plugin : Plugin, private val mcCoroutine: MCCoroutine) : MCCoroutineConfiguration {
     /**
      * Strategy handling how MCCoroutine is disposed.
      * Defaults to ShutdownStrategy.SCHEDULER.

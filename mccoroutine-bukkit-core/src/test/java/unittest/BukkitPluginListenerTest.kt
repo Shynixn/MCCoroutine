@@ -1,6 +1,8 @@
 package unittest
 
 import com.github.shynixn.mccoroutine.bukkit.MCCoroutine
+import com.github.shynixn.mccoroutine.bukkit.MCCoroutineConfiguration
+import com.github.shynixn.mccoroutine.bukkit.ShutdownStrategy
 import com.github.shynixn.mccoroutine.bukkit.impl.CoroutineSessionImpl
 import com.github.shynixn.mccoroutine.bukkit.listener.PluginListener
 import org.bukkit.event.server.PluginDisableEvent
@@ -60,7 +62,11 @@ class BukkitPluginListenerTest {
     private class MockedMCCoroutine : MCCoroutine {
         var disableCalled = false
         override fun getCoroutineSession(plugin: Plugin): CoroutineSessionImpl {
-            return Mockito.mock(CoroutineSessionImpl::class.java)
+            val session = Mockito.mock(CoroutineSessionImpl::class.java)
+            val configuration = Mockito.mock(MCCoroutineConfiguration::class.java)
+            Mockito.`when`(configuration.shutdownStrategy).thenReturn(ShutdownStrategy.SCHEDULER)
+            Mockito.`when`(session.mcCoroutineConfiguration).thenReturn(configuration)
+            return session
         }
 
         override fun disable(plugin: Plugin) {
