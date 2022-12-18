@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin
 import java.util.logging.Level
 import kotlin.coroutines.CoroutineContext
 
-internal class CoroutineSessionImpl(private val plugin: Plugin) : CoroutineSession {
+internal class CoroutineSessionImpl(private val plugin: Plugin, override val mcCoroutineConfiguration : MCCoroutineConfiguration) : CoroutineSession {
     /**
      * Gets the block service during startup.
      */

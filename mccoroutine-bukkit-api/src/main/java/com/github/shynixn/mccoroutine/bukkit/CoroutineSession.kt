@@ -32,6 +32,11 @@ interface CoroutineSession {
     var isManipulatedServerHeartBeatEnabled: Boolean
 
     /**
+     * MCCoroutine Facade.
+     */
+    val mcCoroutineConfiguration: MCCoroutineConfiguration
+
+    /**
      * Registers a suspend command executor.
      */
     fun registerSuspendCommandExecutor(

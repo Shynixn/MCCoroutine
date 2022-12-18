@@ -33,13 +33,11 @@ internal open class MinecraftCoroutineDispatcher(
         }
 
         val timedRunnable = context[CoroutineTimings.Key]
-
         if (timedRunnable == null) {
             plugin.server.scheduler.runTask(plugin, block)
-            return
+        } else {
+            timedRunnable.queue.add(block)
+            plugin.server.scheduler.runTask(plugin, timedRunnable)
         }
-
-        timedRunnable.queue.add(block)
-        plugin.server.scheduler.runTask(plugin, timedRunnable)
     }
 }

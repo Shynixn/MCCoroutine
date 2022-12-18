@@ -24,6 +24,15 @@ internal val mcCoroutine: MCCoroutine by lazy {
     }
 }
 
+
+/**
+ * Gets the configuration instance of MCCoroutine.
+ */
+val Plugin.mcCoroutineConfiguration : MCCoroutineConfiguration
+    get() {
+        return mcCoroutine.getCoroutineSession(this).mcCoroutineConfiguration
+    }
+
 /**
  * Gets the plugin minecraft dispatcher.
  */
@@ -208,7 +217,9 @@ val Int.ticks: Long
         return (this * 50L - 25)
     }
 
-
+/**
+ * Hidden internal MCCoroutine interface.
+ */
 interface MCCoroutine {
     /**
      * Get coroutine session for the given plugin.

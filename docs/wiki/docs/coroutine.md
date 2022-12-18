@@ -9,7 +9,7 @@ how this can be translated to the world of minecraft plugins. It is recommended 
 ### Starting a coroutine
 
 For beginners, it is often confusing how to enter a coroutine. The examples in the official guide mostly use ``runBlocking``
-because it makes sense for testing. However, keep in mind to **never** use ``runblocking`` in any of your plugins.
+because it makes sense for testing. However, keep in mind to **avoid** using ``runblocking`` in any of your plugins.
 
 * To enter a coroutine **anywhere** in your code at any time:
 
@@ -29,9 +29,11 @@ A dispatcher determines what thread or threads the corresponding coroutine uses 
 * minecraftDispatcher (Allows to execute coroutines on the main minecraft thread)
 * asyncDispatcher (Allows to execute coroutines on the async minecraft threadpool)
 
-However, it is recommend to use ``Dispatchers.IO`` instead of asyncDispatcher because it is more optimized.
+!!! note "Important"
+    **However, it is highly recommend to use ``Dispatchers.IO`` instead of asyncDispatcher because the scheduling is more accurate.**
+    Additional technical details can be found here: [GitHub Issue](https://github.com/Shynixn/MCCoroutine/issues/87).
 
-* An example how this works is shown below:
+An example how this works is shown below:
 
 ```kotlin
 fun foo() {
@@ -45,7 +47,8 @@ fun foo() {
 
         // Here we are automatically back on the main thread again.
 
-        val result2 = withContext(plugin.asyncDispatcher) {
+        // Prefer using Dispatchers.IO instead of asyncDispatcher 
+        val result2 = withContext(Dispatchers.IO) {
             // Perform operations asynchronously.
             " Max"
         }
@@ -60,7 +63,6 @@ fun foo() {
 Normally, you do not need to call ``plugin.minecraftDispatcher`` in your code. Instead, you are guaranteed to be always on the minecraft main thread
 in the ``plugin.launch{}`` scope and use sub coroutines (e.g. withContext) to perform asynchronous operations. Such a case can be found below:
 
-
 ```kotlin
 @EventHandler
 fun onPlayerJoinEvent(event: PlayerJoinEvent) {
@@ -69,7 +71,7 @@ fun onPlayerJoinEvent(event: PlayerJoinEvent) {
         val name = event.player.name
         val listOfFriends = withContext(Dispatchers.IO) {
             // IO Thread
-            val friendNames = Files.readAllLines(Paths.get("$name.json"))
+            val friendNames = Files.readAllLines(Paths.get("$name.txt"))
             friendNames
         }
         
@@ -80,6 +82,42 @@ fun onPlayerJoinEvent(event: PlayerJoinEvent) {
 }
 
 ```
+
+### Plugin launch Execution order
+
+If you use ``plugin.launch``, it is important to understand the execution order.
+
+````kotlin
+class Foo(private val plugin : Plugin) {
+
+    fun bar() {
+        // Main Thread
+        println("I am first")
+        
+        val job = plugin.launch {
+            println("I am second") // The context is not suspended when switching to the same suspendable context.
+            delay(1000)
+            println("I am fourth") // The context is given back after 1000 milliseconds and continuous here.
+            bob()
+        }
+        
+        // When calling delay the suspendable context is suspended and the original context immediately continuous here.
+        println("I am third")
+    }
+
+    private suspend fun bob(){
+        println("I am fifth")
+    }
+}
+````
+
+````kotlin
+"I am first"
+"I am second"
+"I am third"
+"I am fourth"
+"I am fifth"
+````
 
 ###  Coroutines everywhere
 

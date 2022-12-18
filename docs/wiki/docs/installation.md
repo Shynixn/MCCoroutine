@@ -8,8 +8,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.7.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.7.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.8.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.8.0")
     }
     ```
 
@@ -17,8 +17,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:2.7.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:2.7.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:2.8.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:2.8.0")
     }
     ```
 
@@ -26,8 +26,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:2.7.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:2.7.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:2.8.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:2.8.0")
     }
     ```
 
@@ -35,8 +35,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.7.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.7.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.8.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.8.0")
     }
     ```
 
@@ -60,8 +60,8 @@ dependencies {
     **plugin.yml**
     ```yaml
     libraries:
-      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.7.0
-      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.7.0
+      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.8.0
+      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.8.0
     ```
 
 === "Other Server"
