@@ -40,11 +40,12 @@ class MCCoroutineImpl : MCCoroutine {
      */
     private fun startCoroutineSession(plugin: Plugin) {
         if (!plugin.isEnabled) {
-            throw RuntimeException("Plugin ${plugin.name} attempt to start a new coroutine session while being disabled. Dispatchers such as plugin.minecraftDispatcher and plugin.asyncDispatcher are already disposed at this point and cannot be used! If you are starting a coroutine in onDisable, consider using runBlocking instead.")
+            throw RuntimeException("Plugin ${plugin.name} attempted to start a new coroutine session while being disabled. Dispatchers such as plugin.minecraftDispatcher and plugin.asyncDispatcher are using the BukkitScheduler, which is already disposed at this point of time. If you are starting a coroutine in onDisable, consider using runBlocking or a different plugin.mcCoroutineConfiguration.shutdownStrategy.")
         }
 
         val pluginListener = PluginListener(this, plugin)
-        items[plugin] = CoroutineSessionImpl(plugin)
+        val coroutineFacade = MCCoroutineConfigurationImpl(plugin, this)
+        items[plugin] = CoroutineSessionImpl(plugin, coroutineFacade)
         plugin.server.pluginManager.registerEvents(pluginListener, plugin)
     }
 }

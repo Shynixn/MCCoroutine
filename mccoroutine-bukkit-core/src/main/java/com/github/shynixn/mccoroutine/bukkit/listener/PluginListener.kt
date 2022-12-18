@@ -1,6 +1,7 @@
 package com.github.shynixn.mccoroutine.bukkit.listener
 
 import com.github.shynixn.mccoroutine.bukkit.MCCoroutine
+import com.github.shynixn.mccoroutine.bukkit.ShutdownStrategy
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.server.PluginDisableEvent
@@ -16,6 +17,10 @@ internal class PluginListener(private val mcCoroutine: MCCoroutine, private val 
             return
         }
 
-        mcCoroutine.disable(pluginEvent.plugin)
+        val configuration = mcCoroutine.getCoroutineSession(plugin).mcCoroutineConfiguration
+
+        if (configuration.shutdownStrategy == ShutdownStrategy.SCHEDULER) {
+            mcCoroutine.disable(pluginEvent.plugin)
+        }
     }
 }

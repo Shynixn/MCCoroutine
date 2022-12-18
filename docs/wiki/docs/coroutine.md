@@ -9,7 +9,7 @@ how this can be translated to the world of minecraft plugins. It is recommended 
 ### Starting a coroutine
 
 For beginners, it is often confusing how to enter a coroutine. The examples in the official guide mostly use ``runBlocking``
-because it makes sense for testing. However, keep in mind to **never** use ``runblocking`` in any of your plugins.
+because it makes sense for testing. However, keep in mind to **avoid** using ``runblocking`` in any of your plugins.
 
 * To enter a coroutine **anywhere** in your code at any time:
 
@@ -27,11 +27,12 @@ Later in the [Coroutines in Kotlin](https://kotlinlang.org/docs/coroutine-contex
 A dispatcher determines what thread or threads the corresponding coroutine uses for its execution. Therefore, MCCoroutine offers 2 custom dispatchers:
 
 * minecraftDispatcher (Allows to execute coroutines on the main minecraft thread)
-* asyncDispatcher (Allows to execute coroutines on the async minecraft threadpool)
+* ~~asyncDispatcher~~ (Allows to execute coroutines on the async minecraft threadpool)
 
-However, it is recommend to use ``Dispatchers.IO`` instead of asyncDispatcher because it is more optimized.
+**However, it is highly recommend to use ``Dispatchers.IO`` instead of asyncDispatcher because the scheduling is more accurate. :exclamation:** 
+Additional technical details can be found here: [GitHub Issue](https://github.com/Shynixn/MCCoroutine/issues/87).
 
-* An example how this works is shown below:
+An example how this works is shown below:
 
 ```kotlin
 fun foo() {
@@ -45,7 +46,8 @@ fun foo() {
 
         // Here we are automatically back on the main thread again.
 
-        val result2 = withContext(plugin.asyncDispatcher) {
+        // Prefer using Dispatchers.IO instead of asyncDispatcher 
+        val result2 = withContext(Dispatchers.IO) {
             // Perform operations asynchronously.
             " Max"
         }
