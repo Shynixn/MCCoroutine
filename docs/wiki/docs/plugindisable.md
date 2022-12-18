@@ -107,7 +107,7 @@ override fun onDisable() {
 ```
 
 ```
-[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample v2.7.0
+[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample
 [Server thread/INFO]: [MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:Server thread/55/primaryThread=true
 [Server thread/INFO]: [MCCoroutineSamplePlugin/onDisableAsync] Number 1:Server thread/55/primaryThread=true
 [Server thread/INFO]: [MCCoroutineSamplePlugin/onDisableAsync] Is ending on Thread:Server thread/55/primaryThread=true
@@ -137,7 +137,7 @@ override fun onDisable() {
 ```
 
 ```
-[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample v2.7.0
+[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample
 [Server thread/INFO]: [MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:Server thread/55/primaryThread=true
 [Server thread/INFO]: [MCCoroutineSamplePlugin/onDisableAsync] Number 1:Server thread/55/primaryThread=true
 [kotlinx.coroutines.DefaultExecutor/INFO]: [MCCoroutineSamplePlugin/onDisableAsync] Number 2:kotlinx.coroutines.DefaultExecutor/133/primaryThread=false
@@ -182,7 +182,7 @@ override fun onDisable() {
 ```
 
 ```
-[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample v2.7.0
+[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample
 [kotlinx.coroutines.DefaultExecutor/INFO]: Over
 ```
 
@@ -215,7 +215,7 @@ override fun onDisable() {
 ```
 
 ```
-[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample v2.7.0
+[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample
 [kotlinx.coroutines.DefaultExecutor/INFO]: Over
 ```
 
