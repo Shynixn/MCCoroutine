@@ -34,5 +34,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
 
     compileOnly("org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT")
+
+    testImplementation(project(":mccoroutine-bukkit-test"))
     testCompile("org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT")
 }

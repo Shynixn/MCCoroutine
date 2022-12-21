@@ -14,7 +14,7 @@ import kotlin.coroutines.CoroutineContext
  */
 internal val mcCoroutine: MCCoroutine by lazy {
     try {
-        Class.forName("com.github.shynixn.mccoroutine.bukkit.impl.MCCoroutineImpl")
+        Class.forName(MCCoroutine.Driver)
             .getDeclaredConstructor().newInstance() as MCCoroutine
     } catch (e: Exception) {
         throw RuntimeException(
@@ -24,11 +24,10 @@ internal val mcCoroutine: MCCoroutine by lazy {
     }
 }
 
-
 /**
  * Gets the configuration instance of MCCoroutine.
  */
-val Plugin.mcCoroutineConfiguration : MCCoroutineConfiguration
+val Plugin.mcCoroutineConfiguration: MCCoroutineConfiguration
     get() {
         return mcCoroutine.getCoroutineSession(this).mcCoroutineConfiguration
     }
@@ -221,6 +220,14 @@ val Int.ticks: Long
  * Hidden internal MCCoroutine interface.
  */
 interface MCCoroutine {
+    companion object {
+        /**
+         * Allows to change the driver to load different kinds of MCCoroutine implementations.
+         * e.g. loading the implementation for UnitTests.
+         */
+        var Driver: String = "com.github.shynixn.mccoroutine.bukkit.impl.MCCoroutineImpl"
+    }
+
     /**
      * Get coroutine session for the given plugin.
      */

@@ -1,6 +1,8 @@
 rootProject.name = "mccoroutine-root"
+
 include("mccoroutine-bukkit-api")
 include("mccoroutine-bukkit-core")
+include("mccoroutine-bukkit-test")
 include("mccoroutine-bukkit-sample")
 
 include("mccoroutine-bungeecord-api")
