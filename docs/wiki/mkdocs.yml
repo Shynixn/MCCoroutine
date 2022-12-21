@@ -15,6 +15,7 @@ nav:
     - 'Coroutines in onDisable': plugindisable.md
     - 'Exception Handling': exception.md
     - 'Timing Measurements': timings.md
+    - 'Unit-Testing': unittests.md
   - 'FAQ': faq.md
 theme:
   name: material
