@@ -9,6 +9,10 @@ include("mccoroutine-bungeecord-api")
 include("mccoroutine-bungeecord-core")
 include("mccoroutine-bungeecord-sample")
 
+include("mccoroutine-minestom-api")
+include("mccoroutine-minestom-core")
+include("mccoroutine-minestom-sample")
+
 include("mccoroutine-sponge-api")
 include("mccoroutine-sponge-core")
 include("mccoroutine-sponge-sample")
