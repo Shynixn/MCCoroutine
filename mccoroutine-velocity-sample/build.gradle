@@ -37,5 +37,5 @@ dependencies {
 
     compileOnly("com.velocitypowered:velocity-api:3.0.1")
     kapt("com.velocitypowered:velocity-api:3.0.1")
-    testCompile("com.velocitypowered:velocity-api:3.0.1")
+    testImplementation("com.velocitypowered:velocity-api:3.0.1")
 }
