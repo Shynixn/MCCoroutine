@@ -12,7 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Pos
-import net.minestom.server.event.EventNode
+import net.minestom.server.entity.Player
 import net.minestom.server.event.player.PlayerDisconnectEvent
 import net.minestom.server.event.player.PlayerLoginEvent
 import net.minestom.server.instance.InstanceContainer
@@ -47,17 +47,23 @@ fun main(args: Array<String>) {
     instanceContainer.setGenerator { unit: GenerationUnit ->
         unit.modifier().fillHeight(0, 40, Block.STONE)
     }
+    val globalEventHandler = MinecraftServer.getGlobalEventHandler()
+    globalEventHandler.addListener(
+        PlayerLoginEvent::class.java
+    ) { event: PlayerLoginEvent ->
+        val player: Player = event.player
+        player.setPermissionLevel(2)
+        event.setSpawningInstance(instanceContainer)
+        player.setRespawnPoint(Pos(0.0, 42.0, 0.0))
+    }
 
     val database = FakeDatabase()
     val cache = UserDataCache(minecraftServer, database)
 
     // Extension to traditional registration.
     val playerConnectListener = PlayerConnectListener(minecraftServer, cache)
-    val rootEventNode = EventNode.all("my-root")
+    val rootEventNode = MinecraftServer.getGlobalEventHandler()
     rootEventNode.addSuspendingListener(minecraftServer, PlayerLoginEvent::class.java) { e ->
-        // Just that the player can spawn.
-        e.setSpawningInstance(instanceContainer)
-        e.player.respawnPoint = Pos(0.0, 42.0, 0.0)
         playerConnectListener.onPlayerJoinEvent(e)
     }
     rootEventNode.addSuspendingListener(minecraftServer, PlayerDisconnectEvent::class.java) { e ->
