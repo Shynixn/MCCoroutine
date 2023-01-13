@@ -10,7 +10,7 @@ import net.minestom.server.entity.Player
 import net.minestom.server.extensions.Extension
 
 class AdminCommandExecutor(private val userDataCache: UserDataCache, private val extension: Extension) :
-    Command("mccor") {
+    Command("mccor2") {
     init {
         setSuspendingDefaultExecutor(extension) { sender, context ->
             println("Say hello in 1 second")
@@ -20,13 +20,11 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache, private val
             sender.sendMessage("/mccor exception")
         }
 
-        val setArgument = ArgumentType.String("set")
         val killsArgument = ArgumentType.Integer("kills");
 
         addSyntax({ sender, context ->
             extension.launch {
                 if (sender is Player) {
-                    val set = context.get(setArgument)
                     val kills: Int = context.get(killsArgument)
                     println("[AdmingCommandExecutor/onCommand] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
                     val userData = userDataCache.getUserDataFromPlayerAsync(sender).await()

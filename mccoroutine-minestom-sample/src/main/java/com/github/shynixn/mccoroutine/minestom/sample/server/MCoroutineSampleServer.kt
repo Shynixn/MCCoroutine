@@ -73,7 +73,7 @@ fun main(args: Array<String>) {
         playerConnectListener.onCoroutineException(e)
     }
 
-    AdminCommandExecutor(cache, minecraftServer)
+    MinecraftServer.getCommandManager().register(AdminCommandExecutor(cache, minecraftServer))
 
     println(MinecraftServer.VERSION_NAME)
     println(UUID.randomUUID().toString())

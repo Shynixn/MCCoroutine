@@ -32,6 +32,7 @@ dependencies {
 }
 
 tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes["Main-Class"] = "com.github.shynixn.mccoroutine.minestom.sample.MCoroutineSampleServerKt"
     }
@@ -43,5 +44,5 @@ tasks.withType<ShadowJar> {
     archiveName = "$baseName.$extension"
 
     // Change the output folder of the plugin.
-    // destinationDir = File("C:\\temp\\minestom")
+    // destinationDir = File("..\\extensions")
 }

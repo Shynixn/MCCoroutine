@@ -11,6 +11,7 @@ import com.github.shynixn.mccoroutine.minestom.sample.extension.listener.PlayerC
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import net.minestom.server.MinecraftServer
 import net.minestom.server.event.EventNode
 import net.minestom.server.event.player.PlayerDisconnectEvent
 import net.minestom.server.event.player.PlayerEntityInteractEvent
@@ -26,19 +27,19 @@ class MCCoroutineSampleExtension : Extension() {
      * Gets called on extension load.
      */
     override fun initialize() {
-        println("[MCCoroutineSampleServer/main] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+        println("[MCCoroutineSampleExtension/main] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
 
         // Switches into suspendable scope on startup.
         this.launch {
-            println("[MCCoroutineSampleServer/main] MainThread 1 Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+            println("[MCCoroutineSampleExtension/main] MainThread 1 Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
             delay(2000)
-            println("[MCCoroutineSampleServer/main] MainThread 2 Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+            println("[MCCoroutineSampleExtension/main] MainThread 2 Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
 
             withContext(Dispatchers.IO) {
-                println("[MCCoroutineSampleServer/main] Simulating data load Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+                println("[MCCoroutineSampleExtension/main] Simulating data load Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
                 Thread.sleep(500)
             }
-            println("[MCCoroutineSampleServer/main] MainThread 3 Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+            println("[MCCoroutineSampleExtension/main] MainThread 3 Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
         }
 
         val database = FakeDatabase()
@@ -46,7 +47,7 @@ class MCCoroutineSampleExtension : Extension() {
 
         // Extension to traditional registration.
         val playerConnectListener = PlayerConnectListener(this, cache)
-        val rootEventNode = EventNode.all("my-root")
+        val rootEventNode = MinecraftServer.getGlobalEventHandler()
         rootEventNode.addSuspendingListener(this, PlayerLoginEvent::class.java) { e ->
             playerConnectListener.onPlayerJoinEvent(e)
         }
@@ -57,7 +58,12 @@ class MCCoroutineSampleExtension : Extension() {
             playerConnectListener.onCoroutineException(e)
         }
 
-        AdminCommandExecutor(cache, this)
+        MinecraftServer.getCommandManager().register(
+            AdminCommandExecutor(
+                cache,
+                this
+            )
+        )
     }
 
     /**
