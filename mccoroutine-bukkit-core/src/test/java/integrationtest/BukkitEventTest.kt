@@ -14,10 +14,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.Plugin
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 
 class BukkitEventTest {
     /**
@@ -42,7 +41,7 @@ class BukkitEventTest {
         }
 
         // Assert
-        assertEquals(server.mainThreadId, testListener.joinEventCalledId)
+        Assertions.assertEquals(server.mainThreadId, testListener.joinEventCalledId)
     }
 
     /**
@@ -67,7 +66,7 @@ class BukkitEventTest {
         }
 
         // Assert
-        assertEquals(server.mainThreadId, testListener.quitEventCalledId)
+        Assertions.assertEquals(server.mainThreadId, testListener.quitEventCalledId)
     }
 
     /**
@@ -92,7 +91,7 @@ class BukkitEventTest {
         }
 
         // Assert
-        assertNotEquals(server.mainThreadId, testListener.asyncChatEventCalledId)
+        Assertions.assertNotEquals(server.mainThreadId, testListener.asyncChatEventCalledId)
     }
 
     private fun createWithDependencies(plugin: Plugin): EventServiceImpl {

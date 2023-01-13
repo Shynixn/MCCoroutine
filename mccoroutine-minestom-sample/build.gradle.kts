@@ -10,17 +10,13 @@ repositories {
     }
 }
 
-dependencies {
-    components {
-        all {
-            allVariants {
-                attributes {
-                    attribute(Attribute.of("org.gradle.jvm.version", Int::class.javaObjectType), 8)
-                }
-            }
-        }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
 
+dependencies {
     implementation(project(":mccoroutine-minestom-api"))
     implementation(project(":mccoroutine-minestom-core"))
 

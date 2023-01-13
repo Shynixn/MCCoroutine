@@ -14,9 +14,9 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
-import kotlin.test.assertEquals
 
 class BukkitEventPriorityTest {
     /**
@@ -44,11 +44,11 @@ class BukkitEventPriorityTest {
         val actualResult = classUnderTest.resultList
 
         // Assert
-        assertEquals(server.mainThreadId, classUnderTest.startThreadId)
-        assertEquals(server.mainThreadId, classUnderTest.endThreadId)
-        assertEquals(2, actualResult[0])
-        assertEquals(3, actualResult[1])
-        assertEquals(1, actualResult[2])
+        Assertions.assertEquals(server.mainThreadId, classUnderTest.startThreadId)
+        Assertions.assertEquals(server.mainThreadId, classUnderTest.endThreadId)
+        Assertions.assertEquals(2, actualResult[0])
+        Assertions.assertEquals(3, actualResult[1])
+        Assertions.assertEquals(1, actualResult[2])
     }
 
     /**
@@ -77,11 +77,11 @@ class BukkitEventPriorityTest {
         val actualResult = classUnderTest.resultList
 
         // Assert
-        assertEquals(server.mainThreadId, classUnderTest.startThreadId)
-        assertEquals(server.mainThreadId, classUnderTest.endThreadId)
-        assertEquals(1, actualResult[0])
-        assertEquals(2, actualResult[1])
-        assertEquals(3, actualResult[2])
+        Assertions.assertEquals(server.mainThreadId, classUnderTest.startThreadId)
+        Assertions.assertEquals(server.mainThreadId, classUnderTest.endThreadId)
+        Assertions.assertEquals(1, actualResult[0])
+        Assertions.assertEquals(2, actualResult[1])
+        Assertions.assertEquals(3, actualResult[2])
     }
 
     private class TestEventListener : Listener {

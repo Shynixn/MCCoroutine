@@ -4,9 +4,9 @@ import com.github.shynixn.mccoroutine.bukkit.impl.MCCoroutineImpl
 import org.bukkit.Server
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
-import kotlin.test.assertEquals
 
 class BukkitMCCoroutineTest {
     /**
@@ -30,7 +30,7 @@ class BukkitMCCoroutineTest {
         val session2 = classUnderTest.getCoroutineSession(plugin)
 
         // Assert
-        assertEquals(session1, session2)
+        Assertions.assertEquals(session1, session2)
     }
 
     private fun createWithDependencies(): MCCoroutineImpl {
