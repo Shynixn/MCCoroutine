@@ -13,7 +13,7 @@ class MCCoroutineExceptionEvent(
      * Extension causing the exception.
      * Is null if the exception is thrown from the root Minecraft Server implementation.
      */
-    val plugin: Extension?,
+    val extension: Extension?,
     /**
      * The exception to be logged.
      */

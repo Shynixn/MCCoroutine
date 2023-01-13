@@ -2,6 +2,11 @@ package com.github.shynixn.mccoroutine.minestom
 
 import kotlinx.coroutines.*
 import net.minestom.server.MinecraftServer
+import net.minestom.server.command.CommandSender
+import net.minestom.server.command.builder.Command
+import net.minestom.server.command.builder.CommandContext
+import net.minestom.server.event.Event
+import net.minestom.server.event.EventNode
 import net.minestom.server.extensions.Extension
 import net.minestom.server.thread.Acquirable
 import net.minestom.server.thread.AcquirableCollection
@@ -23,6 +28,22 @@ internal val mcCoroutine: MCCoroutine by lazy {
         )
     }
 }
+
+/**
+ * Gets the configuration instance of MCCoroutine.
+ */
+val Extension.mcCoroutineConfiguration: MCCoroutineConfiguration
+    get() {
+        return mcCoroutine.getCoroutineSession(this).mcCoroutineConfiguration
+    }
+
+/**
+ * Gets the configuration instance of MCCoroutine.
+ */
+val MinecraftServer.mcCoroutineConfiguration: MCCoroutineConfiguration
+    get() {
+        return mcCoroutine.getCoroutineSession(this).mcCoroutineConfiguration
+    }
 
 /**
  * Gets the extension minecraft dispatcher.
@@ -168,12 +189,6 @@ val Int.ticks: Long
  */
 suspend fun <T, R> Acquirable<T>.asyncSuspend(f: (T) -> R): R {
     val acquire = this
-    val localReference = acquire.local()
-
-    if (localReference.isPresent) {
-        return f.invoke(localReference.get())
-    }
-
     return withContext(Dispatchers.IO) {
         var result: R? = null
         acquire.sync { element ->
@@ -190,26 +205,79 @@ suspend fun <T, R> Acquirable<T>.asyncSuspend(f: (T) -> R): R {
  * not do anything like accessing fields or methods, do that outside of the callback parameter.
  */
 suspend fun <T, R> Collection<Acquirable<T>>.asyncSuspend(f: (Collection<T>) -> R): R {
-    val resolved = ArrayList<T>()
-
-    for (item in this) {
-        val localObject = item.local()
-        if (localObject.isPresent) {
-            resolved.add(localObject.get())
-        }
-    }
-
-    if (resolved.size == this.size) {
-        return f.invoke(resolved)
-    }
-
     val acquirableCollection = AcquirableCollection(this)
     return withContext(Dispatchers.IO) {
-        resolved.clear()
+        val resolved = ArrayList<T>()
         acquirableCollection.acquireSync {
             resolved.add(it)
         }
         f.invoke(resolved)
+    }
+}
+
+/**
+ * Sets the default {@link CommandExecutor}.
+ *
+ * @param server MineCraft server.
+ * @param executor the new default executor.
+ * @see #getDefaultExecutor()
+ */
+fun Command.setSuspendingDefaultExecutor(
+    server: MinecraftServer,
+    executor: suspend (CommandSender, CommandContext) -> Unit
+) {
+    this.setDefaultExecutor { sender: CommandSender, context ->
+        server.launch {
+            executor.invoke(sender, context)
+        }
+    }
+}
+
+/**
+ * Sets the default {@link CommandExecutor}.
+ *
+ * @param server MineCraft server.
+ * @param executor the new default executor.
+ * @see #getDefaultExecutor()
+ */
+fun Command.setSuspendingDefaultExecutor(
+    extension: Extension,
+    executor: suspend (CommandSender, CommandContext) -> Unit
+) {
+    this.setDefaultExecutor { sender: CommandSender, context ->
+        extension.launch {
+            executor.invoke(sender, context)
+        }
+    }
+}
+
+/**
+ * Adds a new suspendable listener to this event node.
+ */
+fun <E : Event> EventNode<in E>.addSuspendingListener(
+    server: MinecraftServer,
+    eventType: Class<E>,
+    listener: suspend (E) -> Unit
+) {
+    this.addListener(eventType) { e ->
+        server.launch {
+            listener.invoke(e)
+        }
+    }
+}
+
+/**
+ * Adds a new suspendable listener to this event node.
+ */
+fun <E : Event> EventNode<in E>.addSuspendingListener(
+    extension: Extension,
+    eventType: Class<E>,
+    listener: suspend (E) -> Unit
+) {
+    this.addListener(eventType) { e ->
+        extension.launch {
+            listener.invoke(e)
+        }
     }
 }
 

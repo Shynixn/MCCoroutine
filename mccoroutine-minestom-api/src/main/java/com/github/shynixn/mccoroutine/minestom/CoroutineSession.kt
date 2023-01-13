@@ -21,4 +21,9 @@ interface CoroutineSession {
      * Async Dispatcher.
      */
     val dispatcherAsync: CoroutineContext
+
+    /**
+     * MCCoroutine Facade.
+     */
+    val mcCoroutineConfiguration: MCCoroutineConfiguration
 }

@@ -1,6 +1,7 @@
 package com.github.shynixn.mccoroutine.minestom.impl
 
 import com.github.shynixn.mccoroutine.minestom.CoroutineSession
+import com.github.shynixn.mccoroutine.minestom.MCCoroutineConfiguration
 import com.github.shynixn.mccoroutine.minestom.MCCoroutineExceptionEvent
 import com.github.shynixn.mccoroutine.minestom.dispatcher.AsyncCoroutineDispatcher
 import com.github.shynixn.mccoroutine.minestom.dispatcher.MinecraftCoroutineDispatcher
@@ -10,7 +11,10 @@ import net.minestom.server.event.EventDispatcher
 import net.minestom.server.extensions.Extension
 import kotlin.coroutines.CoroutineContext
 
-internal class CoroutineSessionImpl(private val extension: Any) : CoroutineSession {
+internal class CoroutineSessionImpl(
+    private val extension: Any,
+    override val mcCoroutineConfiguration: MCCoroutineConfiguration
+) : CoroutineSession {
     /**
      * Gets minecraft coroutine scope.
      */

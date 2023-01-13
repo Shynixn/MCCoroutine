@@ -22,12 +22,13 @@ dependencies {
     }
 
     implementation(project(":mccoroutine-minestom-api"))
+    implementation(project(":mccoroutine-minestom-core"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
 
-    implementation("com.github.Minestom:Minestom:eb06ba8664")
+    implementation("com.github.Minestom:Minestom:8eb089bf3e")
 }
 
 tasks.withType<Jar> {

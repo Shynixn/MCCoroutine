@@ -24,7 +24,7 @@ class MCCoroutineImpl : MCCoroutine {
      * Get coroutine session for the given extension.
      * When using an extension, coroutine scope is bound to the lifetime of the entire server.
      */
-    override fun getCoroutineSession(minecraftServer: MinecraftServer) : CoroutineSession {
+    override fun getCoroutineSession(minecraftServer: MinecraftServer): CoroutineSession {
         if (!items.containsKey(minecraftServer)) {
             startCoroutineSession(minecraftServer)
         }
@@ -62,6 +62,7 @@ class MCCoroutineImpl : MCCoroutine {
      * Starts a new coroutine session.
      */
     private fun startCoroutineSession(extension: Any) {
-        items[extension] = CoroutineSessionImpl(extension)
+        val mcCoroutineConfiguration = MCCoroutineConfigurationImpl(extension, this)
+        items[extension] = CoroutineSessionImpl(extension, mcCoroutineConfiguration)
     }
 }
