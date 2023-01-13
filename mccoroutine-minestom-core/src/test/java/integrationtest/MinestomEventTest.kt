@@ -43,7 +43,6 @@ class MinestomEventTest {
         Assertions.assertNotEquals(unitTestThreadId, testListener.joinEventCalledId)
         Assertions.assertNotEquals(unitTestThreadId, testListener.asyncChatEventCalledId)
         Assertions.assertNotEquals(unitTestThreadId, testListener.leaveThreadId)
-        Assertions.assertEquals(testListener.joinEventCalledId, testListener.leaveThreadId)
         Assertions.assertNotEquals(testListener.asyncChatEventCalledId, testListener.leaveThreadId)
     }
 

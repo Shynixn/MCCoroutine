@@ -193,3 +193,12 @@ task generateVelocityJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
         }
     }
 }
+
+task generateMinestomJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    dokkaSourceSets {
+        named("main") {
+            outputDirectory = file("docs/apidocs")
+            sourceRoots.from(file("mccoroutine-minestom-api/src/main/java"))
+        }
+    }
+}
