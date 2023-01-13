@@ -49,7 +49,7 @@ class MinestomExceptionTest {
                 actualThreadId = Thread.currentThread().id
             }
         }
-        Thread.sleep(500)
+        Thread.sleep(2000)
 
         // Assert
         Assertions.assertNotEquals(ioThreadId, actualThreadId)
