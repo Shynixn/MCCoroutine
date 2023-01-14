@@ -10,8 +10,14 @@
         <meta name="author" content="Shynixn">
       
       
+      
+        <link rel="prev" href="../caching/">
+      
+      
+        <link rel="next" href="../exception/">
+      
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
     
     
       
@@ -19,11 +25,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.558e4712.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -54,7 +59,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
     
@@ -132,7 +137,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -267,12 +272,13 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_1">
+        <label class="md-nav__link" for="__nav_1" tabindex="0" aria-expanded="false">
           Getting Started
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -331,12 +337,13 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
-      
-        <label class="md-nav__link" for="__nav_2">
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="true">
           User Guide
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -691,10 +698,9 @@
                 
                   
 
-  <a href="https://github.com/Shynixn/MCCoroutine/edit/master/docs/plugindisable.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="coroutines-in-ondisable">Coroutines in onDisable</h1>
@@ -706,17 +712,17 @@ any other function, which gets called, after the plugin has already been disable
 shutdown. This happens automatically and <strong>before</strong> your <code>onDisable</code> function of your <code>JavaPlugin</code> class
 gets called.</p>
 <p>If you try the following, you run into the following exception.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Is starting on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Is starting on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
 
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Simulating data save on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Simulating data save on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Is ending on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Is ending on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>java.lang.RuntimeException: Plugin MCCoroutine-Sample attempted to start a new coroutine session while being disabled.
 </code></pre></div>
@@ -724,21 +730,21 @@ gets called.</p>
 <h4 id="calling-a-suspend-function">Calling a suspend function</h4>
 <p>However, you may <strong>have to call</strong> a suspend function anyway. This one of the few exceptions were using <code>runBlocking</code> makes
 sense:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Is starting on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Is starting on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
 
-<span class="w">    </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">foo</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">foo</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Is ending on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Is ending on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="p">}</span>
 
-<span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Simulating data save on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[onDisable] Simulating data save on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div>
 <h2 id="manual-behaviour-shutdownstrategymanual">Manual Behaviour (ShutdownStrategy=Manual)</h2>
 <p>The default strategy is the recommend one and you should design your plugin according that.</p>
@@ -746,36 +752,36 @@ sense:</p>
 you need full control over handling remaining coroutine jobs and use <code>minecraftDispatcher</code> or <code>asyncDispatcher</code>
 after the plugin has been disabled.</p>
 <p>Change the shutdownStrategy in <code>onEnable</code></p>
-<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">shutdownStrategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShutdownStrategy</span><span class="p">.</span><span class="na">MANUAL</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">shutdownStrategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShutdownStrategy</span><span class="p">.</span><span class="na">MANUAL</span>
 
-<span class="w">    </span><span class="c1">// Your code ...</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Your code ...</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>Call <code>disposePluginSession</code> after you are finished.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Your code ...</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Your code ...</span>
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="pluginlaunch-is-back">Plugin.launch is back</h3>
 <p>This allows to use <code>plugin.launch</code> in your <code>onDisable</code> function.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
 
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Number 1:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Number 2:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Number 1:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Number 2:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Is ending on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Is ending on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample
 [Server thread/INFO]: [MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:Server thread/55/primaryThread=true
@@ -785,21 +791,21 @@ after the plugin has been disabled.</p>
 <p>However, the message <code>[MCCoroutineSamplePlugin/onDisableAsync] Number 2</code> will not printed,
 because <code>plugin.mcCoroutineConfiguration.disposePluginSession()</code> is called first (context switch of delay).</p>
 <p>This means, we need to use <code>runBlocking</code> anyway:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
 
-<span class="w">    </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Number 1:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Number 2:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">}.</span><span class="na">join</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Number 1:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Number 2:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}.</span><span class="na">join</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Is ending on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[MCCoroutineSamplePlugin/onDisableAsync] Is ending on Thread:</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">name</span><span class="si">}</span><span class="s">/</span><span class="si">${</span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="si">}</span><span class="s">/primaryThread=</span><span class="si">${</span><span class="n">Bukkit</span><span class="p">.</span><span class="na">isPrimaryThread</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample
 [Server thread/INFO]: [MCCoroutineSamplePlugin/onDisableAsync] Is starting on Thread:Server thread/55/primaryThread=true
@@ -817,53 +823,53 @@ shutdownStrategy to manual.</strong></p>
 <h3 id="waiting-for-jobs-to-complete">Waiting for jobs to complete</h3>
 <p>One useful case, where you want to set the shutdownStrategy to manual is to be able to wait for long running jobs to
 complete before you disable the plugin.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">longRunningJob</span><span class="p">:</span><span class="w"> </span><span class="n">Job? </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">longRunningJob</span><span class="p">:</span><span class="w"> </span><span class="n">Job? </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span>
 
-<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">shutdownStrategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShutdownStrategy</span><span class="p">.</span><span class="na">MANUAL</span><span class="w"></span>
+<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">shutdownStrategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShutdownStrategy</span><span class="p">.</span><span class="na">MANUAL</span>
 
-<span class="w">    </span><span class="n">longRunningJob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Over&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">longRunningJob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Over&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">longRunningJob</span><span class="o">!!</span><span class="p">.</span><span class="na">join</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">longRunningJob</span><span class="o">!!</span><span class="p">.</span><span class="na">join</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
+<span class="p">}</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample
 [kotlinx.coroutines.DefaultExecutor/INFO]: Over
 </code></pre></div>
 <h3 id="waiting-for-all-jobs-to-complete">Waiting for all jobs to complete</h3>
 <p>You can also wait for all of your spawned open jobs to complete.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">shutdownStrategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShutdownStrategy</span><span class="p">.</span><span class="na">MANUAL</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">shutdownStrategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShutdownStrategy</span><span class="p">.</span><span class="na">MANUAL</span>
 
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Over&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Over&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="w"></span>
+<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span>
 
-<span class="w">    </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">plugin</span><span class="p">.</span><span class="na">scope</span><span class="p">.</span><span class="na">coroutineContext</span><span class="o">[</span><span class="n">Job</span><span class="o">]!!</span><span class="p">.</span><span class="na">children</span><span class="p">.</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">childJob</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"></span>
-<span class="w">            </span><span class="n">childJob</span><span class="p">.</span><span class="na">join</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">runBlocking</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">plugin</span><span class="p">.</span><span class="na">scope</span><span class="p">.</span><span class="na">coroutineContext</span><span class="o">[</span><span class="n">Job</span><span class="o">]!!</span><span class="p">.</span><span class="na">children</span><span class="p">.</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">childJob</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">            </span><span class="n">childJob</span><span class="p">.</span><span class="na">join</span><span class="p">()</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
+<span class="p">}</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>[Server thread/INFO]: [MCCoroutine-Sample] Disabling MCCoroutine-Sample
 [kotlinx.coroutines.DefaultExecutor/INFO]: Over
@@ -886,42 +892,6 @@ complete before you disable the plugin.</p>
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../caching/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Suspending Caches, Background Repeating Tasks" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Suspending Caches, Background Repeating Tasks
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../exception/" class="md-footer__link md-footer__link--next" aria-label="Next: Exception Handling" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Exception Handling
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -938,12 +908,11 @@ complete before you disable the plugin.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
       
-    
     
   </body>
 </html>

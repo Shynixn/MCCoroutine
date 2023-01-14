@@ -1,1 +1,1 @@
-sourceset_dependencies='{":generateVelocityJavaDocPages/main":[]}'
+sourceset_dependencies='{":generateMinestomJavaDocPages/main":[]}'

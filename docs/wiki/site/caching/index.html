@@ -10,8 +10,14 @@
         <meta name="author" content="Shynixn">
       
       
+      
+        <link rel="prev" href="../tasks/">
+      
+      
+        <link rel="next" href="../plugindisable/">
+      
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
     
     
       
@@ -19,11 +25,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.558e4712.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -54,7 +59,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
     
@@ -132,7 +137,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -267,12 +272,13 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_1">
+        <label class="md-nav__link" for="__nav_1" tabindex="0" aria-expanded="false">
           Getting Started
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -331,12 +337,13 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
-      
-        <label class="md-nav__link" for="__nav_2">
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="true">
           User Guide
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -651,10 +658,9 @@
                 
                   
 
-  <a href="https://github.com/Shynixn/MCCoroutine/edit/master/docs/caching.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="suspending-caches-background-repeating-tasks">Suspending Caches, Background Repeating Tasks</h1>
@@ -666,136 +672,136 @@ implemented, which is a lot easier when using coroutines.</p>
 <p>When taking a look at the <code>Database</code> implementation below, we can observe quite a lot of redundant database
 accesses when a player rejoins a server in a very short timeframe.</p>
 <p>For this, we put a <code>lazy-loading</code> cache in front of the  <code>Database</code> implementation.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">Database</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">createDbIfNotExist</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// ... SQL calls</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">Database</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">createDbIfNotExist</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// ... SQL calls</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// ... SQL calls</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// ... SQL calls</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">saveData</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// ... SQL calls</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">saveData</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// ... SQL calls</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Deferred</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Deferred</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
 
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">):</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">):</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="deferred-playerdata">Deferred PlayerData</h3>
 <p>Instead of using the type <code>PlayerData</code> directly, we use the type <code>Deferred</code>, which is the representation of a
 non-blocking job which has got <code>PlayerData</code> as result. This means we essentially store the job of retrieving data from
 the database into the cache.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.*</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.plugin.Plugin</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.*</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.plugin.Plugin</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">,</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">Plugin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">,</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">Plugin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
 
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">):</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">coroutineScope</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="c1">// Cache miss, create a new job</span><span class="w"></span>
-<span class="w">                </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                    </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">                </span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">):</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">coroutineScope</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Cache miss, create a new job</span>
+<span class="w">                </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
 
-<span class="w">            </span><span class="c1">// Await suspends the current context until the value of the Deferred job is ready.</span><span class="w"></span>
-<span class="w">            </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// Await suspends the current context until the value of the Deferred job is ready.</span>
+<span class="w">            </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="implementing-cache-clearing">Implementing cache clearing</h3>
 <p>Clearing the cache is as simple as adding a <code>clear</code> method.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.*</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.plugin.Plugin</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.*</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.plugin.Plugin</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">,</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">Plugin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">,</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">Plugin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">clear</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">cache</span><span class="p">.</span><span class="na">clear</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">clear</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">cache</span><span class="p">.</span><span class="na">clear</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">):</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">coroutineScope</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="c1">// Cache miss, create a new job</span><span class="w"></span>
-<span class="w">                </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                    </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">                </span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">):</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">coroutineScope</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Cache miss, create a new job</span>
+<span class="w">                </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
 
-<span class="w">            </span><span class="c1">// Await suspends the current context until the value of the ``Deferred`` job is ready.</span><span class="w"></span>
-<span class="w">            </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// Await suspends the current context until the value of the ``Deferred`` job is ready.</span>
+<span class="w">            </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h2 id="background-repeating-tasks">Background Repeating Tasks</h2>
 <p>After introducing a cache, we can implement a new suspendable background task to save the cached data every 10 minutes.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.launch</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.*</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.plugin.Plugin</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.*</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.plugin.Plugin</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">,</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">Plugin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">DatabaseCache</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">,</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">Plugin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">Deferred</span><span class="o">&lt;</span><span class="n">PlayerData</span><span class="o">&gt;&gt;</span><span class="p">()</span>
 
-<span class="w">    </span><span class="k">init</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// This plugin.launch launches a new scope in the minecraft server context which can be understood</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// to be a background task and behaves in a similar way to Bukkit.getScheduler().runTask(plugin, Runnable {  })</span><span class="w"></span>
-<span class="w">        </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="c1">// This background task is a repeatable task which in this case is an endless loop. The endless loop</span><span class="w"></span>
-<span class="w">            </span><span class="c1">// is automatically stopped by MCCoroutine once you reload your plugin.</span><span class="w"></span>
-<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="c1">// Save all cached player data every 10 minutes.</span><span class="w"></span>
-<span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="na">keys</span><span class="p">.</span><span class="na">toTypedArray</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                    </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="k">init</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// This plugin.launch launches a new scope in the minecraft server context which can be understood</span>
+<span class="w">        </span><span class="c1">// to be a background task and behaves in a similar way to Bukkit.getScheduler().runTask(plugin, Runnable {  })</span>
+<span class="w">        </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// This background task is a repeatable task which in this case is an endless loop. The endless loop</span>
+<span class="w">            </span><span class="c1">// is automatically stopped by MCCoroutine once you reload your plugin.</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Save all cached player data every 10 minutes.</span>
+<span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="na">keys</span><span class="p">.</span><span class="na">toTypedArray</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">())</span>
 
-<span class="w">                    </span><span class="c1">// Remove player when no longer online</span><span class="w"></span>
-<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">player</span><span class="p">.</span><span class="na">isOnline</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                        </span><span class="n">cache</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">                    </span><span class="p">}</span><span class="w"></span>
-<span class="w">                </span><span class="p">}</span><span class="w"></span>
+<span class="w">                    </span><span class="c1">// Remove player when no longer online</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">player</span><span class="p">.</span><span class="na">isOnline</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">cache</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
 
-<span class="w">                </span><span class="c1">// Suspending the current context is important in this case otherwise the minecraft thread will only execute this</span><span class="w"></span>
-<span class="w">                </span><span class="c1">// endless loop as it does not have time to execute other things. Delay gives the thread time to execute other things.</span><span class="w"></span>
-<span class="w">                </span><span class="n">delay</span><span class="p">(</span><span class="m">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">1000</span><span class="p">)</span><span class="w"> </span><span class="c1">// 10 minutes</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">                </span><span class="c1">// Suspending the current context is important in this case otherwise the minecraft thread will only execute this</span>
+<span class="w">                </span><span class="c1">// endless loop as it does not have time to execute other things. Delay gives the thread time to execute other things.</span>
+<span class="w">                </span><span class="n">delay</span><span class="p">(</span><span class="m">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">1000</span><span class="p">)</span><span class="w"> </span><span class="c1">// 10 minutes</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">clear</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">cache</span><span class="p">.</span><span class="na">clear</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">clear</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">cache</span><span class="p">.</span><span class="na">clear</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">):</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">coroutineScope</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="c1">// Cache miss, create a new job</span><span class="w"></span>
-<span class="w">                </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                    </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">                </span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">):</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">coroutineScope</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cache</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">player</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Cache miss, create a new job</span>
+<span class="w">                </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">async</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
 
-<span class="w">            </span><span class="c1">// Await suspends the current context until the value of the ``Deferred`` job is ready.</span><span class="w"></span>
-<span class="w">            </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="c1">// Await suspends the current context until the value of the ``Deferred`` job is ready.</span>
+<span class="w">            </span><span class="n">cache</span><span class="o">[</span><span class="n">player</span><span class="o">]!!</span><span class="p">.</span><span class="na">await</span><span class="p">()</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 
 
@@ -815,42 +821,6 @@ the database into the cache.</p>
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../tasks/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Suspending Delayed, Repeating Tasks" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Suspending Delayed, Repeating Tasks
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../plugindisable/" class="md-footer__link md-footer__link--next" aria-label="Next: Coroutines in onDisable" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Coroutines in onDisable
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -867,12 +837,11 @@ the database into the cache.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
       
-    
     
   </body>
 </html>

@@ -10,8 +10,14 @@
         <meta name="author" content="Shynixn">
       
       
+      
+        <link rel="prev" href="../installation/">
+      
+      
+        <link rel="next" href="../plugin/">
+      
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
     
     
       
@@ -19,11 +25,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.558e4712.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -54,7 +59,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
     
@@ -132,7 +137,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -267,12 +272,13 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_1">
+        <label class="md-nav__link" for="__nav_1" tabindex="0" aria-expanded="false">
           Getting Started
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -331,12 +337,13 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
-      
-        <label class="md-nav__link" for="__nav_2">
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="true">
           User Guide
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -639,118 +646,193 @@
                 
                   
 
-  <a href="https://github.com/Shynixn/MCCoroutine/edit/master/docs/coroutine.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="kotlin-coroutines-and-minecraft-plugins">Kotlin Coroutines and Minecraft Plugins</h1>
 <p>When starting with <a href="https://kotlinlang.org/docs/coroutines-basics.html">Coroutines in Kotlin</a>, it is interesting
-how this can be translated to the world of minecraft plugins. It is recommended to learn how Kotlin Coroutines work before you continue here.</p>
+how this can be translated to the world of minecraft plugins. It is recommended to learn how Kotlin Coroutines work
+before you continue here.</p>
 <div class="admonition note">
 <p class="admonition-title">Important</p>
 <p>Make sure you have already installed MCCoroutine. See <a href="/gettingstarted">Installation</a> for details.</p>
 </div>
 <h3 id="starting-a-coroutine">Starting a coroutine</h3>
-<p>For beginners, it is often confusing how to enter a coroutine. The examples in the official guide mostly use <code>runBlocking</code>
+<p>For beginners, it is often confusing how to enter a coroutine. The examples in the official guide mostly
+use <code>runBlocking</code>
 because it makes sense for testing. However, keep in mind to <strong>avoid</strong> using <code>runblocking</code> in any of your plugins.</p>
 <ul>
 <li>To enter a coroutine <strong>anywhere</strong> in your code at any time:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// This will always be on the minecraft main thread.</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label><label for="__tabbed_1_4">Velocity</label><label for="__tabbed_1_5">Minestom</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.plugin.Plugin</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// This will always be on the minecraft main thread.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.plugin.Plugin</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// This will be a random thread on the BungeeCord threadpool</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.plugin.PluginContainer</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// This will always be on the minecraft main thread.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.velocity.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.plugin.PluginContainer</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// This will be a random thread on the Velocity threadpool</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Minestom has got 2 lifecycle scopes, the server scope and the extension scope.
+When this guide talks about a <code>plugin</code>, the corresponding class in Minestom is <code>Extension</code> or <code>MinecraftServer</code> depending on your usecase.</p>
+<p>Server level (if you are developing a new server):</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.MinecraftServer</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// This will always be on the minecraft main thread.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Extension level (if you are developing a new extension): </p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.extensions.Extension</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">extension</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// This will always be on the minecraft main thread.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
 <h3 id="switching-coroutine-context">Switching coroutine context</h3>
-<p>Later in the <a href="https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html">Coroutines in Kotlin</a> guide, the terms coroutine-context and dispatchers are explained.
-A dispatcher determines what thread or threads the corresponding coroutine uses for its execution. Therefore, MCCoroutine offers 2 custom dispatchers:</p>
+<p>Later in the <a href="https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html">Coroutines in Kotlin</a> guide, the terms
+coroutine-context and dispatchers are explained.
+A dispatcher determines what thread or threads the corresponding coroutine uses for its execution. Therefore,
+MCCoroutine offers 2 custom dispatchers:</p>
 <ul>
 <li>minecraftDispatcher (Allows to execute coroutines on the main minecraft thread)</li>
 <li>asyncDispatcher (Allows to execute coroutines on the async minecraft threadpool)</li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Important</p>
-<p><strong>However, it is highly recommend to use <code>Dispatchers.IO</code> instead of asyncDispatcher because the scheduling is more accurate.</strong>
+<p><strong>However, it is highly recommend to use <code>Dispatchers.IO</code> instead of asyncDispatcher because the scheduling is more
+accurate.</strong>
 Additional technical details can be found here: <a href="https://github.com/Shynixn/MCCoroutine/issues/87">GitHub Issue</a>.</p>
 </div>
 <p>An example how this works is shown below:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// This will always be on the minecraft main thread.</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// This will always be on the minecraft main thread.</span>
 
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">result1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">plugin</span><span class="p">.</span><span class="na">minecraftDispatcher</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="c1">// Perform operations on the minecraft main thread.</span><span class="w"></span>
-<span class="w">            </span><span class="s">&quot;Player is &quot;</span><span class="w"> </span><span class="c1">// Optionally, return a result.</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">result1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">plugin</span><span class="p">.</span><span class="na">minecraftDispatcher</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Perform operations on the minecraft main thread.</span>
+<span class="w">            </span><span class="s">&quot;Player is &quot;</span><span class="w"> </span><span class="c1">// Optionally, return a result.</span>
+<span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="c1">// Here we are automatically back on the main thread again.</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Here we are automatically back on the main thread again.</span>
 
-<span class="w">        </span><span class="c1">// Prefer using Dispatchers.IO instead of asyncDispatcher </span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">result2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="c1">// Perform operations asynchronously.</span><span class="w"></span>
-<span class="w">            </span><span class="s">&quot; Max&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Prefer using Dispatchers.IO instead of asyncDispatcher </span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">result2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Perform operations asynchronously.</span>
+<span class="w">            </span><span class="s">&quot; Max&quot;</span>
+<span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="c1">// Here we are automatically back on the main thread again.</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Here we are automatically back on the main thread again.</span>
 
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="n">result1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result2</span><span class="p">)</span><span class="w"> </span><span class="c1">// Prints &#39;Player is Max&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="n">result1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result2</span><span class="p">)</span><span class="w"> </span><span class="c1">// Prints &#39;Player is Max&#39;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>Normally, you do not need to call <code>plugin.minecraftDispatcher</code> in your code. Instead, you are guaranteed to be always on the minecraft main thread
-in the <code>plugin.launch{}</code> scope and use sub coroutines (e.g. withContext) to perform asynchronous operations. Such a case can be found below:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@EventHandler</span><span class="w"></span>
-<span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerJoinEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// Main Thread</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="p">.</span><span class="na">name</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">listOfFriends</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="c1">// IO Thread</span><span class="w"></span>
-<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">friendNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Files</span><span class="p">.</span><span class="na">readAllLines</span><span class="p">(</span><span class="n">Paths</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&quot;</span><span class="si">$</span><span class="n">name</span><span class="s">.txt&quot;</span><span class="p">))</span><span class="w"></span>
-<span class="w">            </span><span class="n">friendNames</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<p>Normally, you do not need to call <code>plugin.minecraftDispatcher</code> in your code. Instead, you are guaranteed to be always
+on the minecraft main thread
+in the <code>plugin.launch{}</code> scope and use sub coroutines (e.g. withContext) to perform asynchronous operations. Such a
+case can be found below:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// This is a Bukkit example, but it works in the same way in every other framework.</span>
+<span class="nd">@EventHandler</span>
+<span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerJoinEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Main Thread</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="p">.</span><span class="na">name</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">listOfFriends</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// IO Thread</span>
+<span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">friendNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Files</span><span class="p">.</span><span class="na">readAllLines</span><span class="p">(</span><span class="n">Paths</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&quot;</span><span class="si">$</span><span class="n">name</span><span class="s">.txt&quot;</span><span class="p">))</span>
+<span class="w">            </span><span class="n">friendNames</span>
+<span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="c1">// Main Thread</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">friendText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOfFriends</span><span class="p">.</span><span class="na">joinToString</span><span class="p">(</span><span class="s">&quot;, &quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="p">.</span><span class="na">sendMessage</span><span class="p">(</span><span class="s">&quot;My friends are: </span><span class="si">$</span><span class="n">friendText</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Main Thread</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">friendText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOfFriends</span><span class="p">.</span><span class="na">joinToString</span><span class="p">(</span><span class="s">&quot;, &quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="p">.</span><span class="na">sendMessage</span><span class="p">(</span><span class="s">&quot;My friends are: </span><span class="si">$</span><span class="n">friendText</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="plugin-launch-execution-order">Plugin launch Execution order</h3>
 <p>If you use <code>plugin.launch</code>, it is important to understand the execution order.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Plugin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// This is a Bukkit example, but it works in the same way in every other framework.</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">Plugin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
-<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">bar</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// Main Thread</span><span class="w"></span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am first&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">bar</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Main Thread</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am first&quot;</span><span class="p">)</span>
 
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am second&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// The context is not suspended when switching to the same suspendable context.</span><span class="w"></span>
-<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am fourth&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// The context is given back after 1000 milliseconds and continuous here.</span><span class="w"></span>
-<span class="w">            </span><span class="n">bob</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am second&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// The context is not suspended when switching to the same suspendable context.</span>
+<span class="w">            </span><span class="n">delay</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am fourth&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// The context is given back after 1000 milliseconds and continuous here.</span>
+<span class="w">            </span><span class="n">bob</span><span class="p">()</span>
+<span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="c1">// When calling delay the suspendable context is suspended and the original context immediately continuous here.</span><span class="w"></span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am third&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// When calling delay the suspendable context is suspended and the original context immediately continuous here.</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am third&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">bob</span><span class="p">(){</span><span class="w"></span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am fifth&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">bob</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;I am fifth&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="s">&quot;I am first&quot;</span><span class="w"></span>
-<span class="s">&quot;I am second&quot;</span><span class="w"></span>
-<span class="s">&quot;I am third&quot;</span><span class="w"></span>
-<span class="s">&quot;I am fourth&quot;</span><span class="w"></span>
-<span class="s">&quot;I am fifth&quot;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="s">&quot;I am first&quot;</span>
+<span class="s">&quot;I am second&quot;</span>
+<span class="s">&quot;I am third&quot;</span>
+<span class="s">&quot;I am fourth&quot;</span>
+<span class="s">&quot;I am fifth&quot;</span>
 </code></pre></div>
 <h3 id="coroutines-everywhere">Coroutines everywhere</h3>
-<p>Using <code>plugin.launch{}</code>is valuable if you migrate existing plugins to use coroutines. However, if you write a new plugin from scratch, you may consider using
+<p>Using <code>plugin.launch{}</code>is valuable if you migrate existing plugins to use coroutines. However, if you write a new
+plugin from scratch, you may consider using
 convenience integrations provided by MCCoroutine such as:</p>
 <ul>
 <li>Suspending Plugin</li>
@@ -775,42 +857,6 @@ convenience integrations provided by MCCoroutine such as:</p>
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../installation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Installation" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Installation
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../plugin/" class="md-footer__link md-footer__link--next" aria-label="Next: Suspending Plugin" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Suspending Plugin
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -827,12 +873,11 @@ convenience integrations provided by MCCoroutine such as:</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
       
-    
     
   </body>
 </html>

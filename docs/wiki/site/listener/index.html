@@ -10,8 +10,14 @@
         <meta name="author" content="Shynixn">
       
       
+      
+        <link rel="prev" href="../plugin/">
+      
+      
+        <link rel="next" href="../commandexecutor/">
+      
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.5">
     
     
       
@@ -19,11 +25,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.558e4712.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -54,7 +59,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="None" data-md-color-accent="None">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
     
@@ -132,7 +137,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -267,12 +272,13 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_1">
+        <label class="md-nav__link" for="__nav_1" tabindex="0" aria-expanded="false">
           Getting Started
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -331,12 +337,13 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
-      
-        <label class="md-nav__link" for="__nav_2">
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="true">
           User Guide
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -637,10 +644,9 @@
                 
                   
 
-  <a href="https://github.com/Shynixn/MCCoroutine/edit/master/docs/listener.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="suspending-listeners">Suspending Listeners</h1>
@@ -648,34 +654,34 @@
 <h2 id="create-the-listener">Create the Listener</h2>
 <p>Create a listener and add suspend to all functions where you perform suspendable operations (e.g. calling other
 suspendable functions). You can mix suspendable and non suspendable functions in listeners.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label><label for="__tabbed_1_4">Velocity</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label><label for="__tabbed_1_4">Velocity</label><label for="__tabbed_1_5">Minestom</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.EventHandler</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.Listener</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.player.PlayerJoinEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.player.PlayerQuitEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.EventHandler</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.Listener</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.player.PlayerJoinEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.event.player.PlayerQuitEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Listener</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@EventHandler</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerJoinEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Listener</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@EventHandler</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerJoinEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="nd">@EventHandler</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerQuitEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@EventHandler</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerQuitEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -683,57 +689,57 @@ suspendable functions). You can mix suspendable and non suspendable functions in
 control over consuming, processing and resuming events when performing long running operations. When you create a suspend
 function using MCCoroutine, they automatically handle <code>registerIntent</code> and <code>completeIntent</code>. You do not have to do anything yourself,
 all suspend functions are automatically processed asynchronously.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.event.PostLoginEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.event.ServerDisconnectEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.plugin.Listener</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.event.EventHandler</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.event.PostLoginEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.event.ServerDisconnectEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.api.plugin.Listener</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.md_5.bungee.event.EventHandler</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Listener</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@EventHandler</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PostLoginEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Listener</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@EventHandler</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PostLoginEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="nd">@EventHandler</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ServerDisconnectEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@EventHandler</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ServerDisconnectEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.Listener</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.network.ClientConnectionEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.Listener</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.network.ClientConnectionEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Listener</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ClientConnectionEvent</span><span class="p">.</span><span class="na">Join</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">targetEntity</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Listener</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ClientConnectionEvent</span><span class="p">.</span><span class="na">Join</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">targetEntity</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="nd">@Listener</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ClientConnectionEvent</span><span class="p">.</span><span class="na">Disconnect</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">targetEntity</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Listener</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ClientConnectionEvent</span><span class="p">.</span><span class="na">Disconnect</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">targetEntity</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -741,152 +747,204 @@ all suspend functions are automatically processed asynchronously.</p>
 control over consuming, processing and resuming events when performing long running operations. When you create a suspend
 function using MCCoroutine, they automatically handle <code>Continuation</code> and <code>EventTask</code>. You do not have to do anything yourself,
 all suspend functions are automatically processed asynchronously.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.Subscribe</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.connection.DisconnectEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.connection.PostLoginEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.Subscribe</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.connection.DisconnectEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.connection.PostLoginEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Subscribe</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PostLoginEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">username</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Subscribe</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PostLoginEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">username</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="nd">@Subscribe</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">DisconnectEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span><span class="w"></span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">username</span><span class="w"></span>
-<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Subscribe</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">DisconnectEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">username</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.event.player.PlayerDisconnectEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.event.player.PlayerLoginEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">PlayerDataListener</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="p">:</span><span class="w"> </span><span class="n">Database</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerJoinEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerLoginEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">username</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastJoinDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onPlayerQuitEvent</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerDisconnectEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">player</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">username</span>
+<span class="w">        </span><span class="n">playerData</span><span class="p">.</span><span class="na">lastQuitDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <h3 id="register-the-listener">Register the Listener</h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit</label><label for="__tabbed_2_2">BungeeCord</label><label for="__tabbed_2_3">Sponge</label><label for="__tabbed_2_4">Velocity</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:5"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><input id="__tabbed_2_5" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit</label><label for="__tabbed_2_2">BungeeCord</label><label for="__tabbed_2_3">Sponge</label><label for="__tabbed_2_4">Velocity</label><label for="__tabbed_2_5">Minestom</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Instead of using <code>registerEvents</code>, use the provided extension method <code>registerSuspendingEvents</code> to allow
 suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingJavaPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingJavaPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
 
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span><span class="w"> </span><span class="k">this</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+<span class="w">        </span><span class="n">server</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingEvents</span><span class="p">(</span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">),</span><span class="w"> </span><span class="k">this</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>Instead of using <code>registerListener</code>, use the provided extension method <code>registerSuspendingListener</code> to allow
 suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.SuspendingPlugin</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.registerSuspendingListener</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.SuspendingPlugin</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bungeecord.registerSuspendingListener</span>
 
-<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
 
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// BungeeCord Startup Thread</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">proxy</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingListener</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// BungeeCord Startup Thread</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+<span class="w">        </span><span class="n">proxy</span><span class="p">.</span><span class="na">pluginManager</span><span class="p">.</span><span class="na">registerSuspendingListener</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// BungeeCord Shutdown Thread (Not the same as the startup thread)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// BungeeCord Shutdown Thread (Not the same as the startup thread)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>Instead of using <code>registerListeners</code>, use the provided extension method <code>registerSuspendingListeners</code> to allow
 suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.SuspendingPluginContainer</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.registerSuspendingListeners</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.google.inject.Inject</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.Sponge</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.Listener</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.game.state.GameStartedServerEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.game.state.GameStoppingServerEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.plugin.Plugin</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.plugin.PluginContainer</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.SuspendingPluginContainer</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.registerSuspendingListeners</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.google.inject.Inject</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.Sponge</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.Listener</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.game.state.GameStartedServerEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.event.game.state.GameStoppingServerEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.plugin.Plugin</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.plugin.PluginContainer</span>
 
-<span class="nd">@Plugin</span><span class="p">(</span><span class="w"></span>
-<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Sponge.&quot;</span><span class="w"></span>
-<span class="p">)</span><span class="w"></span>
-<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">suspendingPluginContainer</span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPluginContainer</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">pluginContainer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PluginContainer</span><span class="w"></span>
+<span class="nd">@Plugin</span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Sponge.&quot;</span>
+<span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
+<span class="w">    </span><span class="nd">@Inject</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">suspendingPluginContainer</span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPluginContainer</span>
+<span class="w">    </span><span class="nd">@Inject</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">pluginContainer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PluginContainer</span>
 
-<span class="w">    </span><span class="nd">@Listener</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">GameStartedServerEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">Sponge</span><span class="p">.</span><span class="na">getEventManager</span><span class="p">().</span><span class="na">registerSuspendingListeners</span><span class="p">(</span><span class="n">pluginContainer</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Listener</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">GameStartedServerEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+<span class="w">        </span><span class="n">Sponge</span><span class="p">.</span><span class="na">getEventManager</span><span class="p">().</span><span class="na">registerSuspendingListeners</span><span class="p">(</span><span class="n">pluginContainer</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="nd">@Listener</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">GameStoppingServerEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// Minecraft Main Thread</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Listener</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisable</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">GameStoppingServerEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>Instead of using <code>register</code>, use the provided extension method <code>registerSuspend</code> to allow
 suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.</p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.velocity.registerSuspend</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.google.inject.Inject</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.Subscribe</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.proxy.ProxyInitializeEvent</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.plugin.Plugin</span><span class="w"></span>
-<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.proxy.ProxyServer</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.velocity.registerSuspend</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.google.inject.Inject</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.Subscribe</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.event.proxy.ProxyInitializeEvent</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.plugin.Plugin</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.velocitypowered.api.proxy.ProxyServer</span>
 
-<span class="nd">@Plugin</span><span class="p">(</span><span class="w"></span>
-<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Velocity.&quot;</span><span class="w"></span>
-<span class="p">)</span><span class="w"></span>
-<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span><span class="w"></span>
+<span class="nd">@Plugin</span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mccoroutinesample&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MCCoroutineSample is sample plugin to use MCCoroutine in Velocity.&quot;</span>
+<span class="p">)</span>
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
 
-<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
-<span class="w">    </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">proxyServer</span><span class="p">:</span><span class="w"> </span><span class="n">ProxyServer</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Inject</span>
+<span class="w">    </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">proxyServer</span><span class="p">:</span><span class="w"> </span><span class="n">ProxyServer</span>
 
-<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
-<span class="w">    </span><span class="k">constructor</span><span class="p">(</span><span class="n">suspendingPluginContainer</span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPluginContainer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">suspendingPluginContainer</span><span class="p">.</span><span class="na">initialize</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Inject</span>
+<span class="w">    </span><span class="k">constructor</span><span class="p">(</span><span class="n">suspendingPluginContainer</span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingPluginContainer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">suspendingPluginContainer</span><span class="p">.</span><span class="na">initialize</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="nd">@Subscribe</span><span class="w"></span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onProxyInitialization</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ProxyInitializeEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// Velocity Thread Pool</span><span class="w"></span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="n">proxyServer</span><span class="p">.</span><span class="na">eventManager</span><span class="p">.</span><span class="na">registerSuspend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Subscribe</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onProxyInitialization</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ProxyInitializeEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Velocity Thread Pool</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+<span class="w">        </span><span class="n">proxyServer</span><span class="p">.</span><span class="na">eventManager</span><span class="p">.</span><span class="na">registerSuspend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Instead of using <code>addListener</code>, use the provided extension method <code>addSuspendingListener</code> to allow
+suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.addSuspendingListener</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.sample.extension.impl.Database</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.sample.extension.impl.PlayerDataListener</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.MinecraftServer</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.event.player.PlayerLoginEvent</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="n">Array</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">minecraftServer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">.</span><span class="na">init</span><span class="p">()</span><span class="w"> </span>
+<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">listener</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PlayerDataListener</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+<span class="w">        </span><span class="n">MinecraftServer</span><span class="p">.</span><span class="na">getGlobalEventHandler</span><span class="p">()</span>
+<span class="w">            </span><span class="p">.</span><span class="na">addSuspendingListener</span><span class="p">(</span><span class="n">minecraftServer</span><span class="p">,</span><span class="w"> </span><span class="n">PlayerLoginEvent</span><span class="o">::</span><span class="n">class</span><span class="p">.</span><span class="na">java</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">                </span><span class="n">listener</span><span class="p">.</span><span class="na">onPlayerJoinEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">start</span><span class="p">(</span><span class="s">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="m">25565</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 </div>
@@ -911,42 +969,6 @@ suspendable functions in your listener. Please notice, that timing measurements 
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../plugin/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Suspending Plugin" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Suspending Plugin
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../commandexecutor/" class="md-footer__link md-footer__link--next" aria-label="Next: Suspending CommandExecutors" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Suspending CommandExecutors
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -963,12 +985,11 @@ suspendable functions in your listener. Please notice, that timing measurements 
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
       
-    
     
   </body>
 </html>
