@@ -36,7 +36,7 @@ because it makes sense for testing. However, keep in mind to **avoid** using ``r
 
     fun foo() {
         plugin.launch {
-            // This will always be on the minecraft main thread.
+            // This will be a random thread on the BungeeCord threadpool
         }
     }
     ```
@@ -62,7 +62,7 @@ because it makes sense for testing. However, keep in mind to **avoid** using ``r
 
     fun foo() {
         plugin.launch {
-            // This will always be on the minecraft main thread.
+            // This will be a random thread on the Velocity threadpool
         }
     }
     ```
