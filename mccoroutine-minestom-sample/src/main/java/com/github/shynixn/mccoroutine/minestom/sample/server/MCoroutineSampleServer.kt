@@ -7,6 +7,7 @@ import com.github.shynixn.mccoroutine.minestom.sample.server.commandexecutor.Adm
 import com.github.shynixn.mccoroutine.minestom.sample.server.impl.FakeDatabase
 import com.github.shynixn.mccoroutine.minestom.sample.server.impl.UserDataCache
 import com.github.shynixn.mccoroutine.minestom.sample.server.listener.PlayerConnectListener
+import com.github.shynixn.mccoroutine.minestom.suspendingHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -66,12 +67,16 @@ fun main(args: Array<String>) {
     rootEventNode.addSuspendingListener(minecraftServer, PlayerLoginEvent::class.java) { e ->
         playerConnectListener.onPlayerJoinEvent(e)
     }
-    rootEventNode.addSuspendingListener(minecraftServer, PlayerDisconnectEvent::class.java) { e ->
-        playerConnectListener.onPlayerQuitEvent(e)
-    }
+    rootEventNode.addListener(
+        net.minestom.server.event.EventListener.builder(PlayerDisconnectEvent::class.java)
+            .suspendingHandler(minecraftServer) { e ->
+                playerConnectListener.onPlayerQuitEvent(e)
+            }.build()
+    )
     rootEventNode.addSuspendingListener(minecraftServer, MCCoroutineExceptionEvent::class.java) { e ->
         playerConnectListener.onCoroutineException(e)
     }
+
 
     MinecraftServer.getCommandManager().register(AdminCommandExecutor(cache, minecraftServer))
 

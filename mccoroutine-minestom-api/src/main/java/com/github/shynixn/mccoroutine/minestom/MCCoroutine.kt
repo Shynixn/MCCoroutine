@@ -6,6 +6,7 @@ import net.minestom.server.command.CommandSender
 import net.minestom.server.command.builder.Command
 import net.minestom.server.command.builder.CommandContext
 import net.minestom.server.event.Event
+import net.minestom.server.event.EventListener
 import net.minestom.server.event.EventNode
 import net.minestom.server.extensions.Extension
 import net.minestom.server.thread.Acquirable
@@ -18,8 +19,7 @@ import kotlin.coroutines.CoroutineContext
  */
 internal val mcCoroutine: MCCoroutine by lazy {
     try {
-        MinecraftServer.init()
-        Class.forName("com.github.shynixn.mccoroutine.minestom.impl.MCCoroutineImpl")
+        Class.forName(MCCoroutine.Driver)
             .getDeclaredConstructor().newInstance() as MCCoroutine
     } catch (e: Exception) {
         throw RuntimeException(
@@ -282,6 +282,34 @@ fun <E : Event> EventNode<in E>.addSuspendingListener(
 }
 
 /**
+ * Adds a new suspendable handler to this builder.
+ */
+fun <E : Event> EventListener.Builder<E>.suspendingHandler(
+    server: MinecraftServer,
+    listener: suspend (E) -> Unit
+): EventListener.Builder<E> {
+    return this.handler { e ->
+        server.launch {
+            listener.invoke(e)
+        }
+    }
+}
+
+/**
+ * Adds a new suspendable handler to this builder.
+ */
+fun <E : Event> EventListener.Builder<E>.suspendingHandler(
+    extension: Extension,
+    listener: suspend (E) -> Unit
+): EventListener.Builder<E> {
+    return this.handler { e ->
+        extension.launch {
+            listener.invoke(e)
+        }
+    }
+}
+
+/**
  * Hidden internal MCCoroutine interface.
  */
 interface MCCoroutine {
@@ -300,8 +328,8 @@ interface MCCoroutine {
     fun getCoroutineSession(extension: Extension): CoroutineSession
 
     /**
-     * Get coroutine session for the given extension.
-     * When using an extension, coroutine scope is bound to the lifetime of the entire server.
+     * Get coroutine session for the given server.
+     * When using a server, coroutine scope is bound to the lifetime of the entire server.
      */
     fun getCoroutineSession(minecraftServer: MinecraftServer): CoroutineSession
 
