@@ -7,10 +7,9 @@ import com.github.shynixn.mccoroutine.bukkit.impl.CoroutineSessionImpl
 import com.github.shynixn.mccoroutine.bukkit.listener.PluginListener
 import org.bukkit.event.server.PluginDisableEvent
 import org.bukkit.plugin.Plugin
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class BukkitPluginListenerTest {
     /**
@@ -30,7 +29,7 @@ class BukkitPluginListenerTest {
         classUnderTest.onPluginDisable(pluginDisableEvent)
 
         // Assert
-        assertTrue(mcCoroutine.disableCalled)
+        Assertions.assertTrue(mcCoroutine.disableCalled)
     }
 
     /**
@@ -49,7 +48,7 @@ class BukkitPluginListenerTest {
         classUnderTest.onPluginDisable(pluginDisableEvent)
 
         // Assert
-        assertFalse(mcCoroutine.disableCalled)
+        Assertions.assertFalse(mcCoroutine.disableCalled)
     }
 
     private fun createWithDependencies(

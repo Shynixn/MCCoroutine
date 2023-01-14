@@ -9,13 +9,13 @@ import helper.MockedSpongeServer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.Order
 import org.spongepowered.api.event.network.ClientConnectionEvent
-import kotlin.test.assertEquals
 
 class SpongeEventPriorityTest {
     /**
@@ -46,9 +46,9 @@ class SpongeEventPriorityTest {
         val actualResult = classUnderTest.resultList
 
         // Assert
-        assertEquals(2, actualResult[0])
-        assertEquals(3, actualResult[1])
-        assertEquals(1, actualResult[2])
+        Assertions.assertEquals(2, actualResult[0])
+        Assertions.assertEquals(3, actualResult[1])
+        Assertions.assertEquals(1, actualResult[2])
     }
 
     /**
@@ -71,7 +71,8 @@ class SpongeEventPriorityTest {
         // Act
         runBlocking {
             try {
-                Sponge.getEventManager().postSuspending(clientConnectionEvent, plugin, EventExecutionType.Consecutive).joinAll()
+                Sponge.getEventManager().postSuspending(clientConnectionEvent, plugin, EventExecutionType.Consecutive)
+                    .joinAll()
             } catch (e: Exception) {
                 e.toString()
             }
@@ -79,9 +80,9 @@ class SpongeEventPriorityTest {
         val actualResult = classUnderTest.resultList
 
         // Assert
-        assertEquals(1, actualResult[0])
-        assertEquals(2, actualResult[1])
-        assertEquals(3, actualResult[2])
+        Assertions.assertEquals(1, actualResult[0])
+        Assertions.assertEquals(2, actualResult[1])
+        Assertions.assertEquals(3, actualResult[2])
     }
 
     private class TestEventListener {

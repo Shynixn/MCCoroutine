@@ -8,8 +8,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.9.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.9.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.10.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.10.0")
     }
     ```
 
@@ -17,8 +17,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:2.9.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:2.9.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:2.10.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:2.10.0")
     }
     ```
 
@@ -26,8 +26,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:2.9.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:2.9.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:2.10.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:2.10.0")
     }
     ```
 
@@ -35,8 +35,17 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.9.0")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.9.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.10.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.10.0")
+    }
+    ```
+
+=== "Minestom"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-api:2.10.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-core:2.10.0")
     }
     ```
 
@@ -60,8 +69,8 @@ dependencies {
     **plugin.yml**
     ```yaml
     libraries:
-      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.9.0
-      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.9.0
+      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.10.0
+      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.10.0
     ```
 
 === "Other Server"
@@ -74,6 +83,6 @@ dependencies {
 Try to call ``launch{}`` in your ``onEnable()`` function in your ``Plugin`` class.
 
 !!! note "Further help"
-    Please take a look at the sample plugins ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample`` which
+    Please take a look at the sample plugins (e.g. ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample``) which
     can be found on [Github](https://github.com/Shynixn/MCCoroutine).
     A real production plugin using MCCoroutine can be found [here](https://github.com/Shynixn/BlockBall).

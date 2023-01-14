@@ -6,13 +6,12 @@ import helper.MockedSpongeServer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.network.ClientConnectionEvent
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 
 class SpongeEventTest {
     /**
@@ -34,9 +33,9 @@ class SpongeEventTest {
         }
 
         // Assert
-        assertEquals(server.mainThreadId, testListener.joinEventCalledId)
-        assertNotEquals(server.mainThreadId, testListener.asyncCalledId)
-        assertEquals(server.mainThreadId, testListener.leaveId)
+        Assertions.assertEquals(server.mainThreadId, testListener.joinEventCalledId)
+        Assertions.assertNotEquals(server.mainThreadId, testListener.asyncCalledId)
+        Assertions.assertEquals(server.mainThreadId, testListener.leaveId)
     }
 
     /**
@@ -58,7 +57,7 @@ class SpongeEventTest {
         }
 
         // Assert
-        assertEquals(server.mainThreadId, testListener.quitEventCalledId)
+        Assertions.assertEquals(server.mainThreadId, testListener.quitEventCalledId)
     }
 
     class TestListener(

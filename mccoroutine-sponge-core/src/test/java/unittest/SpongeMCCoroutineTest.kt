@@ -1,10 +1,10 @@
 package unittest
 
 import com.github.shynixn.mccoroutine.sponge.impl.MCCoroutineImpl
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.spongepowered.api.plugin.PluginContainer
-import kotlin.test.assertEquals
 
 class SpongeMCCoroutineTest {
     /**
@@ -23,7 +23,7 @@ class SpongeMCCoroutineTest {
         val session2 = classUnderTest.getCoroutineSession(plugin)
 
         // Assert
-        assertEquals(session1, session2)
+        Assertions.assertEquals(session1, session2)
     }
 
     private fun createWithDependencies(): MCCoroutineImpl {

@@ -1,6 +1,6 @@
 # Suspending Plugin
 
-This guide explains how Kotlin Coroutines can be used in minecraft plugins in various ways using MCCoroutine. 
+This guide explains how Kotlin Coroutines can be used in minecraft plugins in various ways using MCCoroutine.
 For this, a new plugin is developed from scratch to handle asynchronous and synchronous code.
 
 !!! note "Important"
@@ -8,8 +8,9 @@ For this, a new plugin is developed from scratch to handle asynchronous and sync
 
 ## Plugin Main class
 
-MCCoroutine does not need to be called explicitly in your plugin main class. It is started implicitly when you use it for the first time and
-disposed automatically when you reload your plugin. 
+MCCoroutine does not need to be called explicitly in your plugin main class. It is started implicitly when you use it
+for the first time and
+disposed automatically when you reload your plugin.
 
 === "Bukkit"
 
@@ -42,7 +43,6 @@ disposed automatically when you reload your plugin.
         It allows for a clean startup as the plugin is not considered "enabled" until the context is given back.
         Other plugins which are already enabled, may or may not already perform work in the background.
         Plugins, which may get enabled in the future, wait until this plugin is enabled.
-
 
 === "BungeeCord"
 
@@ -129,16 +129,34 @@ disposed automatically when you reload your plugin.
     }
     ````
 
+=== "Minestom"
+
+    MCCoroutine can be used on server or on extension level. The example below shows using MCCoroutine on server level.
+    If you are developing an extension, you can use the instance of your ``Extension`` instead of the ``MinecraftServer``
+
+    ```kotlin
+    import com.github.shynixn.mccoroutine.minestom.launch
+    import net.minestom.server.MinecraftServer
+    
+    fun main(args: Array<String>) {
+        val minecraftServer = MinecraftServer.init() 
+        minecraftServer.launch {
+            // Suspendable operations   
+        }
+        minecraftServer.start("0.0.0.0", 25565)
+    }
+    ```
+
 ## Calling a Database from Plugin Main class
 
 Create a class containing properties of data, which we want to store into a database.
 
 ````kotlin
-class PlayerData(var uuid: UUID, var name: String, var lastJoinDate: Date, var lastQuitDate : Date) {
+class PlayerData(var uuid: UUID, var name: String, var lastJoinDate: Date, var lastQuitDate: Date) {
 }
 ````
 
-Create a class ``Database``, which is responsible to store/retrieve this data into/from a database. 
+Create a class ``Database``, which is responsible to store/retrieve this data into/from a database.
 Here, it is important that we perform all IO calls on async threads and returns on the minecraft main thread.
 
 === "Bukkit"
@@ -321,6 +339,49 @@ Here, it is important that we perform all IO calls on async threads and returns 
     }
     ````
 
+=== "Minestom"
+
+    ```kotlin
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import net.minestom.server.entity.Player
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
+            withContext(Dispatchers.IO){
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
+        }
+    
+        suspend fun getDataFromPlayer(player : Player) : PlayerData {
+            println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uuid, player.username, Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
+            return playerData;
+        }
+    
+        suspend fun saveData(player : Player, playerData : PlayerData) {
+            println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
+    
+            withContext(Dispatchers.IO){
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on minecraft thread " + Thread.currentThread().id)
+        }
+    }
+    ```
+
 Create a new instance of the database and call it in your main class.
 
 === "Bukkit"
@@ -414,6 +475,23 @@ Create a new instance of the database and call it in your main class.
         }
     }
     ````
+
+=== "Minestom"
+
+    ```kotlin
+    import com.github.shynixn.mccoroutine.minestom.launch
+    import net.minestom.server.MinecraftServer
+    
+    fun main(args: Array<String>) {
+        val minecraftServer = MinecraftServer.init() 
+        minecraftServer.launch {
+            // Minecraft Main Thread
+            val database = Database()
+            database.createDbIfNotExist()
+        }
+        minecraftServer.start("0.0.0.0", 25565)
+    }
+    ```
 
 ## Test the Plugin
 

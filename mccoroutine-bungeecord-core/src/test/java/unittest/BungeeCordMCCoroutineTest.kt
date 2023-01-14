@@ -2,10 +2,10 @@ package unittest
 
 import com.github.shynixn.mccoroutine.bungeecord.impl.MCCoroutineImpl
 import net.md_5.bungee.api.plugin.Plugin
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import java.util.concurrent.Executors
-import kotlin.test.assertEquals
 
 class BungeeCordMCCoroutineTest {
     /**
@@ -26,7 +26,7 @@ class BungeeCordMCCoroutineTest {
         val session2 = classUnderTest.getCoroutineSession(plugin)
 
         // Assert
-        assertEquals(session1, session2)
+        Assertions.assertEquals(session1, session2)
     }
 
     private fun createWithDependencies(): MCCoroutineImpl {

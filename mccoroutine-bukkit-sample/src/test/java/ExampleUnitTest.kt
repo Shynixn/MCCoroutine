@@ -11,9 +11,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
-import kotlin.test.assertEquals
 
 class ExampleUnitTest {
 
@@ -76,7 +76,7 @@ class ExampleUnitTest {
             val data2 = classUnderTest.getUserDataFromPlayerAsync(player)
 
             // Should be the same instance because of cache hit. Hashcode should be equal.
-            assertEquals(data1, data2)
+            Assertions.assertEquals(data1, data2)
         }
     }
 }

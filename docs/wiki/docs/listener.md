@@ -134,6 +134,32 @@ suspendable functions). You can mix suspendable and non suspendable functions in
     }
     ````
 
+=== "Minestom"
+
+    ````kotlin
+    import net.minestom.server.event.player.PlayerDisconnectEvent
+    import net.minestom.server.event.player.PlayerLoginEvent
+    import java.util.*
+    
+    class PlayerDataListener(private val database: Database) {
+        suspend fun onPlayerJoinEvent(event: PlayerLoginEvent) {
+            val player = event.player
+            val playerData = database.getDataFromPlayer(player)
+            playerData.name = player.username
+            playerData.lastJoinDate = Date()
+            database.saveData(player, playerData)
+        }
+    
+        suspend fun onPlayerQuitEvent(event: PlayerDisconnectEvent) {
+            val player = event.player
+            val playerData = database.getDataFromPlayer(player)
+            playerData.name = player.username
+            playerData.lastQuitDate = Date()
+            database.saveData(player, playerData)
+        }
+    }
+    ````
+
 ### Register the Listener 
 
 === "Bukkit"
@@ -263,6 +289,37 @@ suspendable functions). You can mix suspendable and non suspendable functions in
         }
     }
     ````
+
+=== "Minestom"
+
+    Instead of using ``addListener``, use the provided extension method ``addSuspendingListener`` to allow
+    suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.
+
+    ```kotlin
+    import com.github.shynixn.mccoroutine.minestom.addSuspendingListener
+    import com.github.shynixn.mccoroutine.minestom.launch
+    import com.github.shynixn.mccoroutine.minestom.sample.extension.impl.Database
+    import com.github.shynixn.mccoroutine.minestom.sample.extension.impl.PlayerDataListener
+    import net.minestom.server.MinecraftServer
+    import net.minestom.server.event.player.PlayerLoginEvent
+    
+    fun main(args: Array<String>) {
+        val minecraftServer = MinecraftServer.init() 
+        minecraftServer.launch {
+            val database = Database()
+            // Minecraft Main Thread
+            database.createDbIfNotExist()
+    
+            val listener = PlayerDataListener(database)
+            MinecraftServer.getGlobalEventHandler()
+                .addSuspendingListener(minecraftServer, PlayerLoginEvent::class.java) { e ->
+                    listener.onPlayerJoinEvent(e)
+                }
+        }
+    
+        minecraftServer.start("0.0.0.0", 25565)
+    }
+    ```
 
 ### Test the Listener
 
