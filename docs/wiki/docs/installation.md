@@ -40,6 +40,15 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
     }
     ```
 
+=== "Minestom"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-api:2.9.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-core:2.9.0")
+    }
+    ```
+
 ## Add Kotlin Coroutines Libraries
 
 MCCoroutine builds against Kotlin 1.3.x, however it does not distribute the Kotlin Runtime or Kotlin Coroutines Runtime.
@@ -74,6 +83,6 @@ dependencies {
 Try to call ``launch{}`` in your ``onEnable()`` function in your ``Plugin`` class.
 
 !!! note "Further help"
-    Please take a look at the sample plugins ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample`` which
+    Please take a look at the sample plugins (e.g. ``mccoroutine-bukkit-sample`` or ``mccoroutine-sponge-sample``) which
     can be found on [Github](https://github.com/Shynixn/MCCoroutine).
     A real production plugin using MCCoroutine can be found [here](https://github.com/Shynixn/BlockBall).

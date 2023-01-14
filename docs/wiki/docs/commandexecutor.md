@@ -1,6 +1,7 @@
 # Suspending Commandexecutors
 
-This page explains how you can use Kotlin Coroutines using the suspend key word for command executors in minecraft plugins.
+This page explains how you can use Kotlin Coroutines using the suspend key word for command executors in minecraft
+plugins.
 
 ## Create the CommandExecutor
 
@@ -125,6 +126,34 @@ This page explains how you can use Kotlin Coroutines using the suspend key word 
     ````
 
     A ``BrigadierCommand`` can be executed asynchronously using the ``executesSuspend`` extension function. More details below.
+
+=== "Minestom"
+
+    Create a traditional command and user ``server.launch`` or ``extension.launch`` in the addSyntax handler.
+    
+    ````kotlin
+    import com.github.shynixn.mccoroutine.minestom.launch
+    import net.minestom.server.MinecraftServer
+    import net.minestom.server.command.builder.Command
+    import net.minestom.server.command.builder.arguments.ArgumentType
+    import net.minestom.server.entity.Player
+    
+    class PlayerDataCommandExecutor(private val server: MinecraftServer, private val database: Database) : Command("mycommand") {
+        init {
+            val nameArgument = ArgumentType.String("name")
+            addSyntax({ sender, context ->
+                server.launch {
+                    if (sender is Player) {
+                        val name : String = context.get(nameArgument)
+                        val playerData = database.getDataFromPlayer(sender)
+                        playerData.name = name
+                        database.saveData(sender, playerData)
+                    }
+                }
+            })
+        }
+    }
+    ````
 
 ## Register the CommandExecutor
 
@@ -284,6 +313,11 @@ This page explains how you can use Kotlin Coroutines using the suspend key word 
     }
     ````
 
+=== "Minestom"
+
+    Register the command in the same way as a traditional command.
+
 ## Test the CommandExecutor
 
-Join your server and use the playerData command to observe ``getDataFromPlayer`` and ``saveData`` messages getting printed to your server log.
+Join your server and use the playerData command to observe ``getDataFromPlayer`` and ``saveData`` messages getting
+printed to your server log.

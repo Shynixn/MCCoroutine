@@ -22,6 +22,7 @@ the existing APIs with suspendable commands, events and schedules.
 * CraftBukkit
 * SpongeVanilla
 * SpongeForge
+* Minestom
 
 **Supported Proxies:**
 
