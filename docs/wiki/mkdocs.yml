@@ -23,6 +23,8 @@ theme:
     - navigation.instant
     - navigation.tabs
     - content.tabs.link
+    - content.code.copy
+    - navigation.footer
 extra:
   generator: false
 markdown_extensions:
