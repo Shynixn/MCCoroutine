@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "package": "com.mod_author.mod_id.mixins",
+  "compatibilityLevel": "JAVA_${java}",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": []
+}

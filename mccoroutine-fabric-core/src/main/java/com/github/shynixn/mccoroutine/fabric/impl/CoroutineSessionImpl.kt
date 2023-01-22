@@ -15,16 +15,7 @@ internal class CoroutineSessionImpl(
     /**
      * Gets minecraft coroutine scope.
      */
-    override val scope: CoroutineScope
-
-    /**
-     * Gets the minecraft dispatcher.
-     */
-    override val dispatcherMinecraft: CoroutineContext by lazy {
-        MinecraftCoroutineDispatcher(mcCoroutineConfiguration.minecraftExecutor)
-    }
-
-    init {
+    override val scope: CoroutineScope by lazy {
         // Root Exception Handler. All Exception which are not consumed by the caller end up here.
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
             mcCoroutineConfiguration.minecraftExecutor.execute {
@@ -42,7 +33,14 @@ internal class CoroutineSessionImpl(
         val rootCoroutineScope = CoroutineScope(exceptionHandler)
 
         // Minecraft Scope is child of plugin scope and supervisor job (e.g. children of a supervisor job can fail independently).
-        scope = rootCoroutineScope + SupervisorJob() + dispatcherMinecraft
+        rootCoroutineScope + SupervisorJob() + dispatcherMinecraft
+    }
+
+    /**
+     * Gets the minecraft dispatcher.
+     */
+    override val dispatcherMinecraft: CoroutineContext by lazy {
+        MinecraftCoroutineDispatcher(mcCoroutineConfiguration.minecraftExecutor)
     }
 
     /**
