@@ -20,7 +20,7 @@ internal class MCCoroutineConfigurationImpl(private val extension: Any, private 
      * Can be retrieved from the MinecraftServer instance.
      */
     override var minecraftExecutor: Executor = Executor {
-        throw RuntimeException("You need to set the minecraft scheduler to MCCoroutine. mcCoroutineConfiguration.minecraftExecutor = Executor {}.")
+        throw RuntimeException("You need to set the minecraft scheduler to MCCoroutine. e.g. ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->  mcCoroutineConfiguration.minecraftExecutor = Executor { r -> server.submitAndJoin(r)}})")
     }
 
     /**

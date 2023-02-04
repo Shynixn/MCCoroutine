@@ -19,8 +19,16 @@ internal class CoroutineSessionImpl(
         // Root Exception Handler. All Exception which are not consumed by the caller end up here.
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
             mcCoroutineConfiguration.minecraftExecutor.execute {
-                val isCancelled = MCCoroutineExceptionEvent.EVENT.invoker().onMCCoroutineException(e, extension)
-                if (!isCancelled) {
+                try {
+                    val isCancelled = MCCoroutineExceptionEvent.EVENT.invoker().onMCCoroutineException(e, extension)
+                    if (!isCancelled) {
+                        mcCoroutineConfiguration.logger.log(
+                            Level.SEVERE, "This is not an error of MCCoroutine! See sub exception for details.",
+                            e
+                        )
+                    }
+                } catch (e: NoClassDefFoundError) {
+                    // When the minecraft internal classes cannot be loaded. (Only on test environments)
                     mcCoroutineConfiguration.logger.log(
                         Level.SEVERE, "This is not an error of MCCoroutine! See sub exception for details.",
                         e

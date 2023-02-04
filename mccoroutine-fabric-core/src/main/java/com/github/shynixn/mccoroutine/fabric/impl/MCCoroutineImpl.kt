@@ -2,21 +2,20 @@ package com.github.shynixn.mccoroutine.fabric.impl
 
 import com.github.shynixn.mccoroutine.fabric.CoroutineSession
 import com.github.shynixn.mccoroutine.fabric.MCCoroutine
-import net.fabricmc.api.DedicatedServerModInitializer
 
 class MCCoroutineImpl : MCCoroutine {
     private val items = HashMap<Any, CoroutineSessionImpl>()
 
     /**
-     * Get coroutine session for the given server mod.
+     * Get coroutine session for the given mod.
      * When using an extension, coroutine scope is bound to the lifetime of the extension.
      */
-    override fun getCoroutineSession(extension: DedicatedServerModInitializer): CoroutineSession {
-        if (!items.containsKey(extension)) {
-            startCoroutineSession(extension)
+    override fun getCoroutineSession(handler: Any): CoroutineSession {
+        if (!items.containsKey(handler)) {
+            startCoroutineSession(handler)
         }
 
-        return items[extension]!!
+        return items[handler]!!
     }
 
     /**

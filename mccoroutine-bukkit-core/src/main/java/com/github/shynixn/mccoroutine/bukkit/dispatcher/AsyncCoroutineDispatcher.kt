@@ -20,7 +20,7 @@ internal open class AsyncCoroutineDispatcher(
      */
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
         wakeUpBlockService.ensureWakeup()
-        return plugin.server.isPrimaryThread && plugin.isEnabled
+        return true
     }
 
     /**
