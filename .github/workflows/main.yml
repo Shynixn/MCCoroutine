@@ -203,6 +203,28 @@ jobs:
           asset_name: MCCoroutine-Minestom-Core.jar
           asset_content_type: application/jar
 
+      - name: Upload Fabric Api to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-fabric-api/build/libs/mccoroutine-fabric-api-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Fabric-Api.jar
+          asset_content_type: application/jar
+
+      - name: Upload Fabric Core to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-fabric-core/build/libs/mccoroutine-fabric-core-${{ env.RELEASE_VERSION }}.jar
+          asset_name: MCCoroutine-Fabric-Core.jar
+          asset_content_type: application/jar
+
   Documentation:
     runs-on: ubuntu-latest
     if: "contains(github.ref, 'master')"
@@ -228,6 +250,7 @@ jobs:
           ./gradlew generateBungeeCordJavaDocPages > /dev/null
           ./gradlew generateVelocityJavaDocPages > /dev/null
           ./gradlew generateMinestomJavaDocPages > /dev/null
+          ./gradlew generateFabricJavaDocPages > /dev/null
           sudo apt-get install -y mkdocs
           pip install mkdocs-material
           pip install Pygments
