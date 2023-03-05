@@ -160,6 +160,32 @@ suspendable functions). You can mix suspendable and non suspendable functions in
     }
     ````
 
+=== "Fabric"
+
+    ````kotlin
+    import net.minecraft.entity.Entity
+    import net.minecraft.entity.player.PlayerEntity
+    import net.minecraft.util.Hand
+    import net.minecraft.util.hit.EntityHitResult
+    import net.minecraft.world.World
+    import java.util.*
+    
+    class PlayerDataListener(private val database: Database) {
+          suspend fun onPlayerAttackEvent(
+            player: PlayerEntity,
+            world: World,
+            hand: Hand,
+            entity: Entity,
+            hitResult: EntityHitResult?
+        ) {
+           val playerData = database.getDataFromPlayer(player)
+           playerData.name = player.name.toString()
+           playerData.lastJoinDate = Date()
+           database.saveData(player, playerData)
+        }
+    }
+    ````
+
 ### Register the Listener 
 
 === "Bukkit"
@@ -320,6 +346,46 @@ suspendable functions). You can mix suspendable and non suspendable functions in
         minecraftServer.start("0.0.0.0", 25565)
     }
     ```
+
+=== "Fabric"
+
+    ````kotlin
+    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
+        override fun onInitializeServer() {
+            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
+                // Connect Native Minecraft Scheduler and MCCoroutine.
+                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
+                    server.submitAndJoin(r)
+                }
+                launch {
+                    onServerStarting(server)
+                }
+            })
+    
+            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+                mcCoroutineConfiguration.disposePluginSession()
+            }
+        }
+
+        /**
+         * MCCoroutine is ready after the server has started.
+         */
+        private suspend fun onServerStarting(server : MinecraftServer) {
+            // Minecraft Main Thread
+            val database = Database()
+            database.createDbIfNotExist()
+
+            val listener = PlayerDataListener(database)
+            val mod = this
+            AttackEntityCallback.EVENT.register(AttackEntityCallback { player, world, hand, entity, hitResult ->
+                mod.launch {
+                    listener.onPlayerAttackEvent(player, world, hand, entity, hitResult)
+                }
+                ActionResult.PASS
+            })
+        }
+    }
+    ````
 
 ### Test the Listener
 

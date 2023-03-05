@@ -16,8 +16,9 @@ the existing APIs with suspendable commands, events and schedules.
 * Spigot
 * Paper
 * CraftBukkit
-* SpongeVanilla
-* SpongeForge
+* SpongeVanilla v7.x.x
+* SpongeForge v7.x.x
+* Fabric
 * Minestom
 
 **Supported Proxies:**
@@ -66,7 +67,8 @@ private suspend fun bob() {
 ## Resources
 
 * [MCCoroutine JavaDocs for the Bukkit-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.bukkit/index.html)
-* [MCCoroutine JavaDocs for the Sponge-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.sponge/index.html)
+* [MCCoroutine JavaDocs for the Sponge-v7.x.x-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.sponge/index.html)
+* [MCCoroutine JavaDocs for the Fabric-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.fabric/index.html)
 * [MCCoroutine JavaDocs for the Minestom-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.minestom/index.html)
 * [MCCoroutine JavaDocs for the BungeeCord-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.bungeecord/index.html)
 * [MCCoroutine JavaDocs for the Velocity-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.velocity/index.html)
@@ -80,11 +82,11 @@ private suspend fun bob() {
 * Coroutine LifeCycle scope for plugins (supports plugin reloading)
 * No NMS
 * Support for Minecraft 1.7 - Latest
-* Support for Java 8
+* Support for Java 8+
 
 ## Contributing
 
-* Fork the MCCoroutine project on github and clone it to your local environment
+* Fork the MCCoroutine project on GitHub and clone it to your local environment
 * Install Java 8+
 * Execute gradle sync for dependencies
 

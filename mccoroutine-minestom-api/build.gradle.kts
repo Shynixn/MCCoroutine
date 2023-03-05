@@ -12,6 +12,6 @@ java {
 
 dependencies {
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    compileOnly("com.github.Minestom:Minestom:8eb089bf3e")
-    testImplementation("com.github.Minestom:Minestom:8eb089bf3e")
+    compileOnly("com.github.Minestom:Minestom:1.19.3-SNAPSHOT")
+    testImplementation("com.github.Minestom:Minestom:1.19.3-SNAPSHOT")
 }

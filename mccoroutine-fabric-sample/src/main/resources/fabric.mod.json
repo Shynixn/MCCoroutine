@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "mccoroutine_sample_mod",
+  "version": "1.0",
+  "name": "MCCoroutine Sample Mod",
+  "description": "MCCoroutine Sample Mod",
+  "authors": [
+    "Shynixn"
+  ],
+  "license": "The Unlicense",
+  "icon": "assets/mod_name/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "server": [
+      {
+        "adapter": "kotlin",
+        "value": "com.github.shynixn.mccoroutine.fabric.server.MCCoroutineSampleServerMod"
+      }
+    ]
+  },
+  "mixins": [
+    "mod_id.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabricloader}",
+    "fabric-api": ">=${fabric_api}",
+    "fabric-language-kotlin": ">=${fabric_language_kotlin}",
+    "minecraft": ">=${minecraft}",
+    "java": ">=${java}"
+  }
+}

@@ -49,6 +49,15 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
     }
     ```
 
+=== "Fabric"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.10.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.10.0")
+    }
+    ```
+
 ## Add Kotlin Coroutines Libraries
 
 MCCoroutine builds against Kotlin 1.3.x, however it does not distribute the Kotlin Runtime or Kotlin Coroutines Runtime.

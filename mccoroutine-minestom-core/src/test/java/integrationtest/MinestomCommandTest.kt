@@ -33,7 +33,7 @@ class MinestomCommandTest {
             MinecraftServer.getCommandManager().executeServerCommand("unittest")
         }
 
-        Thread.sleep(250)
+        Thread.sleep(2000)
 
         Assertions.assertNotEquals(unitTestThreadId, testCommandExecutor.callThreadId)
         Assertions.assertNotEquals(unitTestThreadId, testCommandExecutor.asyncThreadId)

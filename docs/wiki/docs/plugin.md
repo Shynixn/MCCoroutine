@@ -147,6 +147,43 @@ disposed automatically when you reload your plugin.
     }
     ```
 
+=== "Fabric"
+
+    MCCoroutine for Fabric does not have an dependency on Minecraft itself, therefore it is version independent from Minecraft. It only depends
+    on the Fabric Api. This however means, we need to manually setup and dispose MCCoroutine. Register the ``SERVER_STARTING`` event and
+    connect the native Minecraft Scheduler with MCCoroutine using an ``Executor``. Dispose MCCoroutine in ``SERVER_STOPPING``.
+
+    ````kotlin
+    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
+        override fun onInitializeServer() {
+            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
+                // Connect Native Minecraft Scheduler and MCCoroutine.
+                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
+                    server.submitAndJoin(r)
+                }
+                launch {
+                    onServerStarting(server)
+                }
+            })
+    
+            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+                mcCoroutineConfiguration.disposePluginSession()
+            }
+        }
+        /**
+         * MCCoroutine is ready after the server has started.
+         */
+        private suspend fun onServerStarting(server : MinecraftServer) {
+            // Minecraft Main Thread
+            // Your startup code with suspend support
+
+            this.launch {
+                // Launch new corroutines
+            }
+        }
+    }
+    ````
+
 ## Calling a Database from Plugin Main class
 
 Create a class containing properties of data, which we want to store into a database.
@@ -382,6 +419,49 @@ Here, it is important that we perform all IO calls on async threads and returns 
     }
     ```
 
+=== "Fabric"
+
+    ```kotlin
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import net.minecraft.entity.player.PlayerEntity
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
+            withContext(Dispatchers.IO){
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
+        }
+    
+        suspend fun getDataFromPlayer(player: PlayerEntity) : PlayerData {
+            println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uuid, player.name.toString(), Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
+            return playerData;
+        }
+    
+        suspend fun saveData(player: PlayerEntity, playerData : PlayerData) {
+            println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
+    
+            withContext(Dispatchers.IO){
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on minecraft thread " + Thread.currentThread().id)
+        }
+    }
+    ```
+
 Create a new instance of the database and call it in your main class.
 
 === "Bukkit"
@@ -492,6 +572,36 @@ Create a new instance of the database and call it in your main class.
         minecraftServer.start("0.0.0.0", 25565)
     }
     ```
+
+=== "Fabric"
+
+    ````kotlin
+    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
+        override fun onInitializeServer() {
+            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
+                // Connect Native Minecraft Scheduler and MCCoroutine.
+                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
+                    server.submitAndJoin(r)
+                }
+                launch {
+                    onServerStarting(server)
+                }
+            })
+    
+            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+                mcCoroutineConfiguration.disposePluginSession()
+            }
+        }
+        /**
+         * MCCoroutine is ready after the server has started.
+         */
+        private suspend fun onServerStarting(server : MinecraftServer) {
+            // Minecraft Main Thread
+            val database = Database()
+            database.createDbIfNotExist()
+        }
+    }
+    ````
 
 ## Test the Plugin
 
