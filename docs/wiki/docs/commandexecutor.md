@@ -155,6 +155,28 @@ plugins.
     }
     ````
 
+=== "Fabric"
+
+    Create a traditional command executor but extend from ``SuspendingCommand`` instead of ``SuspendingCommand``.
+    
+    ````kotlin
+    import com.github.shynixn.mccoroutine.fabric.SuspendingCommand
+    import com.mojang.brigadier.context.CommandContext
+    import net.minecraft.entity.player.PlayerEntity
+    import net.minecraft.server.command.ServerCommandSource
+
+    class PlayerDataCommandExecutor : SuspendingCommand<ServerCommandSource> {
+        override suspend fun run(context: CommandContext<ServerCommandSource>): Int {
+            if (context.source.entity is PlayerEntity) {
+                val sender = context.source.entity as PlayerEntity
+                println("[PlayerDataCommandExecutor] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+            }
+    
+            return 1
+        }
+    }
+    ````
+
 ## Register the CommandExecutor
 
 === "Bukkit"
@@ -316,6 +338,37 @@ plugins.
 === "Minestom"
 
     Register the command in the same way as a traditional command.
+
+=== "Fabric"
+
+    ````kotlin
+    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
+        override fun onInitializeServer() {
+            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
+                // Connect Native Minecraft Scheduler and MCCoroutine.
+                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
+                    server.submitAndJoin(r)
+                }
+                launch {
+                    onServerStarting(server)
+                }
+            })
+    
+            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+                mcCoroutineConfiguration.disposePluginSession()
+            }
+        }
+
+        /**
+         * MCCoroutine is ready after the server has started.
+         */
+        private suspend fun onServerStarting(server : MinecraftServer) {
+            // Register command
+            val command = PlayerDataCommandExecutor()
+            server.commandManager.dispatcher.register(CommandManager.literal("mccor").executesSuspend(this, command))
+        }
+    }
+    ````
 
 ## Test the CommandExecutor
 

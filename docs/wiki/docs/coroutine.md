@@ -98,6 +98,21 @@ because it makes sense for testing. However, keep in mind to **avoid** using ``r
     }
     ```   
 
+=== "Fabric"
+
+    Fabric has got 3 lifecycle scopes, the ``ModInitializer`` (both client and server) ``ClientModInitializer`` (client) and ``DedicatedServerModInitializer`` scope.
+    This guide gives only ``DedicatedServerModInitializer`` examples but it works in the same way for the other scopes.
+
+    ```kotlin
+    import com.github.shynixn.mccoroutine.fabric.launch
+    import net.fabricmc.api.DedicatedServerModInitializer
+
+    fun foo(){
+        mod.launch {
+            // This will always be on the minecraft main thread.
+        }
+    }
+    ```
 
 ### Switching coroutine context
 
