@@ -43,7 +43,7 @@ tasks.register("printVersion") {
 
 subprojects {
     group 'com.github.shynixn.mccoroutine'
-    version '2.10.0'
+    version '2.11.0'
 
     sourceCompatibility = 1.8
 
@@ -199,6 +199,15 @@ task generateMinestomJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
         named("main") {
             outputDirectory = file("docs/apidocs")
             sourceRoots.from(file("mccoroutine-minestom-api/src/main/java"))
+        }
+    }
+}
+
+task generateFabricJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    dokkaSourceSets {
+        named("main") {
+            outputDirectory = file("docs/apidocs")
+            sourceRoots.from(file("mccoroutine-fabric-api/src/main/java"))
         }
     }
 }
