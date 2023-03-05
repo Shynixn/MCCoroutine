@@ -1,1 +1,1 @@
-sourceset_dependencies='{":generateMinestomJavaDocPages/main":[]}'
+sourceset_dependencies='{":generateFabricJavaDocPages/main":[]}'
