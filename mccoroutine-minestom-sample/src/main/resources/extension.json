@@ -1,5 +1,5 @@
 {
   "entrypoint": "com.github.shynixn.mccoroutine.minestom.sample.extension.MCCoroutineSampleExtension",
   "name": "MCCoroutineSampleExtension",
-  "version": "2.11.0"
+  "version": "2.12.0"
 }
