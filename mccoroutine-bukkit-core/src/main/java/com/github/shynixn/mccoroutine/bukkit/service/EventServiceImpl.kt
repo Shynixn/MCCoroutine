@@ -188,6 +188,7 @@ internal class EventServiceImpl(private val plugin: Plugin) {
         private val method: Method,
         private val plugin: Plugin
     ) : EventExecutor {
+        var isSuspendMethod: Boolean? = null
         fun executeSuspend(listener: Listener, event: Event): Job {
             return executeEvent(listener, event)
         }
@@ -210,11 +211,19 @@ internal class EventServiceImpl(private val plugin: Plugin) {
                     // We want to start it on the same thread as the calling thread -> unDispatched.
                     // However, after a possible suspension we either end up on the asyncDispatcher or minecraft Dispatcher.
                     return plugin.launch(dispatcher, CoroutineStart.UNDISPATCHED) {
-                        try {
-                            // Try as suspension function.
+                        if (isSuspendMethod == null) {
+                            try {
+                                // Try as suspension function.
+                                method.invokeSuspend(listener, event)
+                                isSuspendMethod = true
+                            } catch (e: IllegalArgumentException) {
+                                // Try as ordinary function.
+                                method.invoke(listener, event)
+                                isSuspendMethod = false
+                            }
+                        } else if (isSuspendMethod!!) {
                             method.invokeSuspend(listener, event)
-                        } catch (e: IllegalArgumentException) {
-                            // Try as ordinary function.
+                        } else {
                             method.invoke(listener, event)
                         }
                     }
