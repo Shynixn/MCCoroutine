@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.velocity.CoroutineSession
 import com.github.shynixn.mccoroutine.velocity.MCCoroutine
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.velocitypowered.api.plugin.PluginContainer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.apache.logging.log4j.core.Logger
@@ -49,7 +50,8 @@ class MCCoroutineImpl : MCCoroutine {
         // ReEnable logging.
         val session = getCoroutineSession(pluginInstance)
         val pluginManager = suspendingPluginContainer.server.pluginManager
-        session.scope.launch(session.dispatcherVelocity) {
+        // Scheduler might not be loaded yet.
+        session.scope.launch(Dispatchers.IO) {
             // Once the plugin is enabled, the filter is removed again to avoid any conflicts.
             while (!pluginManager.isLoaded(pluginContainer.description.id)) {
                 delay(5000)
