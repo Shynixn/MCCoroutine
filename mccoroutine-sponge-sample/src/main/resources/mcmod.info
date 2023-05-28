@@ -1,7 +1,7 @@
 [{
     "modid": "mccoroutinesample",
     "name": "MCCoroutineSample",
-    "version": "2.12.0",
+    "version": "2.12.1",
     "description": "MCCoroutineSample is sample plugin to use MCCoroutine in Sponge.",
     "authorList": [
         "Shynixn"
