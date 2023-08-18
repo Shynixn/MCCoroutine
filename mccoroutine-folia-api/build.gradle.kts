@@ -1,8 +1,9 @@
 repositories {
     maven {
-        url = uri("https://jitpack.io")
+        url = uri("https://papermc.io/repo/repository/maven-public/")
     }
 }
+
 
 java {
     toolchain {
@@ -12,6 +13,5 @@ java {
 
 dependencies {
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    compileOnly("com.github.Minestom:Minestom:c5047b8037")
-    testImplementation("com.github.Minestom:Minestom:c5047b8037")
+    compileOnly("dev.folia:folia-api:1.20.1-R0.1-20230615.235213-1")
 }

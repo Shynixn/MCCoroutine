@@ -12,6 +12,10 @@ include("mccoroutine-bungeecord-sample")
 include("mccoroutine-fabric-api")
 include("mccoroutine-fabric-core")
 
+include("mccoroutine-folia-api")
+include("mccoroutine-folia-core")
+include("mccoroutine-folia-sample")
+
 include("mccoroutine-minestom-api")
 include("mccoroutine-minestom-core")
 include("mccoroutine-minestom-sample")
