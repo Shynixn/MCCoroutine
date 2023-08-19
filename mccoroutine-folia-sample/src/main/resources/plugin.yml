@@ -1,0 +1,11 @@
+name: MCCoroutine-Sample
+version: 2.12.1
+author: Shynixn
+main: com.github.shynixn.mccoroutine.folia.sample.MCCoroutineSamplePlugin
+folia-supported: true
+commands:
+  mccor:
+    description: Command for operations.
+    useage: /<command>
+    permission: mccoroutine.sample
+    permission-message: You don't have permission.

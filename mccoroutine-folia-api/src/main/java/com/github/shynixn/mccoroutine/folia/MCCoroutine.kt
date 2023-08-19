@@ -2,6 +2,7 @@ package com.github.shynixn.mccoroutine.folia
 
 import kotlinx.coroutines.*
 import org.bukkit.Location
+import org.bukkit.World
 import org.bukkit.command.PluginCommand
 import org.bukkit.entity.Entity
 import org.bukkit.event.Event
@@ -36,6 +37,7 @@ val Plugin.mcCoroutineConfiguration: MCCoroutineConfiguration
 
 /**
  * Gets the dispatcher to perform edits on data that the global region owns, such as game rules, day time, weather, or to execute commands using the console command sender.
+ * If Folia is not loaded, this falls back to the bukkit minecraftDispatcher.
  */
 val Plugin.globalRegionDispatcher: CoroutineContext
     get() {
@@ -52,17 +54,28 @@ val Plugin.asyncDispatcher: CoroutineContext
 
 /**
  * Gets the dispatcher to schedule tasks on the region that owns the entity.
+ * If Folia is not loaded, this falls back to the bukkit minecraftDispatcher.
  */
 fun Plugin.entityDispatcher(entity: Entity): CoroutineContext {
     return mcCoroutine.getCoroutineSession(this).getEntityDispatcher(entity)
 }
 
 /**
- * Gets the dispatcher to schedule tasks on the region that owns the entity.
+ * Gets the dispatcher to schedule tasks on a particular region.
+ * If Folia is not loaded, this falls back to the bukkit minecraftDispatcher.
  */
 fun Plugin.regionDispatcher(location: Location): CoroutineContext {
     return mcCoroutine.getCoroutineSession(this)
-        .getRegionDispatcher(location.world, location.blockX shr 4, location.blockZ shr 4)
+        .getRegionDispatcher(location.world!!, location.blockX shr 4, location.blockZ shr 4)
+}
+
+/**
+ * Gets the dispatcher to schedule tasks on a particular region.
+ * If Folia is not loaded, this falls back to the bukkit minecraftDispatcher.
+ */
+fun Plugin.regionDispatcher(world: World, chunkX: Int, chunkZ: Int): CoroutineContext {
+    return mcCoroutine.getCoroutineSession(this)
+        .getRegionDispatcher(world, chunkX, chunkZ)
 }
 
 /**
@@ -92,14 +105,14 @@ val Plugin.scope: CoroutineScope
  * Uncaught exceptions in this coroutine do not cancel the parent job or any other child jobs. All uncaught exceptions
  * are logged to [Plugin.getLogger] by default.
  *
- * @param context The coroutine context to start. We simply accept the current thread per default as there is no main thread in Folia. Subsequent withContext
- * operations should select the correct dispatcher depending on the operation. e.g. regionDispatcher, entityDispatcher or globalRegionDispatcher.
+ * @param context The coroutine context to start. As the context of the current operation cannot be assumed automatically, the caller needs to specify a context.
+ * e.g. regionDispatcher, entityDispatcher or globalRegionDispatcher.
  * @param start coroutine start option. The default value is [CoroutineStart.DEFAULT].
  * @param block the coroutine code which will be invoked in the context of the provided scope.
  **/
 fun Plugin.launch(
-    context: CoroutineContext = Dispatchers.Unconfined,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
+    context: CoroutineContext,
+    start: CoroutineStart,
     block: suspend CoroutineScope.() -> Unit
 ): Job {
     if (!scope.isActive) {
@@ -124,9 +137,15 @@ fun Plugin.launch(
  *
  * @param listener Bukkit Listener.
  * @param plugin Bukkit Plugin.
+ * @param eventDispatcher Folia uses different schedulers for different event types. MCCoroutine cannot detect them per default and requires a mapping for
+ * each used event type in the given [listener]. This method throws an exception if you forget to map an event type. See wiki for details.
  */
-fun PluginManager.registerSuspendingEvents(listener: Listener, plugin: Plugin) {
-    return mcCoroutine.getCoroutineSession(plugin).registerSuspendListener(listener)
+fun PluginManager.registerSuspendingEvents(
+    listener: Listener,
+    plugin: Plugin,
+    eventDispatcher: Map<Class<out Event>, (event: Event) -> CoroutineContext>
+) {
+    return mcCoroutine.getCoroutineSession(plugin).registerSuspendListener(listener, eventDispatcher)
 }
 
 /**
@@ -171,7 +190,7 @@ fun PluginCommand.setSuspendingExecutor(
     suspendingCommandExecutor: SuspendingCommandExecutor
 ) {
     return mcCoroutine.getCoroutineSession(plugin).registerSuspendCommandExecutor(
-        Dispatchers.Unconfined,
+        plugin.globalRegionDispatcher,
         this,
         suspendingCommandExecutor
     )
@@ -199,7 +218,7 @@ fun PluginCommand.setSuspendingExecutor(
  */
 fun PluginCommand.setSuspendingTabCompleter(suspendingTabCompleter: SuspendingTabCompleter) {
     return mcCoroutine.getCoroutineSession(plugin).registerSuspendTabCompleter(
-        Dispatchers.Unconfined,
+        plugin.globalRegionDispatcher,
         this,
         suspendingTabCompleter
     )

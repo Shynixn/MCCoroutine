@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin
 import kotlin.coroutines.CoroutineContext
 
 /**
- * CraftBukkit Async ThreadPool Dispatcher. Dispatches only if the call is at the primary thread.
+ * CraftBukkit Async ThreadPool Dispatcher. Dispatches always.
  */
 internal open class AsyncCoroutineDispatcher(
     private val plugin: Plugin,

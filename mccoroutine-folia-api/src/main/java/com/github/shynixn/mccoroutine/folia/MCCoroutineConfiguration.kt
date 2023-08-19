@@ -14,6 +14,12 @@ interface MCCoroutineConfiguration {
     var shutdownStrategy: ShutdownStrategy
 
     /**
+     * Gets if the Folia schedulers where successfully loaded into MCCoroutine.
+     * Returns false if MCCoroutine falls back to the BukkitScheduler.
+     */
+    val isFoliaLoaded: Boolean
+
+    /**
      * Manually disposes the MCCoroutine session for the current plugin.
      */
     fun disposePluginSession()

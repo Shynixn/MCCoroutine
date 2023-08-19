@@ -1,5 +1,6 @@
 package com.github.shynixn.mccoroutine.folia.dispatcher
 
+import com.github.shynixn.mccoroutine.folia.regionDispatcher
 import com.github.shynixn.mccoroutine.folia.service.WakeUpBlockServiceImpl
 import kotlinx.coroutines.CoroutineDispatcher
 import org.bukkit.entity.Entity
@@ -26,6 +27,14 @@ internal open class EntityDispatcher(
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        entity.scheduler.run(plugin, { block.run() }, { })
+        val task = entity.scheduler.run(plugin, {
+            block.run()
+        }, {
+            block.run()
+        })
+
+        if (task == null) { // Entity was removed. Try to detect region
+            plugin.server.globalRegionScheduler.execute(plugin, block)
+        }
     }
 }

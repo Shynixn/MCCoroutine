@@ -6,9 +6,9 @@ import org.bukkit.plugin.Plugin
 import kotlin.coroutines.CoroutineContext
 
 /**
- * CraftBukkit Async ThreadPool Dispatcher. Dispatches always.
+ * CraftBukkit Async ThreadPool Dispatcher. Dispatches in all cases.
  */
-internal open class AsyncCoroutineDispatcher(
+internal open class AsyncFoliaCoroutineDispatcher(
     private val plugin: Plugin,
     private val wakeUpBlockService: WakeUpBlockServiceImpl
 ) : CoroutineDispatcher() {
@@ -27,6 +27,6 @@ internal open class AsyncCoroutineDispatcher(
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        plugin.server.scheduler.runTaskAsynchronously(plugin, block)
+        plugin.server.asyncScheduler.runNow(plugin) { block.run() }
     }
 }

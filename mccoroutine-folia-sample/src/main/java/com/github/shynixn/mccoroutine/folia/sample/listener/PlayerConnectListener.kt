@@ -2,6 +2,7 @@ package com.github.shynixn.mccoroutine.folia.sample.listener
 
 import com.github.shynixn.mccoroutine.folia.*
 import com.github.shynixn.mccoroutine.folia.sample.impl.UserDataCache
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.bukkit.Material
@@ -44,7 +45,7 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
     @EventHandler
     fun onEntitySpawnEvent(event: EntitySpawnEvent) {
         println("[PlayerConnectListener/onEntitySpawnEvent] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
-        plugin.launch {
+        plugin.launch(plugin.entityDispatcher(event.entity), CoroutineStart.UNDISPATCHED) {
             println("[PlayerConnectListener/onEntitySpawnEvent] Entering coroutine on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
             delay(2000)
 
@@ -66,7 +67,7 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
 
             withContext(plugin.entityDispatcher(event.entity)) {
                 println("[PlayerConnectListener/onEntitySpawnEvent] Entity Dispatcher on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
-                event.entity.teleport(entityLocation)
+                event.entity.teleportAsync(entityLocation)
             }
         }
     }

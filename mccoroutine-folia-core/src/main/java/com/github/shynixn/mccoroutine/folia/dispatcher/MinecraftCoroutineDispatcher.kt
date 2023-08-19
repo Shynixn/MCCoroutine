@@ -1,14 +1,15 @@
 package com.github.shynixn.mccoroutine.folia.dispatcher
 
+import com.github.shynixn.mccoroutine.folia.CoroutineTimings
 import com.github.shynixn.mccoroutine.folia.service.WakeUpBlockServiceImpl
 import kotlinx.coroutines.CoroutineDispatcher
 import org.bukkit.plugin.Plugin
 import kotlin.coroutines.CoroutineContext
 
 /**
- * CraftBukkit Async ThreadPool Dispatcher. Dispatches always.
+ * Server Main Thread Dispatcher. Dispatches only if the call is not at the primary thread yet.
  */
-internal open class AsyncCoroutineDispatcher(
+internal open class MinecraftCoroutineDispatcher(
     private val plugin: Plugin,
     private val wakeUpBlockService: WakeUpBlockServiceImpl
 ) : CoroutineDispatcher() {
@@ -20,13 +21,23 @@ internal open class AsyncCoroutineDispatcher(
      */
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
         wakeUpBlockService.ensureWakeup()
-        return true
+        return !plugin.server.isPrimaryThread && plugin.isEnabled
     }
 
     /**
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        plugin.server.scheduler.runTaskAsynchronously(plugin, block)
+        if (!plugin.isEnabled) {
+            return
+        }
+
+        val timedRunnable = context[CoroutineTimings.Key]
+        if (timedRunnable == null) {
+            plugin.server.scheduler.runTask(plugin, block)
+        } else {
+            timedRunnable.queue.add(block)
+            plugin.server.scheduler.runTask(plugin, timedRunnable)
+        }
     }
 }

@@ -1,9 +1,8 @@
 repositories {
     maven {
-        url = uri("https://papermc.io/repo/repository/maven-public/")
+        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     }
 }
-
 
 java {
     toolchain {
@@ -12,6 +11,6 @@ java {
 }
 
 dependencies {
+    compileOnly("org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    compileOnly("dev.folia:folia-api:1.20.1-R0.1-20230615.235213-1")
 }

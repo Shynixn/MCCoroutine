@@ -39,6 +39,12 @@ interface CoroutineSession {
     val mcCoroutineConfiguration: MCCoroutineConfiguration
 
     /**
+     * Gets if the Folia schedulers where successfully loaded into MCCoroutine.
+     * Returns false if MCCoroutine falls back to the BukkitScheduler.
+     */
+    val isFoliaLoaded: Boolean
+
+    /**
      * The RegionizedTaskQueue allows tasks to be scheduled to be executed on the next tick of a region that owns a specific location, or creating such region if it does not exist.
      */
     fun getRegionDispatcher(world: World, chunkX: Int, chunkZ: Int): CoroutineContext
@@ -69,7 +75,10 @@ interface CoroutineSession {
     /**
      * Registers a suspend listener.
      */
-    fun registerSuspendListener(listener: Listener)
+    fun registerSuspendListener(
+        listener: Listener,
+        eventDispatcher: Map<Class<out Event>, (event: Event) -> CoroutineContext>
+    )
 
     /**
      * Fires a suspending [event] with the given [eventExecutionType].

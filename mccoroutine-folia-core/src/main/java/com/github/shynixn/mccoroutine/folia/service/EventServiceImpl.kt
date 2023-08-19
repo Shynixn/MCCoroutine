@@ -1,12 +1,16 @@
 package com.github.shynixn.mccoroutine.folia.service
 
+import com.github.shynixn.mccoroutine.folia.CoroutineSession
+import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.extension.invokeSuspend
+import com.github.shynixn.mccoroutine.folia.globalRegionDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.bukkit.Warning
 import org.bukkit.event.*
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.*
 import java.lang.Deprecated
 import java.lang.reflect.InvocationTargetException
@@ -17,13 +21,17 @@ import kotlin.IllegalArgumentException
 import kotlin.String
 import kotlin.Throwable
 import kotlin.check
+import kotlin.coroutines.CoroutineContext
 
-internal class EventServiceImpl(private val plugin: Plugin) {
+internal class EventServiceImpl(private val plugin: Plugin, private val coroutineSession: CoroutineSession) {
     /**
      * Registers a suspend listener.
      */
-    fun registerSuspendListener(listener: Listener) {
-        val registeredListeners = createCoroutineListener(listener, plugin)
+    fun registerSuspendListener(
+        listener: Listener,
+        eventDispatcher: Map<Class<out Event>, (event: Event) -> CoroutineContext>
+    ) {
+        val registeredListeners = createCoroutineListener(listener, plugin, eventDispatcher)
 
         val method = SimplePluginManager::class.java
             .getDeclaredMethod("getEventListeners", Class::class.java)
@@ -75,7 +83,7 @@ internal class EventServiceImpl(private val plugin: Plugin) {
                 }
             }
         } else if (eventExecutionType == com.github.shynixn.mccoroutine.folia.EventExecutionType.Consecutive) {
-            jobs.add(plugin.launch(Dispatchers.Unconfined) {
+            jobs.add(plugin.launch(Dispatchers.Unconfined, CoroutineStart.UNDISPATCHED) {
                 for (registration in listeners) {
                     if (!registration.plugin.isEnabled) {
                         continue
@@ -106,7 +114,8 @@ internal class EventServiceImpl(private val plugin: Plugin) {
      */
     private fun createCoroutineListener(
         listener: Listener,
-        plugin: Plugin
+        plugin: Plugin,
+        eventDispatcher: Map<Class<out Event>, (event: Event) -> CoroutineContext>
     ): Map<Class<*>, MutableSet<RegisteredListener>> {
         val eventMethods = HashSet<Method>()
 
@@ -166,7 +175,13 @@ internal class EventServiceImpl(private val plugin: Plugin) {
                 )
             }
 
-            val executor = SuspendingEventExecutor(eventClass, method, plugin)
+            if (!eventDispatcher.containsKey(eventClass)) {
+                throw IllegalArgumentException("A event dispatcher for class '" + eventClass.name + "' needs to be added to registerSuspendingEvents.")
+            }
+
+            val contextResolver = eventDispatcher[eventClass]!!
+
+            val executor = SuspendingEventExecutor(eventClass, method, plugin, coroutineSession, contextResolver)
             result[eventClass]!!.add(
                 SuspendingRegisteredListener(
                     listener,
@@ -184,7 +199,9 @@ internal class EventServiceImpl(private val plugin: Plugin) {
     class SuspendingEventExecutor(
         private val eventClass: Class<*>,
         private val method: Method,
-        private val plugin: Plugin
+        private val plugin: Plugin,
+        private val coroutineSession: CoroutineSession,
+        private val contextResolver: (event: Event) -> CoroutineContext
     ) : EventExecutor {
         var isSuspendMethod: Boolean? = null
         fun executeSuspend(listener: Listener, event: Event): Job {
@@ -198,9 +215,21 @@ internal class EventServiceImpl(private val plugin: Plugin) {
         private fun executeEvent(listener: Listener, event: Event): Job {
             try {
                 if (eventClass.isAssignableFrom(event.javaClass)) {
+                    val isAsync = event.isAsynchronous
+
+                    val dispatcher = if (isAsync) {
+                        plugin.asyncDispatcher
+                    } else {
+                        if (coroutineSession.isFoliaLoaded) {
+                            contextResolver.invoke(event)
+                        } else {
+                            plugin.globalRegionDispatcher // Load minecraft dispatcher
+                        }
+                    }
+
                     // We want to start it on the same thread as the calling thread -> unDispatched.
                     // However, after a possible suspension we either end up on the asyncDispatcher or minecraft Dispatcher.
-                    return plugin.launch(Dispatchers.Unconfined, CoroutineStart.UNDISPATCHED) {
+                    return plugin.launch(dispatcher, CoroutineStart.UNDISPATCHED) {
                         if (isSuspendMethod == null) {
                             try {
                                 // Try as suspension function.
@@ -229,12 +258,11 @@ internal class EventServiceImpl(private val plugin: Plugin) {
 
     class SuspendingRegisteredListener(
         lister: Listener,
-        executorParam: EventExecutor,
+        private val executorImpl: EventExecutor,
         priority: EventPriority,
         plugin: Plugin,
         ignoreCancelled: Boolean
-    ) : RegisteredListener(lister, executorParam, priority, plugin, ignoreCancelled) {
-
+    ) : RegisteredListener(lister, executorImpl, priority, plugin, ignoreCancelled) {
         fun callSuspendingEvent(event: Event): Job {
             if (event is Cancellable) {
                 if ((event as Cancellable).isCancelled && isIgnoringCancelled) {
@@ -242,10 +270,10 @@ internal class EventServiceImpl(private val plugin: Plugin) {
                 }
             }
 
-            return if (executor is SuspendingEventExecutor) {
-                (executor as SuspendingEventExecutor).executeSuspend(listener, event)
+            return if (executorImpl is SuspendingEventExecutor) {
+                executorImpl.executeSuspend(listener, event)
             } else {
-                executor.execute(listener, event)
+                executorImpl.execute(listener, event)
                 Job()
             }
         }

@@ -1,7 +1,8 @@
 package com.github.shynixn.mccoroutine.folia.impl
 
 import com.github.shynixn.mccoroutine.folia.*
-import com.github.shynixn.mccoroutine.folia.dispatcher.AsyncCoroutineDispatcher
+import com.github.shynixn.mccoroutine.folia.dispatcher.*
+import com.github.shynixn.mccoroutine.folia.dispatcher.AsyncFoliaCoroutineDispatcher
 import com.github.shynixn.mccoroutine.folia.dispatcher.EntityDispatcher
 import com.github.shynixn.mccoroutine.folia.dispatcher.GlobalRegionDispatcher
 import com.github.shynixn.mccoroutine.folia.dispatcher.RegionDispatcher
@@ -24,6 +25,19 @@ internal class CoroutineSessionImpl(
 ) :
     CoroutineSession {
     /**
+     * Gets if the Folia schedulers where successfully loaded into MCCoroutine.
+     * Returns false if MCCoroutine falls back to the BukkitScheduler.
+     */
+    override val isFoliaLoaded: Boolean by lazy {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.scheduler.EntityScheduler")
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
+    }
+
+    /**
      * Gets the block service during startup.
      */
     private val wakeUpBlockService: WakeUpBlockServiceImpl by lazy {
@@ -34,7 +48,7 @@ internal class CoroutineSessionImpl(
      * Gets the event service.
      */
     private val eventService: EventServiceImpl by lazy {
-        EventServiceImpl(plugin)
+        EventServiceImpl(plugin, this)
     }
 
     /**
@@ -53,14 +67,44 @@ internal class CoroutineSessionImpl(
      * The global region dispatcher is simply used to perform edits on data that the global region owns, such as game rules, day time, weather, or to execute commands using the console command sender.
      */
     override val dispatcherGlobalRegion: CoroutineContext by lazy {
-        GlobalRegionDispatcher(plugin, wakeUpBlockService)
+        if (isFoliaLoaded) {
+            GlobalRegionDispatcher(plugin, wakeUpBlockService)
+        } else {
+            MinecraftCoroutineDispatcher(plugin, wakeUpBlockService)
+        }
     }
 
     /**
      * Gets the async dispatcher.
      */
     override val dispatcherAsync: CoroutineContext by lazy {
-        AsyncCoroutineDispatcher(plugin, wakeUpBlockService)
+        if (isFoliaLoaded) {
+            AsyncFoliaCoroutineDispatcher(plugin, wakeUpBlockService)
+        } else {
+            AsyncCoroutineDispatcher(plugin, wakeUpBlockService)
+        }
+    }
+
+    /**
+     * The RegionizedTaskQueue allows tasks to be scheduled to be executed on the next tick of a region that owns a specific location, or creating such region if it does not exist.
+     */
+    override fun getRegionDispatcher(world: World, chunkX: Int, chunkZ: Int): CoroutineContext {
+        if (isFoliaLoaded) {
+            return RegionDispatcher(plugin, wakeUpBlockService, world, chunkX, chunkZ)
+        }
+
+        return dispatcherGlobalRegion // minecraftDispatcher on BukkitOnly servers
+    }
+
+    /**
+    The EntityScheduler allows tasks to be scheduled to be executed on the region that owns the entity.
+     */
+    override fun getEntityDispatcher(entity: Entity): CoroutineContext {
+        if (isFoliaLoaded) {
+            return EntityDispatcher(plugin, wakeUpBlockService, entity)
+        }
+
+        return dispatcherGlobalRegion // minecraftDispatcher on BukkitOnly servers
     }
 
     /**
@@ -74,27 +118,13 @@ internal class CoroutineSessionImpl(
             wakeUpBlockService.isManipulatedServerHeartBeatEnabled = value
         }
 
-    /**
-     * The RegionizedTaskQueue allows tasks to be scheduled to be executed on the next tick of a region that owns a specific location, or creating such region if it does not exist.
-     */
-    override fun getRegionDispatcher(world: World, chunkX: Int, chunkZ: Int): CoroutineContext {
-        return RegionDispatcher(plugin, wakeUpBlockService, world, chunkX, chunkZ)
-    }
-
-    /**
-    The EntityScheduler allows tasks to be scheduled to be executed on the region that owns the entity.
-     */
-    override fun getEntityDispatcher(entity: Entity): CoroutineContext {
-        return EntityDispatcher(plugin, wakeUpBlockService, entity)
-    }
-
     init {
         // Root Exception Handler. All Exception which are not consumed by the caller end up here.
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
             val mcCoroutineExceptionEvent = MCCoroutineExceptionEvent(plugin, e)
 
             if (plugin.isEnabled) {
-                plugin.server.scheduler.runTask(plugin, Runnable {
+                plugin.launch(plugin.globalRegionDispatcher, CoroutineStart.DEFAULT){
                     plugin.server.pluginManager.callEvent(mcCoroutineExceptionEvent)
 
                     if (!mcCoroutineExceptionEvent.isCancelled) {
@@ -106,7 +136,7 @@ internal class CoroutineSessionImpl(
                             )
                         }
                     }
-                })
+                }
             }
         }
 
@@ -142,9 +172,13 @@ internal class CoroutineSessionImpl(
     /**
      * Registers a suspend listener.
      */
-    override fun registerSuspendListener(listener: Listener) {
-        eventService.registerSuspendListener(listener)
+    override fun registerSuspendListener(
+        listener: Listener,
+        eventDispatcher: Map<Class<out Event>, (event: Event) -> CoroutineContext>
+    ) {
+        eventService.registerSuspendListener(listener, eventDispatcher)
     }
+
 
     /**
      * Fires a suspending [event] with the given [eventExecutionType].

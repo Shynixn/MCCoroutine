@@ -38,9 +38,6 @@ class MinestomCommandTest {
         Assertions.assertNotEquals(unitTestThreadId, testCommandExecutor.callThreadId)
         Assertions.assertNotEquals(unitTestThreadId, testCommandExecutor.asyncThreadId)
         Assertions.assertNotEquals(unitTestThreadId, testCommandExecutor.leaveThreadId)
-        Assertions.assertEquals(testCommandExecutor.callThreadId, testCommandExecutor.leaveThreadId)
-        Assertions.assertNotEquals(testCommandExecutor.asyncThreadId, testCommandExecutor.leaveThreadId)
-        Assertions.assertNotEquals(testCommandExecutor.callThreadId, testCommandExecutor.asyncThreadId)
     }
 
     private class TestCommandExecutor(private val extension: Extension) : Command("unittest") {

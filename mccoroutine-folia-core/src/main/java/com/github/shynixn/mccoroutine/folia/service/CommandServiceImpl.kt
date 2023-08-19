@@ -1,9 +1,9 @@
 package com.github.shynixn.mccoroutine.folia.service
 
-import com.github.shynixn.mccoroutine.folia.SuspendingCommandExecutor
-import com.github.shynixn.mccoroutine.folia.SuspendingTabCompleter
-import com.github.shynixn.mccoroutine.folia.launch
+import com.github.shynixn.mccoroutine.folia.*
+import kotlinx.coroutines.CoroutineStart
 import org.bukkit.command.PluginCommand
+import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import kotlin.coroutines.CoroutineContext
 
@@ -19,9 +19,13 @@ internal class CommandServiceImpl(private val plugin: Plugin) {
         pluginCommand.setExecutor { p0, p1, p2, p3 ->
             // If the result is delayed we can automatically assume it is true.
             var success = true
-
+            val scheduleContext = if (context == plugin.globalRegionDispatcher && p0 is Player) {
+                plugin.entityDispatcher(p0)
+            } else {
+                context
+            }
             // Commands in spigot always arrive synchronously. Therefore, we can simply use the default properties.
-            plugin.launch(context) {
+            plugin.launch(scheduleContext, CoroutineStart.UNDISPATCHED) {
                 success = commandExecutor.onCommand(p0, p1, p2, p3)
             }
 
@@ -38,10 +42,15 @@ internal class CommandServiceImpl(private val plugin: Plugin) {
         tabCompleter: SuspendingTabCompleter
     ) {
         pluginCommand.setTabCompleter { sender, command, alias, args ->
-            var result : List<String>? = null
+            var result: List<String>? = null
+            val scheduleContext = if (context == plugin.globalRegionDispatcher && sender is Player) {
+                plugin.entityDispatcher(sender)
+            } else {
+                context
+            }
 
             // Tab Completes in spigot always arrive synchronously. Therefore, we can simply use the default properties.
-            plugin.launch(context) {
+            plugin.launch(scheduleContext, CoroutineStart.UNDISPATCHED) {
                 result = tabCompleter.onTabComplete(sender, command, alias, args)
             }
 
