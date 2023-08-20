@@ -17,7 +17,7 @@
         <link rel="next" href="../listener/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
       
       
 
@@ -641,7 +641,7 @@ For this, a new plugin is developed from scratch to handle asynchronous and sync
 <p>MCCoroutine does not need to be called explicitly in your plugin main class. It is started implicitly when you use it
 for the first time and
 disposed automatically when you reload your plugin.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label><label for="__tabbed_1_4">Velocity</label><label for="__tabbed_1_5">Minestom</label><label for="__tabbed_1_6">Fabric</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:7"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><input id="__tabbed_1_7" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Fabric</label><label for="__tabbed_1_4">Folia</label><label for="__tabbed_1_5">Minestom</label><label for="__tabbed_1_6">Sponge</label><label for="__tabbed_1_7">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>The first decision for Bukkit API based plugins is to decide between <code>JavaPlugin</code> or <code>SuspendingJavaPlugin</code>, which is a new base
@@ -702,6 +702,84 @@ Plugins, which may get enabled in the future, wait until this plugin is enabled.
 </div>
 </div>
 <div class="tabbed-block">
+<p>MCCoroutine for Fabric does not have an dependency on Minecraft itself, therefore it is version independent from Minecraft. It only depends
+on the Fabric Api. This however means, we need to manually setup and dispose MCCoroutine. Register the <code>SERVER_STARTING</code> event and
+connect the native Minecraft Scheduler with MCCoroutine using an <code>Executor</code>. Dispose MCCoroutine in <code>SERVER_STOPPING</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSampleServerMod</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">DedicatedServerModInitializer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onInitializeServer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">SERVER_STARTING</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">ServerStarting</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">            </span><span class="c1">// Connect Native Minecraft Scheduler and MCCoroutine.</span>
+<span class="w">            </span><span class="n">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">minecraftExecutor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Executor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">                </span><span class="n">server</span><span class="p">.</span><span class="na">submitAndJoin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">onServerStarting</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">})</span>
+
+<span class="w">        </span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">SERVER_STOPPING</span><span class="p">.</span><span class="na">register</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">            </span><span class="n">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * MCCoroutine is ready after the server has started.</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onServerStarting</span><span class="p">(</span><span class="n">server</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
+<span class="w">        </span><span class="c1">// Your startup code with suspend support</span>
+
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Launch new corroutines</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>The first decision for Bukkit API based plugins is to decide between <code>JavaPlugin</code> or <code>SuspendingJavaPlugin</code>, which is a new base
+class extending <code>JavaPlugin</code>.</p>
+<p>If you want to perform async operations or call other suspending functions from your plugin class, go with the newly
+available type <code>SuspendingJavaPlugin</code> otherwise use <code>JavaPlugin</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingJavaPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Global Region Thread</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Global Region Thread</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">How onEnableAsync works</p>
+<p>The implementation which calls the <code>onEnableAsync</code> function manipulates the Bukkit Server implementation in the
+following way:
+If a context switch is made, it blocks the entire global region thread until the context is given back. This means,
+in this method, you can switch contexts as you like but the plugin is not considered enabled until the context is given
+back.
+It allows for a clean startup as the plugin is not considered "enabled" until the context is given back.
+Other plugins which are already enabled, may or may not already perform work in the background.
+Plugins, which may get enabled in the future, wait until this plugin is enabled.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<p>MCCoroutine can be used on server or on extension level. The example below shows using MCCoroutine on server level.
+If you are developing an extension, you can use the instance of your <code>Extension</code> instead of the <code>MinecraftServer</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.MinecraftServer</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="n">Array</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">minecraftServer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">.</span><span class="na">init</span><span class="p">()</span><span class="w"> </span>
+<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Suspendable operations   </span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">start</span><span class="p">(</span><span class="s">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="m">25565</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
 <p>The first decision for Sponge API based plugins is to decide, if you want to call other suspending functions from your plugin class.
 If so, add a field which injects the type <code>SuspendingPluginContainer</code>. This turns your main class into a suspendable listener.</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.sponge.SuspendingPluginContainer</span>
@@ -748,55 +826,6 @@ also allows to call suspending functions in your plugin main class.</p>
 <span class="p">}</span>
 </code></pre></div>
 </div>
-<div class="tabbed-block">
-<p>MCCoroutine can be used on server or on extension level. The example below shows using MCCoroutine on server level.
-If you are developing an extension, you can use the instance of your <code>Extension</code> instead of the <code>MinecraftServer</code></p>
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.launch</span>
-<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.MinecraftServer</span>
-
-<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="n">Array</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">minecraftServer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">.</span><span class="na">init</span><span class="p">()</span><span class="w"> </span>
-<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Suspendable operations   </span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">start</span><span class="p">(</span><span class="s">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="m">25565</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<p>MCCoroutine for Fabric does not have an dependency on Minecraft itself, therefore it is version independent from Minecraft. It only depends
-on the Fabric Api. This however means, we need to manually setup and dispose MCCoroutine. Register the <code>SERVER_STARTING</code> event and
-connect the native Minecraft Scheduler with MCCoroutine using an <code>Executor</code>. Dispose MCCoroutine in <code>SERVER_STOPPING</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSampleServerMod</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">DedicatedServerModInitializer</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onInitializeServer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">SERVER_STARTING</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">ServerStarting</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">            </span><span class="c1">// Connect Native Minecraft Scheduler and MCCoroutine.</span>
-<span class="w">            </span><span class="n">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">minecraftExecutor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Executor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">                </span><span class="n">server</span><span class="p">.</span><span class="na">submitAndJoin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">            </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">onServerStarting</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">})</span>
-
-<span class="w">        </span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">SERVER_STOPPING</span><span class="p">.</span><span class="na">register</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">            </span><span class="n">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="cm">/**</span>
-<span class="cm">     * MCCoroutine is ready after the server has started.</span>
-<span class="cm">     */</span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onServerStarting</span><span class="p">(</span><span class="n">server</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
-<span class="w">        </span><span class="c1">// Your startup code with suspend support</span>
-
-<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// Launch new corroutines</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
 </div>
 </div>
 <h2 id="calling-a-database-from-plugin-main-class">Calling a Database from Plugin Main class</h2>
@@ -806,7 +835,7 @@ connect the native Minecraft Scheduler with MCCoroutine using an <code>Executor<
 </code></pre></div>
 <p>Create a class <code>Database</code>, which is responsible to store/retrieve this data into/from a database.
 Here, it is important that we perform all IO calls on async threads and returns on the minecraft main thread.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:6"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><input id="__tabbed_2_5" name="__tabbed_2" type="radio" /><input id="__tabbed_2_6" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit</label><label for="__tabbed_2_2">BungeeCord</label><label for="__tabbed_2_3">Sponge</label><label for="__tabbed_2_4">Velocity</label><label for="__tabbed_2_5">Minestom</label><label for="__tabbed_2_6">Fabric</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:7"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><input id="__tabbed_2_5" name="__tabbed_2" type="radio" /><input id="__tabbed_2_6" name="__tabbed_2" type="radio" /><input id="__tabbed_2_7" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit</label><label for="__tabbed_2_2">BungeeCord</label><label for="__tabbed_2_3">Fabric</label><label for="__tabbed_2_4">Folia</label><label for="__tabbed_2_5">Minestom</label><label for="__tabbed_2_6">Sponge</label><label for="__tabbed_2_7">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Dispatchers</span>
@@ -898,6 +927,129 @@ This means, the thread id is not always the same if we suspend an operation. The
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Dispatchers</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.withContext</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minecraft.entity.player.PlayerEntity</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">Database</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">createDbIfNotExist</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Creating database on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// ... create tables</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerEntity</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Retrieving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// ... get from database by player uuid or create new playerData instance.</span>
+<span class="w">            </span><span class="n">PlayerData</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="na">uuid</span><span class="p">,</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="p">.</span><span class="na">toString</span><span class="p">(),</span><span class="w"> </span><span class="n">Date</span><span class="p">(),</span><span class="w"> </span><span class="n">Date</span><span class="p">())</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">playerData</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerEntity</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Saving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// insert or update playerData</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Dispatchers</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.withContext</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.entity.Player</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">Database</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">createDbIfNotExist</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Start on the caller thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Creating database on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// ... create tables</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] End on the caller thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Start on the caller thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Retrieving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// ... get from database by player uuid or create new playerData instance.</span>
+<span class="w">            </span><span class="n">PlayerData</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="na">uniqueId</span><span class="p">,</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="p">,</span><span class="w"> </span><span class="n">Date</span><span class="p">(),</span><span class="w"> </span><span class="n">Date</span><span class="p">())</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] End on the caller thread  &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">playerData</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">saveData</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Start on the caller thread  &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Saving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// insert or update playerData</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] End on the caller thread  &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Dispatchers</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.withContext</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.entity.Player</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">Database</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">createDbIfNotExist</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Creating database on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// ... create tables</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Retrieving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// ... get from database by player uuid or create new playerData instance.</span>
+<span class="w">            </span><span class="n">PlayerData</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="na">uuid</span><span class="p">,</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">username</span><span class="p">,</span><span class="w"> </span><span class="n">Date</span><span class="p">(),</span><span class="w"> </span><span class="n">Date</span><span class="p">())</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">playerData</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">saveData</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
+<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Saving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">            </span><span class="c1">// insert or update playerData</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Dispatchers</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.withContext</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">org.spongepowered.api.entity.living.player.Player</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
 
@@ -982,92 +1134,10 @@ This means, the thread id is not always the same if we suspend an operation. The
 <span class="p">}</span>
 </code></pre></div>
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Dispatchers</span>
-<span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.withContext</span>
-<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.entity.Player</span>
-<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
-
-<span class="kd">class</span><span class="w"> </span><span class="nc">Database</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">createDbIfNotExist</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Creating database on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">            </span><span class="c1">// ... create tables</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Retrieving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">            </span><span class="c1">// ... get from database by player uuid or create new playerData instance.</span>
-<span class="w">            </span><span class="n">PlayerData</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="na">uuid</span><span class="p">,</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">username</span><span class="p">,</span><span class="w"> </span><span class="n">Date</span><span class="p">(),</span><span class="w"> </span><span class="n">Date</span><span class="p">())</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">playerData</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">saveData</span><span class="p">(</span><span class="n">player</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Player</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-
-<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Saving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">            </span><span class="c1">// insert or update playerData</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.Dispatchers</span>
-<span class="k">import</span><span class="w"> </span><span class="nn">kotlinx.coroutines.withContext</span>
-<span class="k">import</span><span class="w"> </span><span class="nn">net.minecraft.entity.player.PlayerEntity</span>
-<span class="k">import</span><span class="w"> </span><span class="nn">java.util.*</span>
-
-<span class="kd">class</span><span class="w"> </span><span class="nc">Database</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">createDbIfNotExist</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] Creating database on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">            </span><span class="c1">// ... create tables</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[createDbIfNotExist] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getDataFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerEntity</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">playerData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] Retrieving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">            </span><span class="c1">// ... get from database by player uuid or create new playerData instance.</span>
-<span class="w">            </span><span class="n">PlayerData</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="na">uuid</span><span class="p">,</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="na">name</span><span class="p">.</span><span class="na">toString</span><span class="p">(),</span><span class="w"> </span><span class="n">Date</span><span class="p">(),</span><span class="w"> </span><span class="n">Date</span><span class="p">())</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[getDataFromPlayer] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">playerData</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">saveData</span><span class="p">(</span><span class="n">player</span><span class="p">:</span><span class="w"> </span><span class="n">PlayerEntity</span><span class="p">,</span><span class="w"> </span><span class="n">playerData</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PlayerData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Start on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-
-<span class="w">        </span><span class="n">withContext</span><span class="p">(</span><span class="n">Dispatchers</span><span class="p">.</span><span class="na">IO</span><span class="p">){</span>
-<span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] Saving player data on database io thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">            </span><span class="c1">// insert or update playerData</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;[saveData] End on minecraft thread &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">currentThread</span><span class="p">().</span><span class="na">id</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
 </div>
 </div>
 <p>Create a new instance of the database and call it in your main class.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:6"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><input id="__tabbed_3_5" name="__tabbed_3" type="radio" /><input id="__tabbed_3_6" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Bukkit</label><label for="__tabbed_3_2">BungeeCord</label><label for="__tabbed_3_3">Sponge</label><label for="__tabbed_3_4">Velocity</label><label for="__tabbed_3_5">Minestom</label><label for="__tabbed_3_6">Fabric</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:7"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><input id="__tabbed_3_4" name="__tabbed_3" type="radio" /><input id="__tabbed_3_5" name="__tabbed_3" type="radio" /><input id="__tabbed_3_6" name="__tabbed_3" type="radio" /><input id="__tabbed_3_7" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Bukkit</label><label for="__tabbed_3_2">BungeeCord</label><label for="__tabbed_3_3">Fabric</label><label for="__tabbed_3_4">Folia</label><label for="__tabbed_3_5">Minestom</label><label for="__tabbed_3_6">Sponge</label><label for="__tabbed_3_7">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin</span>
@@ -1099,6 +1169,65 @@ This means, the thread id is not always the same if we suspend an operation. The
 <span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// BungeeCord Shutdown Thread (Not the same as the startup thread)</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSampleServerMod</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">DedicatedServerModInitializer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onInitializeServer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">SERVER_STARTING</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">ServerStarting</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">            </span><span class="c1">// Connect Native Minecraft Scheduler and MCCoroutine.</span>
+<span class="w">            </span><span class="n">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">minecraftExecutor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Executor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">                </span><span class="n">server</span><span class="p">.</span><span class="na">submitAndJoin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">onServerStarting</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">})</span>
+
+<span class="w">        </span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">SERVER_STOPPING</span><span class="p">.</span><span class="na">register</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">            </span><span class="n">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * MCCoroutine is ready after the server has started.</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onServerStarting</span><span class="p">(</span><span class="n">server</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSamplePlugin</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">SuspendingJavaPlugin</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
+
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onEnableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Global Region Thread</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onDisableAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.launch</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.MinecraftServer</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="n">Array</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">minecraftServer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">.</span><span class="na">init</span><span class="p">()</span><span class="w"> </span>
+<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
+<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">start</span><span class="p">(</span><span class="s">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="m">25565</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
@@ -1147,49 +1276,6 @@ also allows to call suspending functions in your plugin main class.</p>
 <span class="w">    </span><span class="nd">@Subscribe</span>
 <span class="w">    </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onProxyInitialization</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="n">ProxyInitializeEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// Velocity Thread Pool</span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.minestom.launch</span>
-<span class="k">import</span><span class="w"> </span><span class="nn">net.minestom.server.MinecraftServer</span>
-
-<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="w"> </span><span class="n">Array</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">minecraftServer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">.</span><span class="na">init</span><span class="p">()</span><span class="w"> </span>
-<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
-<span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">minecraftServer</span><span class="p">.</span><span class="na">start</span><span class="p">(</span><span class="s">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="m">25565</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MCCoroutineSampleServerMod</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">DedicatedServerModInitializer</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onInitializeServer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">SERVER_STARTING</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">ServerStarting</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">            </span><span class="c1">// Connect Native Minecraft Scheduler and MCCoroutine.</span>
-<span class="w">            </span><span class="n">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">minecraftExecutor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Executor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">                </span><span class="n">server</span><span class="p">.</span><span class="na">submitAndJoin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">            </span><span class="n">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">onServerStarting</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">})</span>
-
-<span class="w">        </span><span class="n">ServerLifecycleEvents</span><span class="p">.</span><span class="na">SERVER_STOPPING</span><span class="p">.</span><span class="na">register</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">-&gt;</span>
-<span class="w">            </span><span class="n">mcCoroutineConfiguration</span><span class="p">.</span><span class="na">disposePluginSession</span><span class="p">()</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="cm">/**</span>
-<span class="cm">     * MCCoroutine is ready after the server has started.</span>
-<span class="cm">     */</span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">suspend</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onServerStarting</span><span class="p">(</span><span class="n">server</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">MinecraftServer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Minecraft Main Thread</span>
-<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Database</span><span class="p">()</span>
 <span class="w">        </span><span class="n">database</span><span class="p">.</span><span class="na">createDbIfNotExist</span><span class="p">()</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
@@ -1272,10 +1358,10 @@ Extend it with real database operations to get familiar with how it works.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link", "content.code.copy", "navigation.footer"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link", "content.code.copy", "navigation.footer"], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../assets/javascripts/bundle.220ee61c.min.js"></script>
       
     
   </body>

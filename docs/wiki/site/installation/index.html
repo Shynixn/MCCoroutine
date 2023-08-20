@@ -17,7 +17,7 @@
         <link rel="next" href="../coroutine/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
       
       
 
@@ -659,47 +659,54 @@
 <h1 id="getting-started">Getting Started</h1>
 <p>In order to use the MCCoroutine Kotlin API, you need to include the following libraries into your project.</p>
 <h2 id="add-mccoroutine-libraries">Add MCCoroutine Libraries</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:6"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Sponge</label><label for="__tabbed_1_4">Velocity</label><label for="__tabbed_1_5">Minestom</label><label for="__tabbed_1_6">Fabric</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:7"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><input id="__tabbed_1_6" name="__tabbed_1" type="radio" /><input id="__tabbed_1_7" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bukkit</label><label for="__tabbed_1_2">BungeeCord</label><label for="__tabbed_1_3">Fabric</label><label for="__tabbed_1_4">Folia</label><label for="__tabbed_1_5">Minestom</label><label for="__tabbed_1_6">Sponge</label><label for="__tabbed_1_7">Velocity</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.12.1&quot;</span><span class="o">)</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.12.1&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.13.0&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.13.0&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:2.12.1&quot;</span><span class="o">)</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:2.12.1&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:2.13.0&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:2.13.0&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-sponge-api:2.12.1&quot;</span><span class="o">)</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-sponge-core:2.12.1&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.13.0&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.13.0&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.12.1&quot;</span><span class="o">)</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.12.1&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.13.0&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.13.0&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-minestom-api:2.12.1&quot;</span><span class="o">)</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-minestom-core:2.12.1&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-minestom-api:2.13.0&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-minestom-core:2.13.0&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.12.1&quot;</span><span class="o">)</span>
-<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.12.1&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-sponge-api:2.13.0&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-sponge-core:2.13.0&quot;</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.13.0&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.13.0&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
@@ -714,13 +721,20 @@ This means, you can use any Kotlin version in your plugins. It is even encourage
 <span class="o">}</span>
 </code></pre></div>
 <h2 id="shade-dependencies">Shade Dependencies</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit Server 1.17 - Latest</label><label for="__tabbed_2_2">Other Server</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Bukkit Server 1.17 - Latest</label><label for="__tabbed_2_2">Folia</label><label for="__tabbed_2_3">Other Server</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><strong>plugin.yml</strong>
 <div class="highlight"><pre><span></span><code><span class="nt">libraries</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.12.1</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.12.1</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.13.0</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.13.0</span>
+</code></pre></div></p>
+</div>
+<div class="tabbed-block">
+<p><strong>plugin.yml</strong>
+<div class="highlight"><pre><span></span><code><span class="nt">libraries</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.13.0</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.13.0</span>
 </code></pre></div></p>
 </div>
 <div class="tabbed-block">
@@ -808,10 +822,10 @@ A real production plugin using MCCoroutine can be found <a href="https://github.
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link", "content.code.copy", "navigation.footer"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "content.tabs.link", "content.code.copy", "navigation.footer"], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../assets/javascripts/bundle.220ee61c.min.js"></script>
       
     
   </body>
