@@ -1,6 +1,5 @@
 package com.github.shynixn.mccoroutine.folia.dispatcher
 
-import com.github.shynixn.mccoroutine.folia.regionDispatcher
 import com.github.shynixn.mccoroutine.folia.service.WakeUpBlockServiceImpl
 import kotlinx.coroutines.CoroutineDispatcher
 import org.bukkit.entity.Entity
@@ -33,7 +32,7 @@ internal open class EntityDispatcher(
             block.run()
         })
 
-        if (task == null) { // Entity was removed. Try to detect region
+        if (task == null) { // Entity was removed. Execute on global region scheduler.
             plugin.server.globalRegionScheduler.execute(plugin, block)
         }
     }
