@@ -218,7 +218,11 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
                     val isAsync = event.isAsynchronous
 
                     val dispatcher = if (isAsync) {
-                        plugin.asyncDispatcher
+                        if (coroutineSession.isFoliaLoaded) {
+                            plugin.globalRegionDispatcher // There are no async events in folia.
+                        } else {
+                            plugin.asyncDispatcher
+                        }
                     } else {
                         if (coroutineSession.isFoliaLoaded) {
                             contextResolver.invoke(event)

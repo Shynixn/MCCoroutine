@@ -6,8 +6,10 @@ In minecraft plugins, players can perform many actions in a short time period. I
 every action in the database, creating a new database call for every single action may cause performance problems. Therefore, caches are often
 implemented, which is a lot easier when using coroutines.
 
+!!! note "Important"
+    The following code examples are for Bukkit, but work in a similar way in other mccoroutine implementations.
 
-## Implementing a Cache (Bukkit)
+## Implementing a Cache
 
 When taking a look at the ``Database`` implementation below, we can observe quite a lot of redundant database
 accesses when a player rejoins a server in a very short timeframe.

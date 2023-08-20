@@ -22,6 +22,33 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
     }
     ```
 
+=== "Fabric"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.12.1")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.12.1")
+    }
+    ```
+
+=== "Folia"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.12.1")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.12.1")
+    }
+    ```
+
+=== "Minestom"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-api:2.12.1")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-core:2.12.1")
+    }
+    ```
+
 === "Sponge"
 
     ```groovy
@@ -37,24 +64,6 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
     dependencies {
         implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.12.1")
         implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.12.1")
-    }
-    ```
-
-=== "Minestom"
-
-    ```groovy
-    dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-api:2.12.1")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-core:2.12.1")
-    }
-    ```
-
-=== "Fabric"
-
-    ```groovy
-    dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.12.1")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.12.1")
     }
     ```
 
@@ -81,6 +90,16 @@ dependencies {
       - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.12.1
       - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.12.1
     ```
+
+=== "Folia"
+
+    **plugin.yml**
+    ```yaml
+    libraries:
+      - com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.12.1
+      - com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.12.1
+    ```
+
 
 === "Other Server"
 

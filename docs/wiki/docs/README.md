@@ -17,19 +17,20 @@ the existing APIs with suspendable commands, events and schedules.
 
 **Supported Game Servers:**
 
-* Spigot
-* Paper
 * CraftBukkit
+* Fabric
+* Folia
+* Minestom
+* Paper
+* Spigot
 * SpongeVanilla
 * SpongeForge
-* Fabric
-* Minestom
 
 **Supported Proxies:**
 
 * BungeeCord
-* Waterfall
 * Velocity
+* Waterfall
 
 ## Features
 
