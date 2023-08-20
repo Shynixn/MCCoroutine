@@ -1,5 +1,5 @@
 name: MCCoroutine-Sample
-version: 2.12.1
+version: 2.13.0
 author: Shynixn
 main: com.github.shynixn.mccoroutine.bungeecord.sample.MCCoroutineSamplePlugin
 commands:
