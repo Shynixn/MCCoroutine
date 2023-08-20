@@ -61,6 +61,86 @@ plugins.
     }
     ````
 
+=== "Fabric"
+
+    Create a traditional command executor but extend from ``SuspendingCommand`` instead of ``SuspendingCommand``.
+    
+    ````kotlin
+    import com.github.shynixn.mccoroutine.fabric.SuspendingCommand
+    import com.mojang.brigadier.context.CommandContext
+    import net.minecraft.entity.player.PlayerEntity
+    import net.minecraft.server.command.ServerCommandSource
+
+    class PlayerDataCommandExecutor : SuspendingCommand<ServerCommandSource> {
+        override suspend fun run(context: CommandContext<ServerCommandSource>): Int {
+            if (context.source.entity is PlayerEntity) {
+                val sender = context.source.entity as PlayerEntity
+                println("[PlayerDataCommandExecutor] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+            }
+    
+            return 1
+        }
+    }
+    ````
+
+=== "Folia"
+
+    Folia schedules threads on the region of the entity who executed this command. For the console (globalregion) and command blocks (region) this rule
+    applies as well. Other than that, usage is almost identical to Bukkit.
+    
+    ````kotlin
+    import com.github.shynixn.mccoroutine.folia.SuspendingCommandExecutor
+    import org.bukkit.command.Command
+    import org.bukkit.command.CommandSender
+    import org.bukkit.entity.Player
+    
+    class PlayerDataCommandExecutor(private val database: Database) : SuspendingCommandExecutor {
+        override suspend fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+            if (sender !is Player) {
+                return false
+            }
+    
+            if (args.size == 2 && args[0].equals("rename", true)) {
+                val name = args[1]
+                val playerData = database.getDataFromPlayer(sender)
+                playerData.name = name
+                database.saveData(sender, playerData)
+                return true
+            }
+    
+            return false
+        }
+    }
+    ````
+
+=== "Minestom"
+
+    Create a traditional command and user ``server.launch`` or ``extension.launch`` in the addSyntax handler.
+    
+    ````kotlin
+    import com.github.shynixn.mccoroutine.minestom.launch
+    import net.minestom.server.MinecraftServer
+    import net.minestom.server.command.builder.Command
+    import net.minestom.server.command.builder.arguments.ArgumentType
+    import net.minestom.server.entity.Player
+    
+    class PlayerDataCommandExecutor(private val server: MinecraftServer, private val database: Database) : Command("mycommand") {
+        init {
+            val nameArgument = ArgumentType.String("name")
+            addSyntax({ sender, context ->
+                server.launch {
+                    if (sender is Player) {
+                        val name : String = context.get(nameArgument)
+                        val playerData = database.getDataFromPlayer(sender)
+                        playerData.name = name
+                        database.saveData(sender, playerData)
+                    }
+                }
+            })
+        }
+    }
+    ````
+
 === "Sponge"
 
     Create a traditional command executor but extend from ``SuspendingCommandExecutor`` instead of ``CommandExecutor``. Please
@@ -127,56 +207,6 @@ plugins.
 
     A ``BrigadierCommand`` can be executed asynchronously using the ``executesSuspend`` extension function. More details below.
 
-=== "Minestom"
-
-    Create a traditional command and user ``server.launch`` or ``extension.launch`` in the addSyntax handler.
-    
-    ````kotlin
-    import com.github.shynixn.mccoroutine.minestom.launch
-    import net.minestom.server.MinecraftServer
-    import net.minestom.server.command.builder.Command
-    import net.minestom.server.command.builder.arguments.ArgumentType
-    import net.minestom.server.entity.Player
-    
-    class PlayerDataCommandExecutor(private val server: MinecraftServer, private val database: Database) : Command("mycommand") {
-        init {
-            val nameArgument = ArgumentType.String("name")
-            addSyntax({ sender, context ->
-                server.launch {
-                    if (sender is Player) {
-                        val name : String = context.get(nameArgument)
-                        val playerData = database.getDataFromPlayer(sender)
-                        playerData.name = name
-                        database.saveData(sender, playerData)
-                    }
-                }
-            })
-        }
-    }
-    ````
-
-=== "Fabric"
-
-    Create a traditional command executor but extend from ``SuspendingCommand`` instead of ``SuspendingCommand``.
-    
-    ````kotlin
-    import com.github.shynixn.mccoroutine.fabric.SuspendingCommand
-    import com.mojang.brigadier.context.CommandContext
-    import net.minecraft.entity.player.PlayerEntity
-    import net.minecraft.server.command.ServerCommandSource
-
-    class PlayerDataCommandExecutor : SuspendingCommand<ServerCommandSource> {
-        override suspend fun run(context: CommandContext<ServerCommandSource>): Int {
-            if (context.source.entity is PlayerEntity) {
-                val sender = context.source.entity as PlayerEntity
-                println("[PlayerDataCommandExecutor] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
-            }
-    
-            return 1
-        }
-    }
-    ````
-
 ## Register the CommandExecutor
 
 === "Bukkit"
@@ -234,6 +264,69 @@ plugins.
         }
     }
     ````
+
+=== "Fabric"
+
+    ````kotlin
+    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
+        override fun onInitializeServer() {
+            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
+                // Connect Native Minecraft Scheduler and MCCoroutine.
+                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
+                    server.submitAndJoin(r)
+                }
+                launch {
+                    onServerStarting(server)
+                }
+            })
+    
+            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+                mcCoroutineConfiguration.disposePluginSession()
+            }
+        }
+
+        /**
+         * MCCoroutine is ready after the server has started.
+         */
+        private suspend fun onServerStarting(server : MinecraftServer) {
+            // Register command
+            val command = PlayerDataCommandExecutor()
+            server.commandManager.dispatcher.register(CommandManager.literal("mccor").executesSuspend(this, command))
+        }
+    }
+    ````
+
+=== "Folia"
+
+    Instead of using ``setExecutor``, use the provided extension method ``setSuspendingExecutor`` to register a command executor.
+    
+    !!! note "Important"
+        Do not forget to declare the ``playerdata`` command in your plugin.yml.
+    
+    ````kotlin
+    import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
+    import com.github.shynixn.mccoroutine.folia.registerSuspendingEvents
+    import com.github.shynixn.mccoroutine.folia.setSuspendingExecutor
+    
+    class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
+        private val database = Database()
+    
+        override suspend fun onEnableAsync() {
+            // Minecraft Main Thread
+            database.createDbIfNotExist()
+            server.pluginManager.registerSuspendingEvents(PlayerDataListener(database), this)
+            getCommand("playerdata")!!.setSuspendingExecutor(PlayerDataCommandExecutor(database))
+        }
+    
+        override suspend fun onDisableAsync() {
+            // Minecraft Main Thread
+        }
+    }
+    ````
+
+=== "Minestom"
+
+    Register the command in the same way as a traditional command.
 
 === "Sponge"
 
@@ -331,41 +424,6 @@ plugins.
                     })
                     .build()
             proxyServer.commandManager.register(BrigadierCommand(helloCommand))
-        }
-    }
-    ````
-
-=== "Minestom"
-
-    Register the command in the same way as a traditional command.
-
-=== "Fabric"
-
-    ````kotlin
-    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
-        override fun onInitializeServer() {
-            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
-                // Connect Native Minecraft Scheduler and MCCoroutine.
-                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
-                    server.submitAndJoin(r)
-                }
-                launch {
-                    onServerStarting(server)
-                }
-            })
-    
-            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
-                mcCoroutineConfiguration.disposePluginSession()
-            }
-        }
-
-        /**
-         * MCCoroutine is ready after the server has started.
-         */
-        private suspend fun onServerStarting(server : MinecraftServer) {
-            // Register command
-            val command = PlayerDataCommandExecutor()
-            server.commandManager.dispatcher.register(CommandManager.literal("mccor").executesSuspend(this, command))
         }
     }
     ````

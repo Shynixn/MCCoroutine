@@ -8,8 +8,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.12.1")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.12.1")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.13.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.13.0")
     }
     ```
 
@@ -17,35 +17,8 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:2.12.1")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:2.12.1")
-    }
-    ```
-
-=== "Sponge"
-
-    ```groovy
-    dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:2.12.1")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:2.12.1")
-    }
-    ```
-
-=== "Velocity"
-
-    ```groovy
-    dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.12.1")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.12.1")
-    }
-    ```
-
-=== "Minestom"
-
-    ```groovy
-    dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-api:2.12.1")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-core:2.12.1")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-api:2.13.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-bungeecord-core:2.13.0")
     }
     ```
 
@@ -53,8 +26,44 @@ In order to use the MCCoroutine Kotlin API, you need to include the following li
 
     ```groovy
     dependencies {
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.12.1")
-        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.12.1")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.13.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.13.0")
+    }
+    ```
+
+=== "Folia"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.13.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.13.0")
+    }
+    ```
+
+=== "Minestom"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-api:2.13.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-minestom-core:2.13.0")
+    }
+    ```
+
+=== "Sponge"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-api:2.13.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-sponge-core:2.13.0")
+    }
+    ```
+
+=== "Velocity"
+
+    ```groovy
+    dependencies {
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-api:2.13.0")
+        implementation("com.github.shynixn.mccoroutine:mccoroutine-velocity-core:2.13.0")
     }
     ```
 
@@ -78,9 +87,19 @@ dependencies {
     **plugin.yml**
     ```yaml
     libraries:
-      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.12.1
-      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.12.1
+      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.13.0
+      - com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.13.0
     ```
+
+=== "Folia"
+
+    **plugin.yml**
+    ```yaml
+    libraries:
+      - com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.13.0
+      - com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.13.0
+    ```
+
 
 === "Other Server"
 

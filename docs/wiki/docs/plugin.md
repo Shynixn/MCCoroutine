@@ -76,6 +76,94 @@ disposed automatically when you reload your plugin.
         Other plugins which are already enabled, may or may not already perform work in the background.
         Plugins, which may get enabled in the future, wait until this plugin is enabled.
 
+=== "Fabric"
+
+    MCCoroutine for Fabric does not have an dependency on Minecraft itself, therefore it is version independent from Minecraft. It only depends
+    on the Fabric Api. This however means, we need to manually setup and dispose MCCoroutine. Register the ``SERVER_STARTING`` event and
+    connect the native Minecraft Scheduler with MCCoroutine using an ``Executor``. Dispose MCCoroutine in ``SERVER_STOPPING``.
+
+    ````kotlin
+    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
+        override fun onInitializeServer() {
+            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
+                // Connect Native Minecraft Scheduler and MCCoroutine.
+                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
+                    server.submitAndJoin(r)
+                }
+                launch {
+                    onServerStarting(server)
+                }
+            })
+    
+            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+                mcCoroutineConfiguration.disposePluginSession()
+            }
+        }
+        /**
+         * MCCoroutine is ready after the server has started.
+         */
+        private suspend fun onServerStarting(server : MinecraftServer) {
+            // Minecraft Main Thread
+            // Your startup code with suspend support
+
+            this.launch {
+                // Launch new corroutines
+            }
+        }
+    }
+    ````
+
+=== "Folia"
+
+    The first decision for Bukkit API based plugins is to decide between ``JavaPlugin`` or ``SuspendingJavaPlugin``, which is a new base
+    class extending ``JavaPlugin``.
+
+    If you want to perform async operations or call other suspending functions from your plugin class, go with the newly
+    available type ``SuspendingJavaPlugin`` otherwise use ``JavaPlugin``.
+
+    ````kotlin
+    import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
+    
+    class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
+        override suspend fun onEnableAsync() {
+            // Global Region Thread
+        }
+    
+        override suspend fun onDisableAsync() {
+            // Global Region Thread
+        }
+    }
+    ````
+
+    !!! note "How onEnableAsync works"
+        The implementation which calls the ``onEnableAsync`` function manipulates the Bukkit Server implementation in the
+        following way:
+        If a context switch is made, it blocks the entire global region thread until the context is given back. This means,
+        in this method, you can switch contexts as you like but the plugin is not considered enabled until the context is given
+        back.
+        It allows for a clean startup as the plugin is not considered "enabled" until the context is given back.
+        Other plugins which are already enabled, may or may not already perform work in the background.
+        Plugins, which may get enabled in the future, wait until this plugin is enabled.
+
+
+=== "Minestom"
+
+    MCCoroutine can be used on server or on extension level. The example below shows using MCCoroutine on server level.
+    If you are developing an extension, you can use the instance of your ``Extension`` instead of the ``MinecraftServer``
+
+    ```kotlin
+    import com.github.shynixn.mccoroutine.minestom.launch
+    import net.minestom.server.MinecraftServer
+    
+    fun main(args: Array<String>) {
+        val minecraftServer = MinecraftServer.init() 
+        minecraftServer.launch {
+            // Suspendable operations   
+        }
+        minecraftServer.start("0.0.0.0", 25565)
+    }
+    ```
+
 === "Sponge"
 
     The first decision for Sponge API based plugins is to decide, if you want to call other suspending functions from your plugin class.
@@ -125,61 +213,6 @@ disposed automatically when you reload your plugin.
         @Subscribe
         suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
             // Velocity Thread Pool
-        }
-    }
-    ````
-
-=== "Minestom"
-
-    MCCoroutine can be used on server or on extension level. The example below shows using MCCoroutine on server level.
-    If you are developing an extension, you can use the instance of your ``Extension`` instead of the ``MinecraftServer``
-
-    ```kotlin
-    import com.github.shynixn.mccoroutine.minestom.launch
-    import net.minestom.server.MinecraftServer
-    
-    fun main(args: Array<String>) {
-        val minecraftServer = MinecraftServer.init() 
-        minecraftServer.launch {
-            // Suspendable operations   
-        }
-        minecraftServer.start("0.0.0.0", 25565)
-    }
-    ```
-
-=== "Fabric"
-
-    MCCoroutine for Fabric does not have an dependency on Minecraft itself, therefore it is version independent from Minecraft. It only depends
-    on the Fabric Api. This however means, we need to manually setup and dispose MCCoroutine. Register the ``SERVER_STARTING`` event and
-    connect the native Minecraft Scheduler with MCCoroutine using an ``Executor``. Dispose MCCoroutine in ``SERVER_STOPPING``.
-
-    ````kotlin
-    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
-        override fun onInitializeServer() {
-            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
-                // Connect Native Minecraft Scheduler and MCCoroutine.
-                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
-                    server.submitAndJoin(r)
-                }
-                launch {
-                    onServerStarting(server)
-                }
-            })
-    
-            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
-                mcCoroutineConfiguration.disposePluginSession()
-            }
-        }
-        /**
-         * MCCoroutine is ready after the server has started.
-         */
-        private suspend fun onServerStarting(server : MinecraftServer) {
-            // Minecraft Main Thread
-            // Your startup code with suspend support
-
-            this.launch {
-                // Launch new corroutines
-            }
         }
     }
     ````
@@ -286,6 +319,135 @@ Here, it is important that we perform all IO calls on async threads and returns 
     }
     ````
 
+=== "Fabric"
+
+    ```kotlin
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import net.minecraft.entity.player.PlayerEntity
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
+            withContext(Dispatchers.IO){
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
+        }
+    
+        suspend fun getDataFromPlayer(player: PlayerEntity) : PlayerData {
+            println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uuid, player.name.toString(), Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
+            return playerData;
+        }
+    
+        suspend fun saveData(player: PlayerEntity, playerData : PlayerData) {
+            println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
+    
+            withContext(Dispatchers.IO){
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on minecraft thread " + Thread.currentThread().id)
+        }
+    }
+    ```
+
+=== "Folia"
+
+    ````kotlin
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import org.bukkit.entity.Player
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on the caller thread " + Thread.currentThread().id)
+            withContext(Dispatchers.IO){
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on the caller thread " + Thread.currentThread().id)
+        }
+    
+        suspend fun getDataFromPlayer(player : Player) : PlayerData {
+            println("[getDataFromPlayer] Start on the caller thread " + Thread.currentThread().id)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uniqueId, player.name, Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on the caller thread  " + Thread.currentThread().id)
+            return playerData;
+        }
+      
+        suspend fun saveData(player : Player, playerData : PlayerData) {
+            println("[saveData] Start on the caller thread  " + Thread.currentThread().id)
+    
+            withContext(Dispatchers.IO){
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on the caller thread  " + Thread.currentThread().id)
+        }
+    }
+    ````
+
+=== "Minestom"
+
+    ```kotlin
+    import kotlinx.coroutines.Dispatchers
+    import kotlinx.coroutines.withContext
+    import net.minestom.server.entity.Player
+    import java.util.*
+    
+    class Database() {
+        suspend fun createDbIfNotExist() {
+            println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
+            withContext(Dispatchers.IO){
+                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
+                // ... create tables
+            }
+            println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
+        }
+    
+        suspend fun getDataFromPlayer(player : Player) : PlayerData {
+            println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
+            val playerData = withContext(Dispatchers.IO) {
+                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
+                // ... get from database by player uuid or create new playerData instance.
+                PlayerData(player.uuid, player.username, Date(), Date())
+            }
+    
+            println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
+            return playerData;
+        }
+    
+        suspend fun saveData(player : Player, playerData : PlayerData) {
+            println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
+    
+            withContext(Dispatchers.IO){
+                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
+                // insert or update playerData
+            }
+    
+            println("[saveData] End on minecraft thread " + Thread.currentThread().id)
+        }
+    }
+    ```
+
 === "Sponge"
 
     ````kotlin
@@ -376,91 +538,6 @@ Here, it is important that we perform all IO calls on async threads and returns 
     }
     ````
 
-=== "Minestom"
-
-    ```kotlin
-    import kotlinx.coroutines.Dispatchers
-    import kotlinx.coroutines.withContext
-    import net.minestom.server.entity.Player
-    import java.util.*
-    
-    class Database() {
-        suspend fun createDbIfNotExist() {
-            println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
-            withContext(Dispatchers.IO){
-                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
-                // ... create tables
-            }
-            println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
-        }
-    
-        suspend fun getDataFromPlayer(player : Player) : PlayerData {
-            println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
-            val playerData = withContext(Dispatchers.IO) {
-                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
-                // ... get from database by player uuid or create new playerData instance.
-                PlayerData(player.uuid, player.username, Date(), Date())
-            }
-    
-            println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
-            return playerData;
-        }
-    
-        suspend fun saveData(player : Player, playerData : PlayerData) {
-            println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
-    
-            withContext(Dispatchers.IO){
-                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
-                // insert or update playerData
-            }
-    
-            println("[saveData] End on minecraft thread " + Thread.currentThread().id)
-        }
-    }
-    ```
-
-=== "Fabric"
-
-    ```kotlin
-    import kotlinx.coroutines.Dispatchers
-    import kotlinx.coroutines.withContext
-    import net.minecraft.entity.player.PlayerEntity
-    import java.util.*
-    
-    class Database() {
-        suspend fun createDbIfNotExist() {
-            println("[createDbIfNotExist] Start on minecraft thread " + Thread.currentThread().id)
-            withContext(Dispatchers.IO){
-                println("[createDbIfNotExist] Creating database on database io thread " + Thread.currentThread().id)
-                // ... create tables
-            }
-            println("[createDbIfNotExist] End on minecraft thread " + Thread.currentThread().id)
-        }
-    
-        suspend fun getDataFromPlayer(player: PlayerEntity) : PlayerData {
-            println("[getDataFromPlayer] Start on minecraft thread " + Thread.currentThread().id)
-            val playerData = withContext(Dispatchers.IO) {
-                println("[getDataFromPlayer] Retrieving player data on database io thread " + Thread.currentThread().id)
-                // ... get from database by player uuid or create new playerData instance.
-                PlayerData(player.uuid, player.name.toString(), Date(), Date())
-            }
-    
-            println("[getDataFromPlayer] End on minecraft thread " + Thread.currentThread().id)
-            return playerData;
-        }
-    
-        suspend fun saveData(player: PlayerEntity, playerData : PlayerData) {
-            println("[saveData] Start on minecraft thread " + Thread.currentThread().id)
-    
-            withContext(Dispatchers.IO){
-                println("[saveData] Saving player data on database io thread " + Thread.currentThread().id)
-                // insert or update playerData
-            }
-    
-            println("[saveData] End on minecraft thread " + Thread.currentThread().id)
-        }
-    }
-    ```
 
 Create a new instance of the database and call it in your main class.
 
@@ -500,6 +577,72 @@ Create a new instance of the database and call it in your main class.
         }
     }
     ````
+
+=== "Fabric"
+
+    ````kotlin
+    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
+        override fun onInitializeServer() {
+            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
+                // Connect Native Minecraft Scheduler and MCCoroutine.
+                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
+                    server.submitAndJoin(r)
+                }
+                launch {
+                    onServerStarting(server)
+                }
+            })
+    
+            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+                mcCoroutineConfiguration.disposePluginSession()
+            }
+        }
+        /**
+         * MCCoroutine is ready after the server has started.
+         */
+        private suspend fun onServerStarting(server : MinecraftServer) {
+            // Minecraft Main Thread
+            val database = Database()
+            database.createDbIfNotExist()
+        }
+    }
+    ````
+
+=== "Folia"
+
+    ````kotlin
+    import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
+    
+    class MCCoroutineSamplePlugin : SuspendingJavaPlugin() {
+        private val database = Database()
+    
+        override suspend fun onEnableAsync() {
+            // Global Region Thread
+            database.createDbIfNotExist()
+        }
+    
+        override suspend fun onDisableAsync() {
+        }
+    }
+    ````
+
+=== "Minestom"
+
+    ```kotlin
+    import com.github.shynixn.mccoroutine.minestom.launch
+    import net.minestom.server.MinecraftServer
+    
+    fun main(args: Array<String>) {
+        val minecraftServer = MinecraftServer.init() 
+        minecraftServer.launch {
+            // Minecraft Main Thread
+            val database = Database()
+            database.createDbIfNotExist()
+        }
+        minecraftServer.start("0.0.0.0", 25565)
+    }
+    ```
+
 
 === "Sponge"
 
@@ -551,53 +694,6 @@ Create a new instance of the database and call it in your main class.
         @Subscribe
         suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
             // Velocity Thread Pool
-            database.createDbIfNotExist()
-        }
-    }
-    ````
-
-=== "Minestom"
-
-    ```kotlin
-    import com.github.shynixn.mccoroutine.minestom.launch
-    import net.minestom.server.MinecraftServer
-    
-    fun main(args: Array<String>) {
-        val minecraftServer = MinecraftServer.init() 
-        minecraftServer.launch {
-            // Minecraft Main Thread
-            val database = Database()
-            database.createDbIfNotExist()
-        }
-        minecraftServer.start("0.0.0.0", 25565)
-    }
-    ```
-
-=== "Fabric"
-
-    ````kotlin
-    class MCCoroutineSampleServerMod : DedicatedServerModInitializer {
-        override fun onInitializeServer() {
-            ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting { server ->
-                // Connect Native Minecraft Scheduler and MCCoroutine.
-                mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
-                    server.submitAndJoin(r)
-                }
-                launch {
-                    onServerStarting(server)
-                }
-            })
-    
-            ServerLifecycleEvents.SERVER_STOPPING.register { server ->
-                mcCoroutineConfiguration.disposePluginSession()
-            }
-        }
-        /**
-         * MCCoroutine is ready after the server has started.
-         */
-        private suspend fun onServerStarting(server : MinecraftServer) {
-            // Minecraft Main Thread
-            val database = Database()
             database.createDbIfNotExist()
         }
     }

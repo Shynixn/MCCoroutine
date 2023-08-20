@@ -13,13 +13,14 @@ the existing APIs with suspendable commands, events and schedules.
 
 **Supported Game Servers:**
 
-* Spigot
-* Paper
 * CraftBukkit
+* Fabric
+* Folia
+* Minestom
+* Paper
+* Spigot
 * SpongeVanilla v7.x.x
 * SpongeForge v7.x.x
-* Fabric
-* Minestom
 
 **Supported Proxies:**
 
@@ -67,10 +68,11 @@ private suspend fun bob() {
 ## Resources
 
 * [MCCoroutine JavaDocs for the Bukkit-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.bukkit/index.html)
-* [MCCoroutine JavaDocs for the Sponge-v7.x.x-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.sponge/index.html)
-* [MCCoroutine JavaDocs for the Fabric-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.fabric/index.html)
-* [MCCoroutine JavaDocs for the Minestom-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.minestom/index.html)
 * [MCCoroutine JavaDocs for the BungeeCord-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.bungeecord/index.html)
+* [MCCoroutine JavaDocs for the Fabric-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.fabric/index.html)
+* [MCCoroutine JavaDocs for the Folia-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.folia/index.html)
+* [MCCoroutine JavaDocs for the Minestom-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.minestom/index.html)
+* [MCCoroutine JavaDocs for the Sponge-v7.x.x-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.sponge/index.html)
 * [MCCoroutine JavaDocs for the Velocity-API](https://shynixn.github.io/MCCoroutine/apidocs/mccoroutine-root/com.github.shynixn.mccoroutine.velocity/index.html)
 * [Article on custom frameworks](https://github.com/Shynixn/MCCoroutine/blob/master/ARTICLE.md)
    

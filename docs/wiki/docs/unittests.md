@@ -18,7 +18,7 @@ feedback to the real environment.
 
 ```kotlin
 dependencies {
-    testImplementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-test:2.12.1")
+    testImplementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-test:2.13.0")
 }
 ```
 
