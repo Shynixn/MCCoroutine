@@ -24,7 +24,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
 
-    implementation("com.github.Minestom:Minestom:c5047b8037")
+    implementation("com.github.Minestom:Minestom:c60ea15") // https://jitpack.io/#Minestom/Minestom
 }
 
 tasks.withType<Jar> {
