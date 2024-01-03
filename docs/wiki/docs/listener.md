@@ -421,7 +421,7 @@ suspendable functions). You can mix suspendable and non suspendable functions in
 === "Velocity"
 
      Instead of using ``register``, use the provided extension method ``registerSuspend`` to allow
-    suspendable functions in your listener. Please notice, that timing measurements are no longer accurate for suspendable functions.
+    suspendable functions in your listener. There are also method overloads for functional style listeners.
 
     ````kotlin
     import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
