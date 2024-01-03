@@ -4,10 +4,10 @@ import com.github.shynixn.mccoroutine.minestom.launch
 import helper.MockedMinestomServer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import org.slf4j.Logger
 
 class MinestomExceptionTest {
     /**
@@ -22,7 +22,7 @@ class MinestomExceptionTest {
     fun extensionLaunch_MultipleFailingCoroutineScopes_ShouldBeCaughtInRootScopeAndKeepExtensionScopeRunning() {
         // Arrange
         val testServer = MockedMinestomServer()
-        val logger = Mockito.mock(ComponentLogger::class.java)
+        val logger = Mockito.mock(Logger::class.java)
         var logMessageCounter = 0
         Mockito.`when`(
             logger.error(Mockito.anyString(), Mockito.any())
