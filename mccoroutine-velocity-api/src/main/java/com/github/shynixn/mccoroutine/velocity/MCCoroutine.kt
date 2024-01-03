@@ -18,7 +18,7 @@ import kotlin.coroutines.CoroutineContext
  */
 internal val mcCoroutine: MCCoroutine by lazy {
     try {
-        Class.forName("com.github.shynixn.mccoroutine.velocity.impl.MCCoroutineImpl")
+        Class.forName(MCCoroutine.Driver)
             .getDeclaredConstructor().newInstance() as MCCoroutine
     } catch (e: Exception) {
         throw RuntimeException(
@@ -185,6 +185,14 @@ fun CommandManager.registerSuspend(
 }
 
 interface MCCoroutine {
+    companion object {
+        /**
+         * Allows to change the driver to load different kinds of MCCoroutine implementations.
+         * e.g. loading the implementation for UnitTests.
+         */
+        var Driver: String = "com.github.shynixn.mccoroutine.velocity.impl.MCCoroutineImpl"
+    }
+
     /**
      * Get coroutine session for the given plugin.
      * @param plugin can be a plugin instance or pluginContainer instance.
