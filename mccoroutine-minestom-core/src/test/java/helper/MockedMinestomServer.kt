@@ -1,11 +1,11 @@
 package helper
 
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger
 import net.minestom.server.MinecraftServer
 import net.minestom.server.extensions.Extension
+import org.slf4j.Logger
 
 class MockedMinestomServer {
-    fun boot(mlogger: ComponentLogger? = null): Extension {
+    fun boot(mlogger: Logger? = null): Extension {
         val extension = MockedExtension(mlogger)
         MinecraftServer.init()
         Thread {
@@ -17,7 +17,7 @@ class MockedMinestomServer {
         return extension
     }
 
-    class MockedExtension(private val logger: ComponentLogger?) : Extension() {
+    class MockedExtension(private val logger: Logger?) : Extension() {
         override fun initialize() {
         }
 
@@ -30,7 +30,7 @@ class MockedMinestomServer {
          *
          * @return The logger for the extension
          */
-        override fun getLogger(): ComponentLogger {
+        override fun getLogger(): Logger {
             if (logger != null) {
                 return logger
             }
