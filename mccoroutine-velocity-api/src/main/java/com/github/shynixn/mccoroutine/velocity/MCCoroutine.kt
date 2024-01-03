@@ -4,7 +4,10 @@ import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import com.velocitypowered.api.command.CommandManager
 import com.velocitypowered.api.command.CommandMeta
+import com.velocitypowered.api.event.AwaitingEventExecutor
 import com.velocitypowered.api.event.EventManager
+import com.velocitypowered.api.event.EventTask
+import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.plugin.PluginContainer
 import kotlinx.coroutines.*
 import kotlin.coroutines.ContinuationInterceptor
@@ -95,6 +98,52 @@ fun PluginContainer.launch(
  */
 fun EventManager.registerSuspend(plugin: Any, listener: Any) {
     return mcCoroutine.getCoroutineSession(plugin).registerSuspendListener(listener, false)
+}
+
+/**
+ * Registers a new event listener with a functional style listener.
+ *
+ * @param plugin Velocity Plugin.
+ * @param eventClass Velocity Event class
+ * @param handler suspend invocation
+ */
+fun <E> EventManager.registerSuspend(
+    plugin: Any,
+    eventClass: Class<E>,
+    handler: suspend (handler: E) -> Unit
+) {
+    return registerSuspend(plugin, eventClass, PostOrder.NORMAL, handler)
+}
+
+/**
+ * Registers a new event listener with a functional style listener.
+ *
+ * @param plugin Velocity Plugin.
+ * @param eventClass Velocity Event class
+ * @param postOrder postOrder parameter,
+ * @param handler suspend invocation
+ */
+fun <E> EventManager.registerSuspend(
+    plugin: Any,
+    eventClass: Class<E>,
+    postOrder: PostOrder,
+    handler: suspend (handler: E) -> Unit
+) {
+    val session = mcCoroutine.getCoroutineSession(plugin)
+    val scope = session.scope
+    val dispatcher = session.dispatcherVelocity
+
+    this.register(plugin, eventClass, postOrder, object : AwaitingEventExecutor<E> {
+        override fun executeAsync(event: E): EventTask {
+            return EventTask.withContinuation { continuation ->
+                // Start unDispatched on the same thread but end up on the velocity dispatcher.
+                scope.launch(dispatcher, CoroutineStart.UNDISPATCHED) {
+                    handler.invoke(event)
+                    continuation.resume()
+                }
+            }
+        }
+    });
 }
 
 /**

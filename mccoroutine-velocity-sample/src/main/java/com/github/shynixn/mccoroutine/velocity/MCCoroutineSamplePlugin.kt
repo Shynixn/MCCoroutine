@@ -7,12 +7,14 @@ import com.github.shynixn.mccoroutine.velocity.listener.PlayerConnectListener
 import com.github.shynixn.mccoroutine.velocity.listener.PlayerDisconnectListener
 import com.google.inject.Inject
 import com.velocitypowered.api.event.Subscribe
+import com.velocitypowered.api.event.player.PlayerChatEvent
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.proxy.ProxyServer
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 @Plugin(
@@ -49,6 +51,11 @@ class MCCoroutineSamplePlugin {
         // Extension to traditional registration.
         proxyServer.eventManager.registerSuspend(this, PlayerConnectListener(cache))
         proxyServer.eventManager.registerSuspend(this, PlayerDisconnectListener(cache))
+        proxyServer.eventManager.registerSuspend(this, PlayerChatEvent::class.java, { e ->
+            println("[MCCoroutineSamplePlugin/onFunctionalChat] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+            delay(500)
+            println("[MCCoroutineSamplePlugin/onFunctionalChat] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
+        })
 
         val commandExecutor = AdminCommandExecutor(cache, proxyServer)
         val meta = proxyServer.commandManager.metaBuilder("mccor")
