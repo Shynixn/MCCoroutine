@@ -1,1 +1,1 @@
-sourceset_dependencies='{":generateVelocityJavaDocPages/main":[]}'
+sourceset_dependencies='{":generateFabricJavaDocPages/main":[]}'

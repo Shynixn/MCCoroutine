@@ -30,7 +30,7 @@ internal class CoroutineSessionImpl(
      */
     override val isFoliaLoaded: Boolean by lazy {
         try {
-            Class.forName("io.papermc.paper.threadedregions.scheduler.EntityScheduler")
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer")
             true
         } catch (e: ClassNotFoundException) {
             false
