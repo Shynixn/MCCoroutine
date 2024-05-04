@@ -86,6 +86,13 @@ internal class CoroutineSessionImpl(
     }
 
     /**
+     * The main dispatcher represents the main thread of a plugin.
+     */
+    override val dispatcherMain: MainDispatcher by lazy {
+        MainDispatcher(plugin)
+    }
+
+    /**
      * The RegionizedTaskQueue allows tasks to be scheduled to be executed on the next tick of a region that owns a specific location, or creating such region if it does not exist.
      */
     override fun getRegionDispatcher(world: World, chunkX: Int, chunkZ: Int): CoroutineContext {
@@ -194,6 +201,7 @@ internal class CoroutineSessionImpl(
     fun dispose() {
         scope.coroutineContext.cancelChildren()
         scope.cancel()
+        dispatcherMain.close()
         wakeUpBlockService.dispose()
     }
 }

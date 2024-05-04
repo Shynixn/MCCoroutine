@@ -1,17 +1,16 @@
 # Kotlin Coroutines and Minecraft Plugins
 
-When starting with [Coroutines in Kotlin](https://kotlinlang.org/docs/coroutines-basics.html), it is interesting
-how this can be translated to the world of minecraft plugins. It is recommended to learn how Kotlin Coroutines work
-before you continue here.
+When starting with [Coroutines in Kotlin](https://kotlinlang.org/docs/coroutines-basics.html), you may wonder how 
+you can use them for minecraft plugins and mods. This guide introduces concepts and a production ready API you can use, to start
+adding coroutines to your project.
 
 !!! note "Important"
     Make sure you have already installed MCCoroutine. See [Installation](/gettingstarted) for details.
 
 ### Starting a coroutine
 
-In order to start coroutine You may also encounter the function
-``runBlocking`` because it makes sense for certain scenarios such as unittest.
-However, keep in mind to **avoid** using ``runblocking`` in any of your plugins.
+In order to start a coroutine, you can use the provided ``plugin.launch {}`` extension method. This is safe to be called
+anywhere in your plugin except in onDisable where you need to use ``runBlocking``. However, keep in mind to **avoid** using ``runblocking`` anywhere else in any of your plugins.
 
 * To enter a coroutine **anywhere** in your code at any time:
 
@@ -62,29 +61,45 @@ However, keep in mind to **avoid** using ``runblocking`` in any of your plugins.
 
 === "Folia"
 
-    As Folia brings multithreading to Paper based servers, threading becomes more complicated and MCCoroutine requires you to think 
-    everytime you call plugin.launch. In Bukkit based servers, MCCoroutine can assume the correct thread automatically and optimise ticking. (e.g.
-    not sending a task to the scheduler if you are already on the main thread). 
-
-    In Folia, there are many threadpools (explained below) and we do not have a main thread.
+    As Folia brings multithreading to Paper based servers, threading becomes a lore more complicated for plugin developers. 
 
     !!! note "Important"
         You can run mccoroutine-folia in standard Bukkit servers as well. MCCoroutine automatically falls back to the standard Bukkit 
         scheduler if the Folia schedulers are not found and the rules for mccoroutine-bukkit start to apply.
+    
+    !!! note "Important"
+        If you have been using mccoroutine for Bukkit before, you have to perform some restructuring in your plugin. **Simply changing the imports is not enough.**
+        ``plugin.launch {}`` works differently in Folia compared to Bukkit.
+
+    First, it is important to understand that Folia does not have a server main thread. In order to access minecraft resources you need to use the correct thread for 
+    a given resource. For an entity, you need to use the currently assigned thread for that entity. MCCoroutine provides dispatchers for each of these usecases and 
+    automatically falls back to the matching dispatchers if you are on a Bukkit server instead of a Folia server. 
+
+    However, this does not solve the problem of accessing our own data in our plugins. We do not have a main thread, so we could try accessing our data on the incoming
+    thread. However, sometimes you have to make sure only 1 thread is accessing a resource at a time. This is important for ordering events and avoiding concurrency exceptions.
+    Concurrent collections can help with that but you may still need synchronize access in other places.
+
+    As a solution, MCCoroutine proposes that each plugin gets their own "main thread" and corresponding "mainDispatcher". It is intended to execute all the stuff the plugin is going to do.
+    For minecraft actions, like teleporting a player or manipulating an entity. You simply excute them in a sub context and return back to your personal main thread. This 
+    concepts result into the following code.
 
     ```kotlin
     import com.github.shynixn.mccoroutine.folia.launch
     import org.bukkit.plugin.Plugin
 
     fun foo(entity : Entity) {
-        // The plugin.entityDispatcher(entity) parameter ensures, that we end up on the scheduler for the entity in the specific region if we suspend
-        // inside the plugin.launch scope. (e.g. using delay)
-        // The CoroutineStart.UNDISPATCHED ensures, that we enter plugin.launch scope without any delay on the current thread. 
-        // You are responsible to ensure that you are on the correct thread pool (in this case the thread pool for the entity), if you pass CoroutineStart.UNDISPATCHED.
-        // This is automatically the case if you use plugin.launch{} in events or commands. You can simply use CoroutineStart.UNDISPATCHED here.
-        // If you use CoroutineStart.DEFAULT, the plugin.launch scope is entered in the next scheduler tick.
-        plugin.launch(plugin.entityDispatcher(entity), CoroutineStart.UNDISPATCHED) {
-            // In this case this will be the correct thread for the given entity, if the thread was correct before calling plugin.launch.
+        plugin.launch { // or plugin.launch(plugin.mainDispatcher) {}
+            // Your plugin main thread. If you have already been on your plugin main thread, this scope is entered immidiatly.
+            // Regardless if your are on bukkit or on folia, this is your personal thread and you must not call bukkit methods on it.
+            // Now perform some data access on your plugin data like accessing a repository.
+            val storedEntityDataInDatabase = database.get()
+            
+            // Apply the data on the entity thread using the entityDispatcher.
+            // The plugin.entityDispatcher(entity) parameter ensures, that we end up on the scheduler for the entity in the specific region.
+            withContext(plugin.entityDispatcher(entity)) {
+                  // In Folia, this will be the correct thread for the given entity.
+                  // In Bukkit, this will be the main thread.
+            }
         }
     }
     ```
@@ -306,7 +321,8 @@ A dispatcher determines what thread or threads the corresponding coroutine uses 
 
     In Folia, MCCoroutine offers 4 custom dispatchers.
 
-    * globalRegion (Allows to execute coroutines on the global region. e.g. Global Game Rules)
+    * mainDispatcher (Your personal plugin main thread, allows to execute coroutines on it)
+    * globalRegionDispatcher (Allows to execute coroutines on the global region. e.g. Global Game Rules)
     * regionDispatcher (Allows to execute coroutines on a specific location in a world)
     * entityDispatcher (Allows to execute coroutines on a specific entity)
     * asyncDispatcher (Allows to execute coroutines on the async thread pool)
@@ -315,16 +331,20 @@ A dispatcher determines what thread or threads the corresponding coroutine uses 
     
     ```kotlin
     fun foo(location: Location)) {
-        plugin.launch(plugin.regionDispatcher(location), CoroutineStart.UNDISPATCHED) {
-            // The correct thread for the given location without delay, if the thread was correct before calling plugin.launch.
+        plugin.launch {
+            // Always make your you are on your personal plugin main thread.
 
-            val result = withContext(Dispatchers.IO) {
-                  // Perform operations asynchronously.
-                "Playxer is Max"
+            val resultBlockType = withContext(plugin.regionDispatcher(location)) {
+                // In Folia, this will be the correct thread for the given location
+                // In Bukkit, this will be the main thread.
+                getTypeOfBlock()
             }
-    
-           // The correct thread for the given location.
-            println(result) // Prints 'Player is Max'
+
+            myBlockTypeList.add(resultBlockType)
+
+            withContext(plugin.asyncDispatcher) {
+                // save myBlockTypeList to file.
+            }
         }
     }
     ```

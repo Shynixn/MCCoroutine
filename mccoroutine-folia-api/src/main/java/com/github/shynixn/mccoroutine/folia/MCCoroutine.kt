@@ -53,6 +53,14 @@ val Plugin.asyncDispatcher: CoroutineContext
     }
 
 /**
+ * Gets the plugin main dispatcher. The main dispatcher consists of a single thread dedicated for your plugin
+ */
+val Plugin.mainDispatcher : CoroutineContext
+    get() {
+        return mcCoroutine.getCoroutineSession(this).dispatcherMain
+    }
+
+/**
  * Gets the dispatcher to schedule tasks on the region that owns the entity.
  * If Folia is not loaded, this falls back to the bukkit minecraftDispatcher.
  */
@@ -87,7 +95,7 @@ val Plugin.scope: CoroutineScope
     }
 
 /**
- * Launches a new coroutine on the current thread without blocking the current thread and returns a reference to the coroutine as a [Job].
+ * Launches a new coroutine on the main plugin thread without blocking the current thread and returns a reference to the coroutine as a [Job].
  * The coroutine is cancelled when the resulting job is [cancelled][Job.cancel].
  *
  * The coroutine context is inherited from a [Plugin.scope]. Additional context elements can be specified with [context] argument.
@@ -95,8 +103,8 @@ val Plugin.scope: CoroutineScope
  * The parent job is inherited from a [Plugin.scope] as well, but it can also be overridden
  * with a corresponding [context] element.
  *
- * By default, the coroutine is immediately scheduled on the current calling thread. However, manipulating global data, entities or locations
- * is not safe in this context. Use subsequent operations for this case e.g. withContext(plugin.entityDispatcher(entity)) {} or withContext(plugin.regionDispatcher(location)) {}
+ * By default, the coroutine is scheduled on the plugin main thread. This is not the minecraft main thread even if you are using MCCoroutine for Folia in Bukkit mode.
+ * Manipulating global data, entities or locations is not safe in this context. Use subsequent operations for this case e.g. withContext(plugin.entityDispatcher(entity)) {} or withContext(plugin.regionDispatcher(location)) {}
  * Other start options can be specified via `start` parameter. See [CoroutineStart] for details.
  * An optional [start] parameter can be set to [CoroutineStart.LAZY] to start coroutine _lazily_. In this case,
  * the coroutine [Job] is created in _new_ state. It can be explicitly started with [start][Job.start] function
@@ -111,8 +119,8 @@ val Plugin.scope: CoroutineScope
  * @param block the coroutine code which will be invoked in the context of the provided scope.
  **/
 fun Plugin.launch(
-    context: CoroutineContext,
-    start: CoroutineStart,
+    context: CoroutineContext = mainDispatcher,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ): Job {
     if (!scope.isActive) {

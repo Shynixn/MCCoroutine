@@ -96,15 +96,22 @@ plugins.
     
     class PlayerDataCommandExecutor(private val database: Database) : SuspendingCommandExecutor {
         override suspend fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+            // In Folia, this will be the global region thread, or entity execution thread.
+            // In Bukkit, this will be the main thread.
+    
             if (sender !is Player) {
                 return false
             }
     
             if (args.size == 2 && args[0].equals("rename", true)) {
                 val name = args[1]
-                val playerData = database.getDataFromPlayer(sender)
-                playerData.name = name
-                database.saveData(sender, playerData)
+                withContext(plugin.mainDispatcher) {
+                    // Make sure you switch to your plugin main thread before you do anything in your plugin.
+                    val playerData = database.getDataFromPlayer(sender)
+                    playerData.name = name
+                    database.saveData(sender, playerData)
+                }
+
                 return true
             }
     
@@ -312,14 +319,14 @@ plugins.
         private val database = Database()
     
         override suspend fun onEnableAsync() {
-            // Minecraft Main Thread
+            // Global Region Thread.
             database.createDbIfNotExist()
             server.pluginManager.registerSuspendingEvents(PlayerDataListener(database), this)
             getCommand("playerdata")!!.setSuspendingExecutor(PlayerDataCommandExecutor(database))
         }
     
         override suspend fun onDisableAsync() {
-            // Minecraft Main Thread
+             // Global Region Thread.
         }
     }
     ````

@@ -29,6 +29,11 @@ interface CoroutineSession {
     val dispatcherAsync: CoroutineContext
 
     /**
+     * The main dispatcher represents the main thread of a plugin.
+     */
+    val dispatcherMain : CoroutineContext
+
+    /**
      * Manipulates the bukkit server heart beat on startup.
      */
     var isManipulatedServerHeartBeatEnabled: Boolean
