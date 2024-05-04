@@ -26,14 +26,10 @@ internal open class EntityDispatcher(
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        val task = entity.scheduler.run(plugin, {
+        entity.scheduler.run(plugin, {
             block.run()
         }, {
             block.run()
         })
-
-        if (task == null) { // Entity was removed. Execute on global region scheduler.
-            plugin.server.globalRegionScheduler.execute(plugin, block)
-        }
     }
 }
