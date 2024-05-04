@@ -2,7 +2,6 @@ package com.github.shynixn.mccoroutine.folia.sample.listener
 
 import com.github.shynixn.mccoroutine.folia.*
 import com.github.shynixn.mccoroutine.folia.sample.impl.UserDataCache
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.bukkit.Material
@@ -38,14 +37,16 @@ class PlayerConnectListener(private val plugin: Plugin, private val userDataCach
             ItemStack(Material.APPLE)
         }
 
-        userDataCache.clearCache(playerQuitEvent.player)
+        withContext(plugin.mainDispatcher) {
+            userDataCache.clearCache(playerQuitEvent.player)
+        }
         println("[PlayerConnectListener/onPlayerQuitEvent] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
     }
 
     @EventHandler
     fun onEntitySpawnEvent(event: EntitySpawnEvent) {
         println("[PlayerConnectListener/onEntitySpawnEvent] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
-        plugin.launch(plugin.entityDispatcher(event.entity), CoroutineStart.UNDISPATCHED) {
+        plugin.launch {
             println("[PlayerConnectListener/onEntitySpawnEvent] Entering coroutine on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
             delay(2000)
 

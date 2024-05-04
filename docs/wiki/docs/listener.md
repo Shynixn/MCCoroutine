@@ -110,17 +110,22 @@ suspendable functions). You can mix suspendable and non suspendable functions in
     class PlayerDataListener(private val database: Database) : Listener {
         @EventHandler
         suspend fun onPlayerJoinEvent(event: PlayerJoinEvent) {
-            val player = event.player
-            val playerData = database.getDataFromPlayer(player)
-            playerData.name = player.name
-            playerData.lastJoinDate = Date()
-            database.saveData(player, playerData)
+            // In Folia, this will be entity thread of the player.
+            // In Bukkit, this will be the main thread.
+            withContext(plugin.mainDispatcher) {
+                // Make sure you switch to your plugin main thread before you do anything in your plugin.
+                val player = event.player
+                val playerData = database.getDataFromPlayer(player)
+                playerData.name = player.name
+                playerData.lastJoinDate = Date()
+                database.saveData(player, playerData)
+            }
         }
     
         @EventHandler
         fun onPlayerQuitEvent(event: PlayerQuitEvent) {
-            // Alternative way to achieve the same thing
-            plugin.launch(plugin.entityDispatcher(event.player)), CoroutineStart.UNDISPATCHED) {
+            plugin.launch {
+                // Make sure you switch to your plugin main thread before you do anything in your plugin.
                 val player = event.player
                 val playerData = database.getDataFromPlayer(player)
                 playerData.name = player.name

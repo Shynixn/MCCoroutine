@@ -3,8 +3,10 @@ package com.github.shynixn.mccoroutine.folia.sample.commandexecutor
 import com.github.shynixn.mccoroutine.folia.SuspendingCommandExecutor
 import com.github.shynixn.mccoroutine.folia.SuspendingTabCompleter
 import com.github.shynixn.mccoroutine.folia.callSuspendingEvent
+import com.github.shynixn.mccoroutine.folia.mainDispatcher
 import com.github.shynixn.mccoroutine.folia.sample.impl.UserDataCache
 import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.withContext
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -29,11 +31,12 @@ class AdminCommandExecutor(private val userDataCache: UserDataCache, private val
             val playerName = args[1]
             val playerKills = args[2].toInt()
             val otherPlayer = Bukkit.getPlayer(playerName)!!
-
             println("[AdmingCommandExecutor/onCommand] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
-            val userData = userDataCache.getUserDataFromPlayerAsync(otherPlayer).await()
-            userData.amountOfPlayerKills = playerKills
-            userDataCache.saveUserData(otherPlayer)
+            withContext(plugin.mainDispatcher) {
+                val userData = userDataCache.getUserDataFromPlayerAsync(otherPlayer).await()
+                userData.amountOfPlayerKills = playerKills
+                userDataCache.saveUserData(otherPlayer)
+            }
             println("[AdmingCommandExecutor/onCommand] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
             return true
         }

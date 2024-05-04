@@ -22,7 +22,7 @@ tasks.withType<ShadowJar> {
     archiveName = "$baseName-$version.$extension"
 
     // Change the output folder of the plugin.
-    // destinationDir = File("C:\\temp\\plugins\\")
+    // destinationDir = File("C:\\temp\\Folia\\plugins")
 }
 
 repositories {
