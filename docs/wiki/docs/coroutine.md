@@ -61,7 +61,7 @@ anywhere in your plugin except in onDisable where you need to use ``runBlocking`
 
 === "Folia"
 
-    As Folia brings multithreading to Paper based servers, threading becomes a lore more complicated for plugin developers. 
+    As Folia brings multithreading to Paper based servers, threading becomes a lot more complicated for plugin developers. 
 
     !!! note "Important"
         You can run mccoroutine-folia in standard Bukkit servers as well. MCCoroutine automatically falls back to the standard Bukkit 
@@ -72,15 +72,15 @@ anywhere in your plugin except in onDisable where you need to use ``runBlocking`
         ``plugin.launch {}`` works differently in Folia compared to Bukkit.
 
     First, it is important to understand that Folia does not have a server main thread. In order to access minecraft resources you need to use the correct thread for 
-    a given resource. For an entity, you need to use the currently assigned thread for that entity. MCCoroutine provides dispatchers for each of these usecases and 
-    automatically falls back to the matching dispatchers if you are on a Bukkit server instead of a Folia server. 
+    a given resource. For an entity, you need to use the currently assigned thread for that entity. MCCoroutine provides dispatchers for each of these usecases in Folia
+    and automatically falls back to the Bukkit dispatchers when you launch your Folia plugin on a standard Bukkit server.
 
-    However, this does not solve the problem of accessing our own data in our plugins. We do not have a main thread, so we could try accessing our data on the incoming
+    However, this does not solve the problem of accessing our own data in our plugins. We do not have a main thread, so we default on accessing our data on the incoming
     thread. However, sometimes you have to make sure only 1 thread is accessing a resource at a time. This is important for ordering events and avoiding concurrency exceptions.
     Concurrent collections can help with that but you may still need synchronize access in other places.
 
     As a solution, MCCoroutine proposes that each plugin gets their own "main thread" and corresponding "mainDispatcher". It is intended to execute all the stuff the plugin is going to do.
-    For minecraft actions, like teleporting a player or manipulating an entity. You simply excute them in a sub context and return back to your personal main thread. This 
+    Examples for this are retrieving and matching data like having a ``List<Game>`` or ``List<Arena>`` in minigame plugins. For minecraft actions, like teleporting a player, you start a sub context, computate the result and return it back to your personal main thread. This 
     concepts result into the following code.
 
     ```kotlin
@@ -319,7 +319,7 @@ A dispatcher determines what thread or threads the corresponding coroutine uses 
 
 === "Folia"
 
-    In Folia, MCCoroutine offers 4 custom dispatchers.
+    In Folia, MCCoroutine offers 5 custom dispatchers.
 
     * mainDispatcher (Your personal plugin main thread, allows to execute coroutines on it)
     * globalRegionDispatcher (Allows to execute coroutines on the global region. e.g. Global Game Rules)
@@ -332,11 +332,11 @@ A dispatcher determines what thread or threads the corresponding coroutine uses 
     ```kotlin
     fun foo(location: Location)) {
         plugin.launch {
-            // Always make your you are on your personal plugin main thread.
+            // Ensures that you are now on your plugin thread.
 
             val resultBlockType = withContext(plugin.regionDispatcher(location)) {
                 // In Folia, this will be the correct thread for the given location
-                // In Bukkit, this will be the main thread.
+                // In Bukkit, this will be the minecraft thread.
                 getTypeOfBlock()
             }
 
