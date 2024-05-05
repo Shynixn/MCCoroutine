@@ -852,7 +852,7 @@ This guide gives only <code>DedicatedServerModInitializer</code> examples but it
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<p>As Folia brings multithreading to Paper based servers, threading becomes a lore more complicated for plugin developers. </p>
+<p>As Folia brings multithreading to Paper based servers, threading becomes a lot more complicated for plugin developers. </p>
 <div class="admonition note">
 <p class="admonition-title">Important</p>
 <p>You can run mccoroutine-folia in standard Bukkit servers as well. MCCoroutine automatically falls back to the standard Bukkit 
@@ -864,13 +864,13 @@ scheduler if the Folia schedulers are not found and the rules for mccoroutine-bu
 <code>plugin.launch {}</code> works differently in Folia compared to Bukkit.</p>
 </div>
 <p>First, it is important to understand that Folia does not have a server main thread. In order to access minecraft resources you need to use the correct thread for 
-a given resource. For an entity, you need to use the currently assigned thread for that entity. MCCoroutine provides dispatchers for each of these usecases and 
-automatically falls back to the matching dispatchers if you are on a Bukkit server instead of a Folia server. </p>
-<p>However, this does not solve the problem of accessing our own data in our plugins. We do not have a main thread, so we could try accessing our data on the incoming
+a given resource. For an entity, you need to use the currently assigned thread for that entity. MCCoroutine provides dispatchers for each of these usecases in Folia
+and automatically falls back to the Bukkit dispatchers when you launch your Folia plugin on a standard Bukkit server.</p>
+<p>However, this does not solve the problem of accessing our own data in our plugins. We do not have a main thread, so we default on accessing our data on the incoming
 thread. However, sometimes you have to make sure only 1 thread is accessing a resource at a time. This is important for ordering events and avoiding concurrency exceptions.
 Concurrent collections can help with that but you may still need synchronize access in other places.</p>
 <p>As a solution, MCCoroutine proposes that each plugin gets their own "main thread" and corresponding "mainDispatcher". It is intended to execute all the stuff the plugin is going to do.
-For minecraft actions, like teleporting a player or manipulating an entity. You simply excute them in a sub context and return back to your personal main thread. This 
+Examples for this are retrieving and matching data like having a <code>List&lt;Game&gt;</code> or <code>List&lt;Arena&gt;</code> in minigame plugins. For minecraft actions, like teleporting a player, you start a sub context, computate the result and return it back to your personal main thread. This 
 concepts result into the following code.</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nn">com.github.shynixn.mccoroutine.folia.launch</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">org.bukkit.plugin.Plugin</span>
@@ -1079,7 +1079,7 @@ case can be found below:</p>
 <p>TBD</p>
 </div>
 <div class="tabbed-block">
-<p>In Folia, MCCoroutine offers 4 custom dispatchers.</p>
+<p>In Folia, MCCoroutine offers 5 custom dispatchers.</p>
 <ul>
 <li>mainDispatcher (Your personal plugin main thread, allows to execute coroutines on it)</li>
 <li>globalRegionDispatcher (Allows to execute coroutines on the global region. e.g. Global Game Rules)</li>
@@ -1090,11 +1090,11 @@ case can be found below:</p>
 <p>An example how this works is shown below:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">location</span><span class="p">:</span><span class="w"> </span><span class="n">Location</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">plugin</span><span class="p">.</span><span class="na">launch</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Always make your you are on your personal plugin main thread.</span>
+<span class="w">        </span><span class="c1">// Ensures that you are now on your plugin thread.</span>
 
 <span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">resultBlockType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">withContext</span><span class="p">(</span><span class="n">plugin</span><span class="p">.</span><span class="na">regionDispatcher</span><span class="p">(</span><span class="n">location</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="c1">// In Folia, this will be the correct thread for the given location</span>
-<span class="w">            </span><span class="c1">// In Bukkit, this will be the main thread.</span>
+<span class="w">            </span><span class="c1">// In Bukkit, this will be the minecraft thread.</span>
 <span class="w">            </span><span class="n">getTypeOfBlock</span><span class="p">()</span>
 <span class="w">        </span><span class="p">}</span>
 
