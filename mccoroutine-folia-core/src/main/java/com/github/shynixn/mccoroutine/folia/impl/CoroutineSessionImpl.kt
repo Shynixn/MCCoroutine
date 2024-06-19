@@ -125,13 +125,21 @@ internal class CoroutineSessionImpl(
             wakeUpBlockService.isManipulatedServerHeartBeatEnabled = value
         }
 
+    /**
+     * The thread id of the dispatcherMain.
+     */
+    override val dispatcherMainThreadId: Long
+        get() {
+            return dispatcherMain.threadId
+        }
+
     init {
         // Root Exception Handler. All Exception which are not consumed by the caller end up here.
         val exceptionHandler = CoroutineExceptionHandler { _, e ->
             val mcCoroutineExceptionEvent = MCCoroutineExceptionEvent(plugin, e)
 
             if (plugin.isEnabled) {
-                plugin.launch(plugin.globalRegionDispatcher, CoroutineStart.DEFAULT){
+                plugin.launch(plugin.globalRegionDispatcher, CoroutineStart.DEFAULT) {
                     plugin.server.pluginManager.callEvent(mcCoroutineExceptionEvent)
 
                     if (!mcCoroutineExceptionEvent.isCancelled) {

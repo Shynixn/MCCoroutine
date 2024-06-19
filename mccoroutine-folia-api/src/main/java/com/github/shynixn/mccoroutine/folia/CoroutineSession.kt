@@ -31,7 +31,7 @@ interface CoroutineSession {
     /**
      * The main dispatcher represents the main thread of a plugin.
      */
-    val dispatcherMain : CoroutineContext
+    val dispatcherMain: CoroutineContext
 
     /**
      * Manipulates the bukkit server heart beat on startup.
@@ -42,6 +42,11 @@ interface CoroutineSession {
      * MCCoroutine Facade.
      */
     val mcCoroutineConfiguration: MCCoroutineConfiguration
+
+    /**
+     * The thread id of the dispatcherMain.
+     */
+    val dispatcherMainThreadId: Long
 
     /**
      * Gets if the Folia schedulers where successfully loaded into MCCoroutine.

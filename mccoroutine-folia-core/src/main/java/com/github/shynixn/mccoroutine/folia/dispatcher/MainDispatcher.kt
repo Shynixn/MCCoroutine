@@ -11,7 +11,7 @@ class MainDispatcher(
     private val executor = Executors.newFixedThreadPool(1) { r ->
         Thread(r, "MCCoroutine-${plugin.name}-MainThread")
     }
-    private var threadId = -1L
+    var threadId = -1L
 
     init {
         executor.submit {
