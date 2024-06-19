@@ -9,8 +9,8 @@ repositories {
     mavenLocal()
 }
 dependencies {
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.16.0")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.16.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.17.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.17.0")
 
     minecraft("com.mojang", "minecraft", project.extra["minecraft_version"] as String)
     mappings("net.fabricmc", "yarn", project.extra["yarn_mappings"] as String, null, "v2")

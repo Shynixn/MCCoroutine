@@ -55,10 +55,28 @@ val Plugin.asyncDispatcher: CoroutineContext
 /**
  * Gets the plugin main dispatcher. The main dispatcher consists of a single thread dedicated for your plugin
  */
-val Plugin.mainDispatcher : CoroutineContext
+val Plugin.mainDispatcher: CoroutineContext
     get() {
         return mcCoroutine.getCoroutineSession(this).dispatcherMain
     }
+
+/**
+ * Validates if the current Thread is the Plugin Main Thread of mainDispatcher.
+ * Throws an Exception if not.
+ */
+fun Plugin.ensurePluginThread() {
+    val threadId = mcCoroutine.getCoroutineSession(this).dispatcherMainThreadId
+    if (Thread.currentThread().id != threadId) {
+        throw IllegalStateException("The current thread is not the main thread of plugin ${name}.")
+    }
+}
+
+/**
+ * Gets if the current server uses Folia instead of Bukkit.
+ */
+fun Plugin.isFoliaLoaded(): Boolean {
+    return mcCoroutine.getCoroutineSession(this).isFoliaLoaded
+}
 
 /**
  * Gets the dispatcher to schedule tasks on the region that owns the entity.
