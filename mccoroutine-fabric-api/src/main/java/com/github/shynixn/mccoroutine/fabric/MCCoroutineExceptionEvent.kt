@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.EventFactory
  * A Fabric event which is called when an exception is raised in one of the coroutines managed by MCCoroutine.
  * Cancelling this exception causes the error to not get logged and offers to possibility for custom logging.
  */
+@FunctionalInterface
 interface MCCoroutineExceptionEvent {
     companion object {
         val EVENT: Event<MCCoroutineExceptionEvent> =
