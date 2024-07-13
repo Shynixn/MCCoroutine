@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("com.github.johnrengelman.shadow") version ("2.0.4")
+    id("com.github.johnrengelman.shadow") version ("8.1.1")
 }
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -21,10 +21,11 @@ dependencies {
     implementation(project(":mccoroutine-minestom-core"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.9.0-RC")
 
-    implementation("com.github.Minestom:Minestom:c60ea15") // https://jitpack.io/#Minestom/Minestom
+    implementation("dev.hollowcube:minestom-ce-extensions:1.2.0")
+    implementation("net.minestom:minestom-snapshots:7320437640")
 }
 
 tasks.withType<Jar> {
@@ -36,8 +37,8 @@ tasks.withType<Jar> {
 
 tasks.withType<ShadowJar> {
     dependsOn("jar")
-    classifier = "shadowJar"
-    archiveName = "$baseName.$extension"
+    archiveClassifier.set("shadowJar")
+    archiveFileName.set("${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}")
 
     // Change the output folder of the plugin.
     // destinationDir = File("..\\extensions")

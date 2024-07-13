@@ -12,10 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import net.minestom.server.MinecraftServer
-import net.minestom.server.event.EventNode
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerDisconnectEvent
-import net.minestom.server.event.player.PlayerEntityInteractEvent
-import net.minestom.server.event.player.PlayerLoginEvent
 import net.minestom.server.extensions.Extension
 
 /**
@@ -48,13 +46,14 @@ class MCCoroutineSampleExtension : Extension() {
         // Extension to traditional registration.
         val playerConnectListener = PlayerConnectListener(this, cache)
         val rootEventNode = MinecraftServer.getGlobalEventHandler()
-        rootEventNode.addSuspendingListener(this, PlayerLoginEvent::class.java) { e ->
+        val mine = MinecraftServer.init()
+        rootEventNode.addSuspendingListener(mine, AsyncPlayerConfigurationEvent::class.java) { e ->
             playerConnectListener.onPlayerJoinEvent(e)
         }
-        rootEventNode.addSuspendingListener(this, PlayerDisconnectEvent::class.java) { e ->
+        rootEventNode.addSuspendingListener(mine, PlayerDisconnectEvent::class.java) { e ->
             playerConnectListener.onPlayerQuitEvent(e)
         }
-        rootEventNode.addSuspendingListener(this, MCCoroutineExceptionEvent::class.java) { e ->
+        rootEventNode.addSuspendingListener(mine, MCCoroutineExceptionEvent::class.java) { e ->
             playerConnectListener.onCoroutineException(e)
         }
 

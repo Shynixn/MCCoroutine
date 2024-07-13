@@ -14,8 +14,8 @@ import kotlinx.coroutines.withContext
 import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.entity.Player
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerDisconnectEvent
-import net.minestom.server.event.player.PlayerLoginEvent
 import net.minestom.server.instance.InstanceContainer
 import net.minestom.server.instance.block.Block
 import net.minestom.server.instance.generator.GenerationUnit
@@ -50,12 +50,12 @@ fun main(args: Array<String>) {
     }
     val globalEventHandler = MinecraftServer.getGlobalEventHandler()
     globalEventHandler.addListener(
-        PlayerLoginEvent::class.java
-    ) { event: PlayerLoginEvent ->
+        AsyncPlayerConfigurationEvent::class.java
+    ) { event: AsyncPlayerConfigurationEvent ->
         val player: Player = event.player
         player.setPermissionLevel(2)
-        event.setSpawningInstance(instanceContainer)
-        player.setRespawnPoint(Pos(0.0, 42.0, 0.0))
+        event.spawningInstance = instanceContainer
+        player.respawnPoint = Pos(0.0, 42.0, 0.0)
     }
 
     val database = FakeDatabase()
@@ -64,7 +64,7 @@ fun main(args: Array<String>) {
     // Extension to traditional registration.
     val playerConnectListener = PlayerConnectListener(minecraftServer, cache)
     val rootEventNode = MinecraftServer.getGlobalEventHandler()
-    rootEventNode.addSuspendingListener(minecraftServer, PlayerLoginEvent::class.java) { e ->
+    rootEventNode.addSuspendingListener(minecraftServer, AsyncPlayerConfigurationEvent::class.java) { e ->
         playerConnectListener.onPlayerJoinEvent(e)
     }
     rootEventNode.addListener(
