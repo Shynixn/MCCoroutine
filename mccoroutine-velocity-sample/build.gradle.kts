@@ -1,24 +1,34 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.github.johnrengelman.shadow") version ("8.1.1")
+    id("org.jetbrains.kotlin.kapt")
 }
 
+
 // Required to generate the velocity-plugin.json file.
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(11)
     }
 }
 
 repositories {
-    maven{
-        url "https://nexus.velocitypowered.com/repository/maven-public"
+    maven {
+        url = uri("https://nexus.velocitypowered.com/repository/maven-public")
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }
 
 
-shadowJar{
+tasks.shadowJar {
     dependsOn("jar")
     archiveClassifier.set("shadowJar")
     archiveFileName.set("${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}")

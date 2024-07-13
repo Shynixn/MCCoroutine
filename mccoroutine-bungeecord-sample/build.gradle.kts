@@ -10,6 +10,12 @@ publishing {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 tasks.withType<ShadowJar> {
     dependsOn("jar")
     archiveClassifier.set("shadowJar")

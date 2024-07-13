@@ -25,6 +25,12 @@ repositories {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 dependencies {
     implementation(project(":mccoroutine-bukkit-api"))
     implementation(project(":mccoroutine-bukkit-core"))

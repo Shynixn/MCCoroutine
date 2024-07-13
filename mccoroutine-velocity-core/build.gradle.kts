@@ -1,14 +1,20 @@
-apply plugin: 'kotlin'
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 repositories {
-    maven{
-        url "https://nexus.velocitypowered.com/repository/maven-public"
+    maven {
+        url = uri("https://nexus.velocitypowered.com/repository/maven-public")
     }
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }
 

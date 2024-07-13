@@ -25,6 +25,12 @@ repositories {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 dependencies {
     implementation(project(":mccoroutine-sponge-api"))
     implementation(project(":mccoroutine-sponge-core"))

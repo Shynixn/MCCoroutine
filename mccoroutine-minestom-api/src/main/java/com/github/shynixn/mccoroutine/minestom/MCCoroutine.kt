@@ -267,6 +267,21 @@ fun <E : Event> EventNode<in E>.addSuspendingListener(
 }
 
 /**
+ * Adds a new suspendable listener to this event node.
+ */
+fun <E : Event> EventNode<in E>.addSuspendingListener(
+    extension: Extension,
+    eventType: Class<E>,
+    listener: suspend (E) -> Unit
+) {
+    this.addListener(eventType) { e ->
+        extension.launch {
+            listener.invoke(e)
+        }
+    }
+}
+
+/**
  * Adds a new suspendable handler to this builder.
  */
 fun <E : Event> EventListener.Builder<E>.suspendingHandler(
