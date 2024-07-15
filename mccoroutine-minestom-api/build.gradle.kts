@@ -20,7 +20,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
 dependencies {
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
-    compileOnly("net.minestom:minestom-snapshots:7320437640")
+    compileOnly("net.minestom:minestom-snapshots:6fc64e3a5d")
     implementation("dev.hollowcube:minestom-ce-extensions:1.2.0")
-    testImplementation("net.minestom:minestom-snapshots:7320437640")
+    testImplementation("net.minestom:minestom-snapshots:6fc64e3a5d")
 }

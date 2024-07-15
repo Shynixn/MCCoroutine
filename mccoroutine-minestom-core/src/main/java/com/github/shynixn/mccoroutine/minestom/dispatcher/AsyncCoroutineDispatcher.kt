@@ -23,6 +23,6 @@ internal open class AsyncCoroutineDispatcher() : CoroutineDispatcher() {
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        MinecraftServer.getSchedulerManager().scheduleNextTick(block, ExecutionType.ASYNC)
+        MinecraftServer.getSchedulerManager().scheduleNextTick(block, ExecutionType.TICK_START)
     }
 }

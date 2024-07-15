@@ -32,7 +32,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.9.0-RC")
 
     implementation("dev.hollowcube:minestom-ce-extensions:1.2.0")
-    implementation("net.minestom:minestom-snapshots:7320437640")
+    implementation("net.minestom:minestom-snapshots:6fc64e3a5d")
 }
 
 tasks.withType<Jar> {
