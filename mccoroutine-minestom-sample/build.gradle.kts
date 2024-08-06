@@ -45,7 +45,6 @@ tasks.withType<Jar> {
 tasks.withType<ShadowJar> {
     dependsOn("jar")
     archiveClassifier.set("shadowJar")
-    archiveFileName.set("${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}")
 
     // Change the output folder of the plugin.
     // destinationDirectory.set(File("C:\\temp\\minestom"))

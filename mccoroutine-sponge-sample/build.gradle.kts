@@ -13,7 +13,6 @@ publishing {
 tasks.withType<ShadowJar> {
     dependsOn("jar")
     archiveClassifier.set("shadowJar")
-    archiveFileName.set("${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}")
 
     // Change the output folder of the plugin.
     //  destinationDir = File("C:\\temp\\Sponge\\Sponge-2825-7.1.6\\mods")
