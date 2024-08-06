@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("com.github.johnrengelman.shadow") version ("2.0.4")
+    id("com.github.johnrengelman.shadow") version ("8.1.1")
 }
 
 publishing {
@@ -12,8 +12,8 @@ publishing {
 
 tasks.withType<ShadowJar> {
     dependsOn("jar")
-    classifier = "shadowJar"
-    archiveName = "$baseName-$version.$extension"
+    archiveClassifier.set("shadowJar")
+    archiveFileName.set("${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}")
 
     // Change the output folder of the plugin.
     //  destinationDir = File("C:\\temp\\Sponge\\Sponge-2825-7.1.6\\mods")
@@ -22,6 +22,12 @@ tasks.withType<ShadowJar> {
 repositories {
     maven {
         url = uri("https://repo.spongepowered.org/maven")
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
     }
 }
 

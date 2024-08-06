@@ -6,13 +6,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.minestom.server.MinecraftServer
 import net.minestom.server.event.player.PlayerDisconnectEvent
-import net.minestom.server.event.player.PlayerLoginEvent
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 
 class PlayerConnectListener(private val server: MinecraftServer, private val userDataCache: UserDataCache) {
     /**
      * Gets called on player join event.
      */
-    suspend fun onPlayerJoinEvent(playerJoinEvent: PlayerLoginEvent) {
+    suspend fun onPlayerJoinEvent(playerJoinEvent: AsyncPlayerConfigurationEvent) {
         println("[PlayerConnectListener/onPlayerJoinEvent] Is starting on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")
         val userData = userDataCache.getUserDataFromPlayerAsync(playerJoinEvent.player).await()
         println("[PlayerConnectListener/onPlayerJoinEvent] Is ending on Thread:${Thread.currentThread().name}/${Thread.currentThread().id}")

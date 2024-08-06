@@ -1,5 +1,5 @@
 name: MCCoroutine-Sample
-version: 2.18.0
+version: 2.19.0
 author: Shynixn
 main: com.github.shynixn.mccoroutine.folia.sample.MCCoroutineSamplePlugin
 folia-supported: true

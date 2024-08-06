@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("com.github.johnrengelman.shadow") version ("2.0.4")
+    id("com.github.johnrengelman.shadow") version ("8.1.1")
 }
 
 publishing {
@@ -10,10 +10,16 @@ publishing {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 tasks.withType<ShadowJar> {
     dependsOn("jar")
-    classifier = "shadowJar"
-    archiveName = "$baseName-$version.$extension"
+    archiveClassifier.set("shadowJar")
+    archiveFileName.set("${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}")
 
     // Change the output folder of the plugin.
     // destinationDir = File("C:\\temp\\BungeeCord\\plugins")

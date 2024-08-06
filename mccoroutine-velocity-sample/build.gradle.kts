@@ -1,9 +1,9 @@
-plugins {
-    id("com.github.johnrengelman.shadow") version ("2.0.4")
-}
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-// Required to generate the velocity-plugin.json file.
-apply plugin: 'kotlin-kapt'
+plugins {
+    id("com.github.johnrengelman.shadow") version ("8.1.1")
+    id("org.jetbrains.kotlin.kapt") // Required to generate the velocity-plugin.json file.
+}
 
 java {
     toolchain {
@@ -12,16 +12,22 @@ java {
 }
 
 repositories {
-    maven{
-        url "https://nexus.velocitypowered.com/repository/maven-public"
+    maven {
+        url = uri("https://nexus.velocitypowered.com/repository/maven-public")
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }
 
 
-shadowJar{
+tasks.shadowJar {
     dependsOn("jar")
-    classifier = "shadowJar"
-    archiveName = "$baseName-$version.$extension"
+    archiveClassifier.set("shadowJar")
+    archiveFileName.set("${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}")
 
     // Change the output folder of the plugin.
     // destinationDirectory = file("C:\\temp\\Velocity\\plugins")

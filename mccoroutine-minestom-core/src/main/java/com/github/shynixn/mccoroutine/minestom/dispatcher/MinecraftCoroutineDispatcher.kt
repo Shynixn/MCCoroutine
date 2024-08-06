@@ -31,6 +31,6 @@ internal open class MinecraftCoroutineDispatcher : CoroutineDispatcher() {
      * Handles dispatching the coroutine on the correct thread.
      */
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        MinecraftServer.getSchedulerManager().scheduleNextTick(block, ExecutionType.SYNC)
+        MinecraftServer.getSchedulerManager().scheduleNextTick(block, ExecutionType.TICK_START)
     }
 }
