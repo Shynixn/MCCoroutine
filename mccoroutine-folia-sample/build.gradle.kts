@@ -5,12 +5,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version ("8.1.1")
 }
 
-publishing {
-    publications {
-        (findByName("mavenJava") as MavenPublication).artifact(tasks.findByName("shadowJar")!!)
-    }
-}
-
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))

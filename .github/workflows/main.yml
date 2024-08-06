@@ -29,7 +29,7 @@ jobs:
       - name: Build Java Application
         run: |
           chmod +x gradlew
-          ./gradlew clean build shadowJar
+          ./gradlew clean build
 
       - name: Publish Release to Maven Central
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
@@ -82,17 +82,6 @@ jobs:
           asset_name: MCCoroutine-Bukkit-Core.jar
           asset_content_type: application/jar
 
-      - name: Upload Bukkit Sampe Plugin to Github
-        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bukkit-sample/build/libs/mccoroutine-bukkit-sample-${{ env.RELEASE_VERSION }}.jar
-          asset_name: MCCoroutine-Bukkit-Plugin-Sample.jar
-          asset_content_type: application/jar
-
       - name: Upload Sponge Api to Github
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
         uses: actions/upload-release-asset@v1
@@ -115,17 +104,6 @@ jobs:
           asset_name: MCCoroutine-Sponge-Core.jar
           asset_content_type: application/jar
 
-      - name: Upload Sponge Sample Plugin to Github
-        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-sponge-sample/build/libs/mccoroutine-sponge-sample-${{ env.RELEASE_VERSION }}.jar
-          asset_name: MCCoroutine-Sponge-Plugin-Sample.jar
-          asset_content_type: application/jar
-
       - name: Upload BungeeCord Api to Github
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
         uses: actions/upload-release-asset@v1
@@ -146,17 +124,6 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bungeecord-core/build/libs/mccoroutine-bungeecord-core-${{ env.RELEASE_VERSION }}.jar
           asset_name: MCCoroutine-BungeeCord-Core.jar
-          asset_content_type: application/jar
-
-      - name: Upload BungeeCord Sample Plugin to Github
-        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /home/runner/work/MCCoroutine/MCCoroutine/mccoroutine-bungeecord-sample/build/libs/mccoroutine-bungeecord-sample-${{ env.RELEASE_VERSION }}.jar
-          asset_name: MCCoroutine-BungeeCord-Plugin-Sample.jar
           asset_content_type: application/jar
 
       - name: Upload Velocity Api to Github

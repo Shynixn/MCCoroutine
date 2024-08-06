@@ -4,12 +4,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version ("8.1.1")
 }
 
-publishing {
-    publications {
-        (findByName("mavenJava") as MavenPublication).artifact(tasks.findByName("shadowJar")!!)
-    }
-}
-
 tasks.withType<ShadowJar> {
     dependsOn("jar")
     archiveClassifier.set("shadowJar")
