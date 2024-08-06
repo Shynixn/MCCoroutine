@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.event.EventFactory
  * Cancelling this exception causes the error to not get logged and offers to possibility for custom logging.
  */
 @FunctionalInterface
-interface MCCoroutineExceptionEvent {
+fun interface MCCoroutineExceptionEvent {
     companion object {
         val EVENT: Event<MCCoroutineExceptionEvent> =
             EventFactory.createArrayBacked(MCCoroutineExceptionEvent::class.java) { listeners ->
