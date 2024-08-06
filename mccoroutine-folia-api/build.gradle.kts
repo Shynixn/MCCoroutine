@@ -20,5 +20,5 @@ tasks.withType<KotlinCompile>().configureEach {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT")
-    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
 }

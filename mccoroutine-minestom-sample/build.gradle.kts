@@ -28,10 +28,10 @@ dependencies {
     implementation(project(":mccoroutine-minestom-core"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.9.0-RC")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
 
-    implementation("dev.hollowcube:minestom-ce-extensions:1.2.0")
+    compileOnly("dev.hollowcube:minestom-ce-extensions:1.2.0")
     implementation("net.minestom:minestom-snapshots:6fc64e3a5d")
 }
 
