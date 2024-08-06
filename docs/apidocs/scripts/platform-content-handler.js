@@ -1,3 +1,7 @@
+/*
+ * Copyright 2014-2023 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license.
+ */
+
 filteringContext = {
     dependencies: {},
     restrictedDependencies: [],
@@ -5,12 +9,15 @@ filteringContext = {
 }
 let highlightedAnchor;
 let topNavbarOffset;
+let instances = [];
+let sourcesetNotification;
+
+const samplesDarkThemeName = 'darcula'
+const samplesLightThemeName = 'idea'
 
 window.addEventListener('load', () => {
     document.querySelectorAll("div[data-platform-hinted]")
-        .forEach(elem => elem.addEventListener('click', (event) => togglePlatformDependent(event,elem)))
-    document.querySelectorAll("div[tabs-section]")
-        .forEach(elem => elem.addEventListener('click', (event) => toggleSectionsEventHandler(event)))
+        .forEach(elem => elem.addEventListener('click', (event) => togglePlatformDependent(event, elem)))
     const filterSection = document.getElementById('filter-section')
     if (filterSection) {
         filterSection.addEventListener('click', (event) => filterButtonHandler(event))
@@ -19,19 +26,17 @@ window.addEventListener('load', () => {
     initTabs()
     handleAnchor()
     initHidingLeftNavigation()
-
-    document.getElementById('main').addEventListener("scroll", (e) => {
-        document.getElementsByClassName("navigation-wrapper")[0].classList.toggle("sticky-navigation", e.target.scrollTop > 0)
-    })
     topNavbarOffset = document.getElementById('navigation-wrapper')
+    darkModeSwitch()
 })
 
 const darkModeSwitch = () => {
     const localStorageKey = "dokka-dark-mode"
     const storage = localStorage.getItem(localStorageKey)
-    const savedDarkMode = storage ? JSON.parse(storage) : false
+    const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    const darkModeEnabled = storage ? JSON.parse(storage) : osDarkSchemePreferred
     const element = document.getElementById("theme-toggle-button")
-    initPlayground(savedDarkMode ? samplesDarkThemeName : samplesLightThemeName)
+    initPlayground(darkModeEnabled ? samplesDarkThemeName : samplesLightThemeName)
 
     element.addEventListener('click', () => {
         const enabledClasses = document.getElementsByTagName("html")[0].classList
@@ -41,8 +46,7 @@ const darkModeSwitch = () => {
         const darkModeEnabled = enabledClasses.contains("theme-dark")
         if (darkModeEnabled) {
             initPlayground(samplesDarkThemeName)
-        }
-        else {
+        } else {
             initPlayground(samplesLightThemeName)
         }
         localStorage.setItem(localStorageKey, JSON.stringify(darkModeEnabled))
@@ -50,7 +54,7 @@ const darkModeSwitch = () => {
 }
 
 const initPlayground = (theme) => {
-    if(!samplesAreEnabled()) return
+    if (!samplesAreEnabled()) return
     instances.forEach(instance => instance.destroy())
     instances = []
 
@@ -80,7 +84,7 @@ const samplesAreEnabled = () => {
 
 
 const initHidingLeftNavigation = () => {
-    document.getElementById("leftToggler").onclick = function(event) {
+    document.getElementById("menu-toggle").onclick = function (event) {
         //Events need to be prevented from bubbling since they will trigger next handler
         event.preventDefault();
         event.stopPropagation();
@@ -97,12 +101,15 @@ const initHidingLeftNavigation = () => {
 // If this is not present user is forced to refresh the site in order to use an anchor
 window.onhashchange = handleAnchor
 
-function scrollToElementInContent(element){
-    const scrollToElement = () => document.getElementById('main').scrollTo({ top: element.offsetTop - topNavbarOffset.offsetHeight, behavior: "smooth"})
+function scrollToElementInContent(element) {
+    const scrollToElement = () => document.getElementById('main').scrollTo({
+        top: element.offsetTop - topNavbarOffset.offsetHeight,
+        behavior: "smooth"
+    })
 
     const waitAndScroll = () => {
         setTimeout(() => {
-            if(topNavbarOffset){
+            if (topNavbarOffset) {
                 scrollToElement()
             } else {
                 waitForScroll()
@@ -110,7 +117,7 @@ function scrollToElementInContent(element){
         }, 50)
     }
 
-    if(topNavbarOffset){
+    if (topNavbarOffset) {
         scrollToElement()
     } else {
         waitAndScroll()
@@ -119,28 +126,45 @@ function scrollToElementInContent(element){
 
 
 function handleAnchor() {
-    if(highlightedAnchor){
+    if (highlightedAnchor) {
         highlightedAnchor.classList.remove('anchor-highlight')
         highlightedAnchor = null;
     }
 
-    let searchForTab = function(element) {
-        if(element && element.hasAttribute) {
-            if(element.hasAttribute("data-togglable")) return element;
-            else return searchForTab(element.parentNode)
+    let searchForContentTarget = function (element) {
+        if (element && element.hasAttribute) {
+            if (element.hasAttribute("data-togglable")) return element.getAttribute("data-togglable");
+            else return searchForContentTarget(element.parentNode)
         } else return null
     }
+
+    let findAnyTab = function (target) {
+    	let result = null
+        document.querySelectorAll('div[tabs-section] > button[data-togglable]')
+        .forEach(node => {
+            if(node.getAttribute("data-togglable").split(",").includes(target)) {
+            	result = node
+            }
+        })
+        return result
+    }
+
     let anchor = window.location.hash
     if (anchor != "") {
         anchor = anchor.substring(1)
-        let element = document.querySelector('a[data-name="' + anchor+'"]')
+        let element = document.querySelector('a[data-name="' + anchor + '"]')
+
         if (element) {
-            let tab = searchForTab(element)
-            if (tab) {
-                toggleSections(tab)
-            }
             const content = element.nextElementSibling
-            if(content){
+            const contentStyle = window.getComputedStyle(content)
+            if(contentStyle.display == 'none') {
+		 let tab = findAnyTab(searchForContentTarget(content))
+		 if (tab) {
+		     toggleSections(tab)
+		 }
+            }
+
+            if (content) {
                 content.classList.add('anchor-highlight')
                 highlightedAnchor = content
             }
@@ -150,41 +174,49 @@ function handleAnchor() {
     }
 }
 
-function initTabs(){
-    document.querySelectorAll("div[tabs-section]")
-        .forEach(element => {
-            showCorrespondingTabBody(element)
-            element.addEventListener('click', (event) => toggleSectionsEventHandler(event))
-        })
-    let cached = localStorage.getItem("active-tab")
-    if (cached) {
-        let parsed = JSON.parse(cached)
-        let tab = document.querySelector('div[tabs-section] > button[data-togglable="' + parsed + '"]')
-        if(tab) {
-            toggleSections(tab)
-        }
-    }
+function initTabs() {
+    // we could have only a single type of data - classlike or package
+    const mainContent = document.querySelector('.main-content');
+    const type = mainContent ? mainContent.getAttribute("data-page-type") : null;
+    const localStorageKey = "active-tab-" + type;
+    document.querySelectorAll('div[tabs-section]').forEach(element => {
+        showCorrespondingTabBody(element);
+        element.addEventListener('click', ({target}) => {
+            const togglable = target ? target.getAttribute("data-togglable") : null;
+            if (!togglable) return;
+
+            localStorage.setItem(localStorageKey, JSON.stringify(togglable));
+            toggleSections(target);
+        });
+    });
+
+    const cached = localStorage.getItem(localStorageKey);
+    if (!cached) return;
+
+    const tab = document.querySelector(
+        'div[tabs-section] > button[data-togglable="' + JSON.parse(cached) + '"]'
+    );
+    if (!tab) return;
+
+    toggleSections(tab);
 }
 
 function showCorrespondingTabBody(element) {
     const buttonWithKey = element.querySelector("button[data-active]")
     if (buttonWithKey) {
-        const key = buttonWithKey.getAttribute("data-togglable")
-        document.querySelector(".tabs-section-body")
-            .querySelector("div[data-togglable='" + key + "']")
-            .setAttribute("data-active", "")
+        toggleSections(buttonWithKey)
     }
 }
 
 function filterButtonHandler(event) {
-        if(event.target.tagName == "BUTTON" && event.target.hasAttribute("data-filter")) {
-            let sourceset = event.target.getAttribute("data-filter")
-            if(filteringContext.activeFilters.indexOf(sourceset) != -1) {
-                filterSourceset(sourceset)
-            } else {
-                unfilterSourceset(sourceset)
-            }
+    if (event.target.tagName == "BUTTON" && event.target.hasAttribute("data-filter")) {
+        let sourceset = event.target.getAttribute("data-filter")
+        if (filteringContext.activeFilters.indexOf(sourceset) != -1) {
+            filterSourceset(sourceset)
+        } else {
+            unfilterSourceset(sourceset)
         }
+    }
 }
 
 function initializeFiltering() {
@@ -198,12 +230,8 @@ function initializeFiltering() {
     let cached = window.localStorage.getItem('inactive-filters')
     if (cached) {
         let parsed = JSON.parse(cached)
-        //Events are used by react to get values in 'on this page'
-        const event = new CustomEvent('sourceset-filter-change', { detail: parsed });
-        window.dispatchEvent(event);
-
         filteringContext.activeFilters = filteringContext.restrictedDependencies
-            .filter(q => parsed.indexOf(q) == -1 )
+            .filter(q => parsed.indexOf(q) == -1)
     } else {
         filteringContext.activeFilters = filteringContext.restrictedDependencies
     }
@@ -217,7 +245,7 @@ function filterSourceset(sourceset) {
 }
 
 function unfilterSourceset(sourceset) {
-    if(filteringContext.activeFilters.length == 0) {
+    if (filteringContext.activeFilters.length == 0) {
         filteringContext.activeFilters = filteringContext.dependencies[sourceset].concat([sourceset])
         refreshFiltering()
         filteringContext.dependencies[sourceset].concat([sourceset]).forEach(p => removeSourcesetFilterFromCache(p))
@@ -248,11 +276,10 @@ function removeSourcesetFilterFromCache(sourceset) {
 }
 
 function toggleSections(target) {
-    localStorage.setItem('active-tab', JSON.stringify(target.getAttribute("data-togglable")))
     const activateTabs = (containerClass) => {
-        for(const element of document.getElementsByClassName(containerClass)){
-            for(const child of element.children){
-                if(child.getAttribute("data-togglable") === target.getAttribute("data-togglable")){
+        for (const element of document.getElementsByClassName(containerClass)) {
+            for (const child of element.children) {
+                if (child.getAttribute("data-togglable") === target.getAttribute("data-togglable")) {
                     child.setAttribute("data-active", "")
                 } else {
                     child.removeAttribute("data-active")
@@ -260,14 +287,19 @@ function toggleSections(target) {
             }
         }
     }
-
+    const toggleTargets = target.getAttribute("data-togglable").split(",")
+    const activateTabsBody = (containerClass) => {
+        document.querySelectorAll("." + containerClass + " *[data-togglable]")
+            .forEach(child => {
+                    if (toggleTargets.includes(child.getAttribute("data-togglable"))) {
+                        child.setAttribute("data-active", "")
+                    } else if(!child.classList.contains("sourceset-dependent-content")) { // data-togglable is used to switch source set as well, ignore it
+                        child.removeAttribute("data-active")
+                    }
+            })
+    }
     activateTabs("tabs-section")
-    activateTabs("tabs-section-body")
-}
-
-function toggleSectionsEventHandler(evt){
-    if(!evt.target.getAttribute("data-togglable")) return
-    toggleSections(evt.target)
+    activateTabsBody("tabs-section-body")
 }
 
 function togglePlatformDependent(e, container) {
@@ -275,20 +307,18 @@ function togglePlatformDependent(e, container) {
     if (target.tagName != 'BUTTON') return;
     let index = target.getAttribute('data-toggle')
 
-    for(let child of container.children){
-        if(child.hasAttribute('data-toggle-list')){
-            for(let bm of child.children){
-                if(bm == target){
-                    bm.setAttribute('data-active',"")
-                } else if(bm != target) {
+    for (let child of container.children) {
+        if (child.hasAttribute('data-toggle-list')) {
+            for (let bm of child.children) {
+                if (bm == target) {
+                    bm.setAttribute('data-active', "")
+                } else if (bm != target) {
                     bm.removeAttribute('data-active')
                 }
             }
-        }
-        else if(child.getAttribute('data-togglable') == index) {
-           child.setAttribute('data-active',"")
-        }
-        else {
+        } else if (child.getAttribute('data-togglable') == index) {
+            child.setAttribute('data-active', "")
+        } else {
             child.removeAttribute('data-active')
         }
     }
@@ -299,15 +329,39 @@ function refreshFiltering() {
     document.querySelectorAll("[data-filterable-set]")
         .forEach(
             elem => {
-                let platformList = elem.getAttribute("data-filterable-set").split(' ').filter(v => -1 !== sourcesetList.indexOf(v))
-                elem.setAttribute("data-filterable-current", platformList.join(' '))
+                let platformList = elem.getAttribute("data-filterable-set").split(',').filter(v => -1 !== sourcesetList.indexOf(v))
+                elem.setAttribute("data-filterable-current", platformList.join(','))
             }
         )
-    const event = new CustomEvent('sourceset-filter-change', { detail: sourcesetList });
-    window.dispatchEvent(event);
-
     refreshFilterButtons()
     refreshPlatformTabs()
+    refreshNoContentNotification()
+    refreshPlaygroundSamples()
+}
+
+function refreshPlaygroundSamples() {
+    document.querySelectorAll('code.runnablesample').forEach(node => {
+        const playground = node.KotlinPlayground;
+        /* Some samples may be hidden by filter, they have 0px height  for visible code area
+         * after rendering. Call this method for re-calculate code area height */
+        playground && playground.view.codemirror.refresh();
+    });
+}
+
+function refreshNoContentNotification() {
+    const element = document.getElementsByClassName("main-content")[0]
+    if(filteringContext.activeFilters.length === 0){
+        element.style.display = "none";
+
+        const appended = document.createElement("div")
+        appended.className = "filtered-message"
+        appended.innerText = "All documentation is filtered, please adjust your source set filters in top-right corner of the screen"
+        sourcesetNotification = appended
+        element.parentNode.prepend(appended)
+    } else {
+        if(sourcesetNotification) sourcesetNotification.remove()
+        element.style.display = "block"
+    }
 }
 
 function refreshPlatformTabs() {
@@ -317,17 +371,17 @@ function refreshPlatformTabs() {
             let firstAvailable = null
             p.childNodes.forEach(
                 element => {
-                    if(element.getAttribute("data-filterable-current") != ''){
-                        if( firstAvailable == null) {
+                    if (element.getAttribute("data-filterable-current") != '') {
+                        if (firstAvailable == null) {
                             firstAvailable = element
                         }
-                        if(element.hasAttribute("data-active")) {
+                        if (element.hasAttribute("data-active")) {
                             active = true;
                         }
                     }
                 }
             )
-            if( active == false && firstAvailable) {
+            if (active == false && firstAvailable) {
                 firstAvailable.click()
             }
         }
@@ -337,8 +391,8 @@ function refreshPlatformTabs() {
 function refreshFilterButtons() {
     document.querySelectorAll("#filter-section > button")
         .forEach(f => {
-            if(filteringContext.activeFilters.indexOf(f.getAttribute("data-filter")) != -1){
-                f.setAttribute("data-active","")
+            if (filteringContext.activeFilters.indexOf(f.getAttribute("data-filter")) != -1) {
+                f.setAttribute("data-active", "")
             } else {
                 f.removeAttribute("data-active")
             }

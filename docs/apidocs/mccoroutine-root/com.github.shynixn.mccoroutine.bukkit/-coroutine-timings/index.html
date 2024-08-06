@@ -1,187 +1,236 @@
-<html>
-  <head>
+<!DOCTYPE html>
+<html class="no-js">
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>CoroutineTimings</title>
-<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script>  </head>
-  <body>
-    <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-          <div id="logo"></div>
-        </a>
-        <div id="paneSearch"></div>
-        <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
-<script type="text/javascript" src="../../../scripts/main.js"></script>        <div class="main-content" id="content" pageIds="mccoroutine-root::com.github.shynixn.mccoroutine.bukkit/CoroutineTimings///PointingToDeclaration//1281217985">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../../index.html">mccoroutine-root</a>/<a href="../index.html">com.github.shynixn.mccoroutine.bukkit</a>/<a href="index.html">CoroutineTimings</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../../index.html">
+                            mccoroutine-root
+                    </a>
             </div>
-          </div>
-          <div class="cover ">
-            <h1 class="cover"><span>Coroutine</span><wbr></wbr><span><span>Timings</span></span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace">abstract class <a href="index.html">CoroutineTimings</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-abstract-coroutine-context-element/index.html">AbstractCoroutineContextElement</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html">Runnable</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">The spigot timings require a reference to the runnable to display the name of timings correctly. Now, Kotlin Coroutines does not allow to directly pass a runnable object, because a single coroutine may consist out of multiple runnables. This class is a workaround coroutine context element, which can be passed along the <a href="../minecraft-dispatcher.html">minecraftDispatcher</a> to display a valid name for the coroutine.</p></div></div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
-            <div class="tabs-section-body">
-              <h2 class="tabbedcontent">Constructors</h2>
-              <div class="table" data-togglable="Constructors"><a data-name="-28840260%2FConstructors%2F1281217985" anchor-label="CoroutineTimings" id="-28840260%2FConstructors%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex"><a href="-coroutine-timings.html">CoroutineTimings</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-28840260%2FConstructors%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace">fun <a href="-coroutine-timings.html">CoroutineTimings</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="363676897%2FClasslikes%2F1281217985" anchor-label="Key" id="363676897%2FClasslikes%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-key/index.html"><span><span>Key</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="363676897%2FClasslikes%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace">object <a href="-key/index.html">Key</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-key/index.html">CoroutineContext.Key</a>&lt;<a href="index.html">CoroutineTimings</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+            <div class="library-version">
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":generateBukkitJavaDocPages/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="mccoroutine-root::com.github.shynixn.mccoroutine.bukkit/CoroutineTimings///PointingToDeclaration//1281217985">
+  <div class="breadcrumbs"><a href="../../../index.html">mccoroutine-root</a><span class="delimiter">/</span><a href="../index.html">com.github.shynixn.mccoroutine.bukkit</a><span class="delimiter">/</span><span class="current">CoroutineTimings</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Coroutine</span><wbr></wbr><span><span>Timings</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">CoroutineTimings</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-abstract-coroutine-context-element/index.html">AbstractCoroutineContextElement</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html">Runnable</a></div><p class="paragraph">The spigot timings require a reference to the runnable to display the name of timings correctly. Now, Kotlin Coroutines does not allow to directly pass a runnable object, because a single coroutine may consist out of multiple runnables. This class is a workaround coroutine context element, which can be passed along the <a href="../minecraft-dispatcher.html">minecraftDispatcher</a> to display a valid name for the coroutine.</p></div></div>
   </div>
-<div class="brief "><p class="paragraph">Key identifier of the context element.</p></div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="466442070%2FFunctions%2F1281217985" anchor-label="fold" id="466442070%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#466442070%2FFunctions%2F1281217985"><span><span>fold</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="466442070%2FFunctions%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace">open override fun &lt;<a href="index.html#466442070%2FFunctions%2F1281217985">R</a>&gt; <a href="index.html#466442070%2FFunctions%2F1281217985">fold</a>(initial: <a href="index.html#466442070%2FFunctions%2F1281217985">R</a>, operation: (<a href="index.html#466442070%2FFunctions%2F1281217985">R</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-element/index.html">CoroutineContext.Element</a>) -&gt; <a href="index.html#466442070%2FFunctions%2F1281217985">R</a>): <a href="index.html#466442070%2FFunctions%2F1281217985">R</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="232613081%2FFunctions%2F1281217985" anchor-label="get" id="232613081%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#232613081%2FFunctions%2F1281217985"><span><span>get</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="232613081%2FFunctions%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace">open operator override fun &lt;<a href="index.html#232613081%2FFunctions%2F1281217985">E</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-element/index.html">CoroutineContext.Element</a>&gt; <a href="index.html#232613081%2FFunctions%2F1281217985">get</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-key/index.html">CoroutineContext.Key</a>&lt;<a href="index.html#232613081%2FFunctions%2F1281217985">E</a>&gt;): <a href="index.html#232613081%2FFunctions%2F1281217985">E</a>?<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1830620809%2FFunctions%2F1281217985" anchor-label="minusKey" id="-1830620809%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-1830620809%2FFunctions%2F1281217985"><span>minus</span><wbr></wbr><span><span>Key</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1830620809%2FFunctions%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace">open override fun <a href="index.html#-1830620809%2FFunctions%2F1281217985">minusKey</a>(key: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-key/index.html">CoroutineContext.Key</a>&lt;*&gt;): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1141296693%2FFunctions%2F1281217985" anchor-label="plus" id="1141296693%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1141296693%2FFunctions%2F1281217985"><span><span>plus</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1141296693%2FFunctions%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace">open operator fun <a href="index.html#1141296693%2FFunctions%2F1281217985">plus</a>(context: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a>): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1619193822%2FFunctions%2F1281217985" anchor-label="run" id="-1619193822%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="run.html"><span><span>run</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1619193822%2FFunctions%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace">open override fun <a href="run.html">run</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<div class="brief "><p class="paragraph">When an object implementing interface <code>Runnable</code> is used to create a thread, starting the thread causes the object's <code>run</code> method to be called in that separately executing thread.</p></div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="-1762250447%2FProperties%2F1281217985" anchor-label="key" id="-1762250447%2FProperties%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#-1762250447%2FProperties%2F1281217985">key</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1762250447%2FProperties%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><a data-name="-1762250447%2FProperties%2F1281217985" anchor-label="key" id="-1762250447%2FProperties%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a><div class="symbol monospace">open override val <a href="index.html#-1762250447%2FProperties%2F1281217985">key</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-key/index.html">CoroutineContext.Key</a>&lt;*&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1083707484%2FProperties%2F1281217985" anchor-label="queue" id="1083707484%2FProperties%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="queue.html">queue</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1083707484%2FProperties%2F1281217985"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><a data-name="1083707484%2FProperties%2F1281217985" anchor-label="queue" id="1083707484%2FProperties%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a><div class="symbol monospace">var <a href="queue.html">queue</a>: <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Queue.html">Queue</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html">Runnable</a>&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1083707484%2FProperties%2F1281217985" anchor-label="queue" id="1083707484%2FProperties%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a><p class="paragraph">Multiple tasks can be assigned to a single coroutine. We implement this by a queue.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-28840260%2FConstructors%2F1281217985" anchor-label="CoroutineTimings" id="-28840260%2FConstructors%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-coroutine-timings.html"><span>Coroutine</span><wbr></wbr><span><span>Timings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-28840260%2FConstructors%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="363676897%2FClasslikes%2F1281217985" anchor-label="Key" id="363676897%2FClasslikes%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-key/index.html"><span><span>Key</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="363676897%2FClasslikes%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-key/index.html">Key</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-key/index.html">CoroutineContext.Key</a><span class="token operator">&lt;</span><a href="index.html">CoroutineTimings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Key identifier of the context element.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1762250447%2FProperties%2F1281217985" anchor-label="key" id="-1762250447%2FProperties%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1762250447%2FProperties%2F1281217985"><span><span>key</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1762250447%2FProperties%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#-1762250447%2FProperties%2F1281217985">key</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-key/index.html">CoroutineContext.Key</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1083707484%2FProperties%2F1281217985" anchor-label="queue" id="1083707484%2FProperties%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="queue.html"><span><span>queue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1083707484%2FProperties%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="queue.html">queue</a><span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Queue.html">Queue</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html">Runnable</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Multiple tasks can be assigned to a single coroutine. We implement this by a queue.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="466442070%2FFunctions%2F1281217985" anchor-label="fold" id="466442070%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#466442070%2FFunctions%2F1281217985"><span><span>fold</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="466442070%2FFunctions%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#466442070%2FFunctions%2F1281217985">R</a><span class="token operator">&gt; </span><a href="index.html#466442070%2FFunctions%2F1281217985"><span class="token function">fold</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">initial<span class="token operator">: </span><a href="index.html#466442070%2FFunctions%2F1281217985">R</a><span class="token punctuation">, </span></span><span class="parameter ">operation<span class="token operator">: </span><span class="token punctuation">(</span><a href="index.html#466442070%2FFunctions%2F1281217985">R</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-element/index.html">CoroutineContext.Element</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="index.html#466442070%2FFunctions%2F1281217985">R</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#466442070%2FFunctions%2F1281217985">R</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="232613081%2FFunctions%2F1281217985" anchor-label="get" id="232613081%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#232613081%2FFunctions%2F1281217985"><span><span>get</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="232613081%2FFunctions%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="index.html#232613081%2FFunctions%2F1281217985">E</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-element/index.html">CoroutineContext.Element</a><span class="token operator">&gt; </span><a href="index.html#232613081%2FFunctions%2F1281217985"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-key/index.html">CoroutineContext.Key</a><span class="token operator">&lt;</span><a href="index.html#232613081%2FFunctions%2F1281217985">E</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#232613081%2FFunctions%2F1281217985">E</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1830620809%2FFunctions%2F1281217985" anchor-label="minusKey" id="-1830620809%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1830620809%2FFunctions%2F1281217985"><span>minus</span><wbr></wbr><span><span>Key</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1830620809%2FFunctions%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#-1830620809%2FFunctions%2F1281217985"><span class="token function">minusKey</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/-key/index.html">CoroutineContext.Key</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1141296693%2FFunctions%2F1281217985" anchor-label="plus" id="1141296693%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1141296693%2FFunctions%2F1281217985"><span><span>plus</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1141296693%2FFunctions%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator </span><span class="token keyword">fun </span><a href="index.html#1141296693%2FFunctions%2F1281217985"><span class="token function">plus</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1619193822%2FFunctions%2F1281217985" anchor-label="run" id="-1619193822%2FFunctions%2F1281217985" data-filterable-set=":generateBukkitJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateBukkitJavaDocPages/main" data-filterable-set=":generateBukkitJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="run.html"><span><span>run</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1619193822%2FFunctions%2F1281217985"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateBukkitJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="run.html"><span class="token function">run</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">When an object implementing interface <code class="lang-kotlin">Runnable</code> is used to create a thread, starting the thread causes the object's <code class="lang-kotlin">run</code> method to be called in that separately executing thread.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
-

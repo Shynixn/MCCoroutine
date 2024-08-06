@@ -1,92 +1,149 @@
-<html>
-  <head>
+<!DOCTYPE html>
+<html class="no-js">
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>CoroutineSession</title>
-<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script>  </head>
-  <body>
-    <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-          <div id="logo"></div>
-        </a>
-        <div id="paneSearch"></div>
-        <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
-<script type="text/javascript" src="../../../scripts/main.js"></script>        <div class="main-content" id="content" pageIds="mccoroutine-root::com.github.shynixn.mccoroutine.minestom/CoroutineSession///PointingToDeclaration//-125386315">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../../index.html">mccoroutine-root</a>/<a href="../index.html">com.github.shynixn.mccoroutine.minestom</a>/<a href="index.html">CoroutineSession</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../../index.html">
+                            mccoroutine-root
+                    </a>
+            </div>
+            <div class="library-version">
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":generateMinestomJavaDocPages/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="mccoroutine-root::com.github.shynixn.mccoroutine.minestom/CoroutineSession///PointingToDeclaration//-125386315">
+  <div class="breadcrumbs"><a href="../../../index.html">mccoroutine-root</a><span class="delimiter">/</span><a href="../index.html">com.github.shynixn.mccoroutine.minestom</a><span class="delimiter">/</span><span class="current">CoroutineSession</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Coroutine</span><wbr></wbr><span><span>Session</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">CoroutineSession</a></div><p class="paragraph">Facade of a coroutine session of a single extension or entire server.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="1197508351%2FProperties%2F-125386315" anchor-label="dispatcherAsync" id="1197508351%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a>
+          <div class="table-row" data-filterable-current=":generateMinestomJavaDocPages/main" data-filterable-set=":generateMinestomJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dispatcher-async.html"><span>dispatcher</span><wbr></wbr><span><span>Async</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1197508351%2FProperties%2F-125386315"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="dispatcher-async.html">dispatcherAsync</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a></div><div class="brief "><p class="paragraph">Async Dispatcher.</p></div></div></div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="cover ">
-            <h1 class="cover"><span>Coroutine</span><wbr></wbr><span><span>Session</span></span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><div class="symbol monospace">interface <a href="index.html">CoroutineSession</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Facade of a coroutine session of a single extension or entire server.</p></div></div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Properties">Properties</button></div>
-            <div class="tabs-section-body">
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="1197508351%2FProperties%2F-125386315" anchor-label="dispatcherAsync" id="1197508351%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateMinestomJavaDocPages/main" data-filterable-set=":generateMinestomJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="dispatcher-async.html">dispatcherAsync</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1197508351%2FProperties%2F-125386315"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><a data-name="1197508351%2FProperties%2F-125386315" anchor-label="dispatcherAsync" id="1197508351%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a><div class="symbol monospace">abstract val <a href="dispatcher-async.html">dispatcherAsync</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1197508351%2FProperties%2F-125386315" anchor-label="dispatcherAsync" id="1197508351%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a><p class="paragraph">Async Dispatcher.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 <a data-name="1949633006%2FProperties%2F-125386315" anchor-label="dispatcherMinecraft" id="1949633006%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateMinestomJavaDocPages/main" data-filterable-set=":generateMinestomJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="dispatcher-minecraft.html">dispatcherMinecraft</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1949633006%2FProperties%2F-125386315"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><a data-name="1949633006%2FProperties%2F-125386315" anchor-label="dispatcherMinecraft" id="1949633006%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a><div class="symbol monospace">abstract val <a href="dispatcher-minecraft.html">dispatcherMinecraft</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1949633006%2FProperties%2F-125386315" anchor-label="dispatcherMinecraft" id="1949633006%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a><p class="paragraph">Minecraft Dispatcher.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":generateMinestomJavaDocPages/main" data-filterable-set=":generateMinestomJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dispatcher-minecraft.html"><span>dispatcher</span><wbr></wbr><span><span>Minecraft</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1949633006%2FProperties%2F-125386315"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="dispatcher-minecraft.html">dispatcherMinecraft</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a></div><div class="brief "><p class="paragraph">Minecraft Dispatcher.</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="247833650%2FProperties%2F-125386315" anchor-label="mcCoroutineConfiguration" id="247833650%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateMinestomJavaDocPages/main" data-filterable-set=":generateMinestomJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="mc-coroutine-configuration.html">mcCoroutineConfiguration</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="247833650%2FProperties%2F-125386315"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><a data-name="247833650%2FProperties%2F-125386315" anchor-label="mcCoroutineConfiguration" id="247833650%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a><div class="symbol monospace">abstract val <a href="mc-coroutine-configuration.html">mcCoroutineConfiguration</a>: <a href="../-m-c-coroutine-configuration/index.html">MCCoroutineConfiguration</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="247833650%2FProperties%2F-125386315" anchor-label="mcCoroutineConfiguration" id="247833650%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a><p class="paragraph">MCCoroutine Facade.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":generateMinestomJavaDocPages/main" data-filterable-set=":generateMinestomJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mc-coroutine-configuration.html"><span>mc</span><wbr></wbr><span>Coroutine</span><wbr></wbr><span><span>Configuration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="247833650%2FProperties%2F-125386315"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="mc-coroutine-configuration.html">mcCoroutineConfiguration</a><span class="token operator">: </span><a href="../-m-c-coroutine-configuration/index.html">MCCoroutineConfiguration</a></div><div class="brief "><p class="paragraph">MCCoroutine Facade.</p></div></div></div>
                 </div>
+              </div>
+            </div>
+          </div>
 <a data-name="23490144%2FProperties%2F-125386315" anchor-label="scope" id="23490144%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a>
-                <div class="table-row" data-filterable-current=":generateMinestomJavaDocPages/main" data-filterable-set=":generateMinestomJavaDocPages/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="scope.html">scope</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="23490144%2FProperties%2F-125386315"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><a data-name="23490144%2FProperties%2F-125386315" anchor-label="scope" id="23490144%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a><div class="symbol monospace">abstract val <a href="scope.html">scope</a>: <span data-unresolved-link="/&amp;lt;ERROR CLASS&amp;gt;///PointingToDeclaration/">&lt;ERROR CLASS&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="23490144%2FProperties%2F-125386315" anchor-label="scope" id="23490144%2FProperties%2F-125386315" data-filterable-set=":generateMinestomJavaDocPages/main"></a><p class="paragraph">Lifetime scope.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
+          <div class="table-row" data-filterable-current=":generateMinestomJavaDocPages/main" data-filterable-set=":generateMinestomJavaDocPages/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scope.html"><span><span>scope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="23490144%2FProperties%2F-125386315"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateMinestomJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="scope.html">scope</a><span class="token operator">: </span><span data-unresolved-link="/&amp;lt;Error class: unknown class&amp;gt;///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span></div><div class="brief "><p class="paragraph">Lifetime scope.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
-

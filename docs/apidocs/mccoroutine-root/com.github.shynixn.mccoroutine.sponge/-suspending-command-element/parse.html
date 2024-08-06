@@ -1,38 +1,80 @@
-<html>
-  <head>
+<!DOCTYPE html>
+<html class="no-js">
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>parse</title>
-<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script>  </head>
-  <body>
-    <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-          <div id="logo"></div>
-        </a>
-        <div id="paneSearch"></div>
-        <div id="sideMenu"></div>
-      </div>
-      <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
-<script type="text/javascript" src="../../../scripts/main.js"></script>        <div class="main-content" id="content" pageIds="mccoroutine-root::com.github.shynixn.mccoroutine.sponge/SuspendingCommandElement/parse/#CommandSource#CommandArgs#CommandContext/PointingToDeclaration//540038461">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../../index.html">mccoroutine-root</a>/<a href="../index.html">com.github.shynixn.mccoroutine.sponge</a>/<a href="index.html">SuspendingCommandElement</a>/<a href="parse.html">parse</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../../index.html">
+                            mccoroutine-root
+                    </a>
             </div>
-          </div>
-          <div class="cover ">
-            <h1 class="cover"><span><span>parse</span></span></h1>
-          </div>
-<div class="divergent-group" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateSpongeJavaDocPages/main"><div class="symbol monospace">open fun <a href="parse.html">parse</a>(source: <span data-unresolved-link="/&amp;lt;ERROR CLASS&amp;gt;///PointingToDeclaration/">&lt;ERROR CLASS&gt;</span>, args: <span data-unresolved-link="/&amp;lt;ERROR CLASS&amp;gt;///PointingToDeclaration/">&lt;ERROR CLASS&gt;</span>, context: <span data-unresolved-link="/&amp;lt;ERROR CLASS&amp;gt;///PointingToDeclaration/">&lt;ERROR CLASS&gt;</span>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<p class="paragraph">Attempt to extract a value for this element from the given arguments and put it in the given context. This method normally delegates to .parseValue for getting the values. This method is expected to have no side-effects for the source, meaning that executing it will not change the state of the CommandSource in any way.</p><h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateSpongeJavaDocPages/main"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><span><span>source</span></span></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">The source to parse for</p></div></div></div></div></div><div class="table-row" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><span><span>args</span></span></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">The args to extract from</p></div></div></div></div></div><div class="table-row" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><span><span>context</span></span></span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">The context to supply to</p></div></div></div></div></div></div></div></div></div></div><h2 class="">Throws</h2><div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":generateSpongeJavaDocPages/main"><div class="table"><div class="table-row" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><span>Argument</span><wbr></wbr><span>Parse</span><wbr></wbr><span><span>Exception</span></span></span></div><div><div class="title"><p class="paragraph">if unable to extract a value</p></div></div></div></div></div></div></div></div>
+            <div class="library-version">
+            </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
-      </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":generateSpongeJavaDocPages/main">jvm</button>
+        </div>
     </div>
-  </body>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageIds="mccoroutine-root::com.github.shynixn.mccoroutine.sponge/SuspendingCommandElement/parse/#[Error type: Unresolved type for CommandSource]#[Error type: Unresolved type for CommandArgs]#[Error type: Unresolved type for CommandContext]/PointingToDeclaration//540038461">
+  <div class="breadcrumbs"><a href="../../../index.html">mccoroutine-root</a><span class="delimiter">/</span><a href="../index.html">com.github.shynixn.mccoroutine.sponge</a><span class="delimiter">/</span><a href="index.html">SuspendingCommandElement</a><span class="delimiter">/</span><span class="current">parse</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>parse</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":generateSpongeJavaDocPages/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="parse.html"><span class="token function">parse</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><span data-unresolved-link="/&amp;lt;Error class: unknown class&amp;gt;///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">args<span class="token operator">: </span><span data-unresolved-link="/&amp;lt;Error class: unknown class&amp;gt;///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="/&amp;lt;Error class: unknown class&amp;gt;///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span></span></span><span class="token punctuation">)</span></div><p class="paragraph">Attempt to extract a value for this element from the given arguments and put it in the given context. This method normally delegates to .parseValue for getting the values. This method is expected to have no side-effects for the source, meaning that executing it will not change the state of the CommandSource in any way.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>source</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The source to parse for</p></div></div></div></div><div class="table-row" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>args</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The args to extract from</p></div></div></div></div><div class="table-row" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The context to supply to</p></div></div></div></div></div><h4 class="">Throws</h4><div class="table"><div class="table-row" data-filterable-current=":generateSpongeJavaDocPages/main" data-filterable-set=":generateSpongeJavaDocPages/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><span>Argument</span><wbr></wbr><span>Parse</span><wbr></wbr><span><span>Exception</span></span></div></span></div><div><div class="title"><p class="paragraph">if unable to extract a value</p></div></div></div></div></div></div></div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
-
