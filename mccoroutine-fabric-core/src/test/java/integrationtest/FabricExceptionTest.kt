@@ -60,6 +60,6 @@ class FabricExceptionTest {
 
         // Assert
         Assertions.assertNotEquals(ioThreadId, actualThreadId)
-        Assertions.assertEquals(1, logMessageCounter) // old value is 2
+        Assertions.assertEquals(2, logMessageCounter)
     }
 }

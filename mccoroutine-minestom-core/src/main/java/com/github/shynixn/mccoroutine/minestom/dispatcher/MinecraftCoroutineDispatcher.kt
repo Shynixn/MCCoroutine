@@ -13,7 +13,7 @@ internal open class MinecraftCoroutineDispatcher : CoroutineDispatcher() {
 
     init {
         MinecraftServer.getSchedulerManager().scheduleNextProcess {
-            mainThreadId = Thread.currentThread().threadId()
+            mainThreadId = Thread.currentThread().id
         }
     }
 
@@ -24,7 +24,7 @@ internal open class MinecraftCoroutineDispatcher : CoroutineDispatcher() {
      * may leave the coroutines that use this dispatcher in the inconsistent and hard to debug state.
      */
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
-        return Thread.currentThread().threadId() != mainThreadId
+        return Thread.currentThread().id != mainThreadId
     }
 
     /**
