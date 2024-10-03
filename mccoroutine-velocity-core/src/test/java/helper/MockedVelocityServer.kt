@@ -15,6 +15,7 @@ import kotlinx.coroutines.Runnable
 import org.mockito.Mockito
 import org.slf4j.Logger
 import java.util.*
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
@@ -43,13 +44,14 @@ class MockedVelocityServer {
         Mockito.`when`(scheduler.buildTask(Mockito.any(), Mockito.any(java.lang.Runnable::class.java))).thenAnswer {
             val runnable = it.getArgument<Runnable>(1)
             object : Scheduler.TaskBuilder {
-                override fun delay(time: Long, unit: TimeUnit?): Scheduler.TaskBuilder {
+                override fun delay(p0: Long, p1: TimeUnit): Scheduler.TaskBuilder {
                     return this
                 }
 
-                override fun repeat(time: Long, unit: TimeUnit?): Scheduler.TaskBuilder {
+                override fun repeat(p0: Long, p1: TimeUnit): Scheduler.TaskBuilder {
                     return this
                 }
+
 
                 override fun clearDelay(): Scheduler.TaskBuilder {
                     return this
@@ -65,14 +67,15 @@ class MockedVelocityServer {
                 }
             }
         }
+        val plugin = MockedPluginContainer(server, logger)
+
         Mockito.`when`(server.scheduler).thenReturn(scheduler)
         Mockito.`when`(server.pluginManager).thenReturn(pluginManager)
         Mockito.`when`(pluginManager.isLoaded(Mockito.anyString())).thenReturn(true)
-
-        val commandManager = VelocityCommandManager(eventManager)
+        Mockito.`when`(pluginManager.ensurePluginContainer(Mockito.any())).thenReturn(plugin)
+        val commandManager = VelocityCommandManager(eventManager, pluginManager)
         Mockito.`when`(server.commandManager).thenReturn(commandManager)
 
-        val plugin = MockedPluginContainer(server, logger)
         proxyServer = server
 
         val suspendingPluginContainer = SuspendingPluginContainer(plugin, server, logger)
@@ -87,6 +90,7 @@ class MockedVelocityServer {
     class MockedPluginContainer(private val proxyServer: ProxyServer, private val logger: org.slf4j.Logger) :
         PluginContainer {
         private val mockedPlugin = MockedPlugin()
+        private val executorService = Executors.newFixedThreadPool(4)
 
         /**
          * Returns the plugin's description.
@@ -101,6 +105,10 @@ class MockedVelocityServer {
 
         override fun getInstance(): Optional<*> {
             return Optional.of(this)
+        }
+
+        override fun getExecutorService(): ExecutorService {
+            return executorService
         }
     }
 

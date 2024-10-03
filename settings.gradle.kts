@@ -14,6 +14,7 @@ include("mccoroutine-fabric-core")
 
 include("mccoroutine-folia-api")
 include("mccoroutine-folia-core")
+include("mccoroutine-folia-test")
 include("mccoroutine-folia-sample")
 
 include("mccoroutine-minestom-api")

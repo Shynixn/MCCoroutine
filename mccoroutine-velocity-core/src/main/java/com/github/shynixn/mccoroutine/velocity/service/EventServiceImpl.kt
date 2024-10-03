@@ -63,6 +63,10 @@ class EventServiceImpl(
         val untargetedEventHandlerClass = Class.forName("com.velocitypowered.proxy.event.UntargetedEventHandler")
         val buildHandlerMethod = untargetedEventHandlerClass.getDeclaredMethod("buildHandler", Any::class.java)
 
+        val asyncTypeClass = Class.forName("com.velocitypowered.proxy.event.VelocityEventManager\$AsyncType")
+        val alwaysAsyncField = asyncTypeClass.getDeclaredField("ALWAYS")
+        alwaysAsyncField.isAccessible = true
+        val alwaysAsyncValue = alwaysAsyncField.get(null)
         val handlerRegistrationClass =
             Class.forName("com.velocitypowered.proxy.event.VelocityEventManager\$HandlerRegistration")
         val handlerRegistrationClassConstructor = handlerRegistrationClass.getDeclaredConstructor(
@@ -70,7 +74,8 @@ class EventServiceImpl(
             Short::class.java,
             Class::class.java,
             Any::class.java,
-            EventHandler::class.java
+            EventHandler::class.java,
+            asyncTypeClass
         )
         handlerRegistrationClassConstructor.isAccessible = true
 
@@ -107,7 +112,8 @@ class EventServiceImpl(
                     order,
                     eventType,
                     listener,
-                    handler
+                    handler,
+                    alwaysAsyncValue
                 )
                 registrations.add(handlerRegistration)
                 continue
@@ -126,7 +132,7 @@ class EventServiceImpl(
             val untargetedHandler = loadingCacheClassGetMethod.invoke(unTargetedMethodHandlers, method)
             val handler = buildHandlerMethod.invoke(untargetedHandler, listener) as EventHandler<Any>
             val handlerRegistration =
-                handlerRegistrationClassConstructor.newInstance(pluginContainer, order, eventType, listener, handler)
+                handlerRegistrationClassConstructor.newInstance(pluginContainer, order, eventType, listener, handler, alwaysAsyncValue)
 
             if (!onlyRegisterSuspend) {
                 registrations.add(handlerRegistration)
