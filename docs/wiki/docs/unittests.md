@@ -1,7 +1,6 @@
 # Unit-Tests with MCCoroutine
 
-(This site is only relevant for Spigot, Paper and CraftBukkit. If you need Unit-Tests support for BungeeCord, Sponge or
-Velocity, please submit an issue on GitHub)
+Unit-Test support is only available for ``mccoroutine-bukkit`` and ``mccoroutine-folia``. Please create a GitHub ticket, if you want support for other libraries.
 
 If you try to write Unit- or IntegrationTests for your Minecraft plugin, you may need to test suspend functions. These
 functions
@@ -16,11 +15,21 @@ feedback to the real environment.
 
 **Do not** shade this library into your final plugin.jar file. This should only be available during UnitTests.
 
-```kotlin
-dependencies {
-    testImplementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-test:2.19.0")
-}
-```
+=== "Bukkit"
+
+    ```kotlin
+    dependencies {
+        testImplementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-test:2.20.0")
+    }
+    ```
+
+=== "Folia"
+  
+    ```kotlin
+    dependencies {
+        testImplementation("com.github.shynixn.mccoroutine:mccoroutine-folia-test:2.20.0")
+    }
+    ```
 
 ### 2. Create a test method
 
