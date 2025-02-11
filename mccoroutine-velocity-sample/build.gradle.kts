@@ -5,24 +5,20 @@ plugins {
     id("org.jetbrains.kotlin.kapt") // Required to generate the velocity-plugin.json file.
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
 repositories {
     maven {
         url = uri("https://nexus.velocitypowered.com/repository/maven-public")
     }
 }
 
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "17"
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 tasks.shadowJar {
     dependsOn("jar")
