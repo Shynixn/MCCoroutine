@@ -30,8 +30,8 @@ dependencies {
     implementation(project(":mccoroutine-folia-api"))
 
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    compileOnly("dev.folia:folia-api:1.20.1-R0.1-20230615.235213-1")
+    compileOnly("dev.folia:folia-api:1.21.4-R0.1-SNAPSHOT")
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    testImplementation("dev.folia:folia-api:1.20.1-R0.1-20230615.235213-1")
+    testImplementation("dev.folia:folia-api:1.21.4-R0.1-SNAPSHOT")
 }
