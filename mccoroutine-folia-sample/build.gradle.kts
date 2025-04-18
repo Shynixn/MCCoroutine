@@ -7,13 +7,13 @@ plugins {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 
@@ -39,7 +39,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
 
-    compileOnly("dev.folia:folia-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("dev.folia:folia-api:1.21.4-R0.1-SNAPSHOT")
 
-    testImplementation("org.spigotmc:spigot-api:1.16.3-R0.1-SNAPSHOT")
+    testImplementation("dev.folia:folia-api:1.21.4-R0.1-SNAPSHOT")
 }
