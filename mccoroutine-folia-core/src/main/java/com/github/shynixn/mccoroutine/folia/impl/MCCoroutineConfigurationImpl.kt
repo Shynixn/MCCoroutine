@@ -14,6 +14,12 @@ internal class MCCoroutineConfigurationImpl(private val plugin: Plugin, private 
     override var shutdownStrategy: ShutdownStrategy = ShutdownStrategy.SCHEDULER
 
     /**
+     * How often the main plugin dispatcher scheduler ticks.
+     * Defaults to 16ms ~ 60 times per second
+     */
+    override var mainDispatcherTickRateMs: Long = 16
+
+    /**
      * Gets if the Folia schedulers where successfully loaded into MCCoroutine.
      * Returns false if MCCoroutine falls back to the BukkitScheduler.
      */

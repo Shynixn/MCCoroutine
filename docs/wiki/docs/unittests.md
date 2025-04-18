@@ -19,7 +19,7 @@ feedback to the real environment.
 
     ```kotlin
     dependencies {
-        testImplementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-test:2.21.0")
+        testImplementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-test:2.22.0")
     }
     ```
 
@@ -27,7 +27,7 @@ feedback to the real environment.
   
     ```kotlin
     dependencies {
-        testImplementation("com.github.shynixn.mccoroutine:mccoroutine-folia-test:2.21.0")
+        testImplementation("com.github.shynixn.mccoroutine:mccoroutine-folia-test:2.22.0")
     }
     ```
 
