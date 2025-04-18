@@ -2,21 +2,35 @@ package com.github.shynixn.mccoroutine.folia.dispatcher
 
 import kotlinx.coroutines.CoroutineDispatcher
 import org.bukkit.plugin.Plugin
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
 class MainDispatcher(
     private val plugin: Plugin,
+    tickRateMs: Long,
 ) : CoroutineDispatcher(), AutoCloseable {
-    private val executor = Executors.newFixedThreadPool(1) { r ->
+    private val executor = Executors.newScheduledThreadPool(1) { r ->
         Thread(r, "MCCoroutine-${plugin.name}-MainThread")
     }
+    private var actionQueue = ConcurrentLinkedQueue<Runnable>()
     var threadId = -1L
 
     init {
         executor.submit {
             threadId = Thread.currentThread().id
         }
+        executor.scheduleAtFixedRate({
+            val actions = ArrayList<Runnable>()
+            while (true) {
+                val action = actionQueue.poll() ?: break
+                actions.add(action)
+            }
+            for (action in actions) {
+                action.run()
+            }
+        }, 1L, tickRateMs, TimeUnit.MILLISECONDS)
     }
 
     /**
@@ -28,7 +42,7 @@ class MainDispatcher(
         }
 
         if (Thread.currentThread().id != threadId) {
-            executor.submit(block)
+            actionQueue.add(block)
         } else {
             block.run()
         }

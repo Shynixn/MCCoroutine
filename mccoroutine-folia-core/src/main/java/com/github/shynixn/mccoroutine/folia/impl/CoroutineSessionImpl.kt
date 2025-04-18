@@ -89,7 +89,7 @@ internal class CoroutineSessionImpl(
      * The main dispatcher represents the main thread of a plugin.
      */
     override val dispatcherMain: MainDispatcher by lazy {
-        MainDispatcher(plugin)
+        MainDispatcher(plugin, mcCoroutineConfiguration.mainDispatcherTickRateMs)
     }
 
     /**

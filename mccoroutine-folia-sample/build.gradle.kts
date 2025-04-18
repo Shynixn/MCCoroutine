@@ -22,7 +22,7 @@ tasks.withType<ShadowJar> {
     archiveClassifier.set("shadowJar")
 
     // Change the output folder of the plugin.
-    // destinationDir = File("C:\\temp\\Folia\\plugins")
+    // destinationDirectory.set(File("C:\\temp\\Folia\\plugins"))
 }
 
 repositories {

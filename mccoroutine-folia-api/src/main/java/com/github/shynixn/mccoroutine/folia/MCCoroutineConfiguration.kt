@@ -14,6 +14,12 @@ interface MCCoroutineConfiguration {
     var shutdownStrategy: ShutdownStrategy
 
     /**
+     * How often the main plugin dispatcher scheduler ticks.
+     * Defaults to 16ms ~ 60 times per second
+     */
+    var mainDispatcherTickRateMs : Long
+
+    /**
      * Gets if the Folia schedulers where successfully loaded into MCCoroutine.
      * Returns false if MCCoroutine falls back to the BukkitScheduler.
      */
