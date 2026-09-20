@@ -3,6 +3,7 @@
 | branch        | status        | download |
 | ------------- | ------------- | ---------| 
 | master        | [![Build Status](https://github.com/Shynixn/MCCoroutine/workflows/CI/badge.svg?branch=master)](https://github.com/Shynixn/MCCoroutine/actions) | [Download latest release](https://repo1.maven.org/maven2/com/github/shynixn/mccoroutine/)|
+
 MCCoroutine is a library, which adds extensive support for Kotlin Coroutines for Minecraft Server environments.
 
 Plugins for game servers and proxy servers often need to perform asynchronous operations (e.g. accessing databases) to
