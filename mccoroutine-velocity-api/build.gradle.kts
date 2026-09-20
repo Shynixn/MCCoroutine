@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 repositories {
     maven {
-        url = uri("https://nexus.velocitypowered.com/repository/maven-public")
+        url = uri("https://repo.papermc.io/repository/maven-public")
     }
 }
 

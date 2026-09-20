@@ -4,6 +4,9 @@ repositories {
     maven {
         url = uri("https://oss.sonatype.org/content/repositories/snapshots")
     }
+    maven {
+        url = uri("https://libraries.minecraft.net")
+    }
 }
 
 tasks.withType<KotlinCompile> {
@@ -17,6 +20,6 @@ java {
 
 dependencies {
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    compileOnly("net.md-5:bungeecord-api:1.16-R0.5-SNAPSHOT")
-    testImplementation("net.md-5:bungeecord-api:1.16-R0.5-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-api:1.21-R0.4")
+    testImplementation("net.md-5:bungeecord-api:1.21-R0.4")
 }
