@@ -93,4 +93,4 @@ private suspend fun bob() {
 
 ## Licence
 
-The source code is licensed under the MIT license. 
+The source code is licensed under the MIT license.
