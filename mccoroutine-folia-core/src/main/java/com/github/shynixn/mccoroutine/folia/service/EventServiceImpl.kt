@@ -173,6 +173,7 @@ internal class EventServiceImpl(private val plugin: Plugin, private val coroutin
                         AuthorNagException(null as String?)
                     } else null
                 )
+                break
             }
 
             if (!eventDispatcher.containsKey(eventClass)) {

@@ -166,6 +166,7 @@ internal class EventServiceImpl(private val plugin: Plugin) {
                         AuthorNagException(null as String?)
                     } else null
                 )
+                break
             }
 
             val executor = SuspendingEventExecutor(eventClass, method, plugin)
