@@ -3,9 +3,8 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 buildscript {
     repositories {
-        jcenter()
-        maven { url 'https://plugins.gradle.org/m2/' }
         mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: '1.9.25'
@@ -15,8 +14,8 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.25'
-    id 'io.codearte.nexus-staging' version '0.20.0'
-    id "de.marcphilipp.nexus-publish" version '0.2.0'
+    // Replaced legacy nexus plugins with the updated official plugin
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
 }
 
 allprojects {
@@ -26,15 +25,19 @@ allprojects {
 repositories {
     mavenCentral()
     mavenLocal()
-    jcenter()
 }
 
-nexusStaging {
-    packageGroup = "com.github.shynixn"
-    username = project.hasProperty("ossrhUsername") ? project.findProperty("ossrhUsername") : System.getenv('SONATYPE_USERNAME')
-    password = project.hasProperty("ossrhPassword") ? project.findProperty("ossrhPassword") : System.getenv('SONATYPE_PASSWORD')
-    delayBetweenRetriesInMillis = 10000
-    numberOfRetries = 100
+// Global configuration for publishing via Sonatype Central Portal API
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
+
+            username = project.hasProperty("ossrhUsername") ? project.findProperty("ossrhUsername") : System.getenv('SONATYPE_USERNAME')
+            password = project.hasProperty("ossrhPassword") ? project.findProperty("ossrhPassword") : System.getenv('SONATYPE_PASSWORD')
+        }
+    }
 }
 
 tasks.register("printVersion") {
@@ -51,7 +54,6 @@ subprojects {
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
     apply plugin: 'java-library'
-    apply plugin: "de.marcphilipp.nexus-publish"
 
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
@@ -119,18 +121,7 @@ subprojects {
                 }
             }
         }
-        repositories {
-            maven {
-                def releasesRepoUrl = "https://central.sonatype.com/api/v1/publisher/deployments/upload"
-                def snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots/"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-                credentials {
-                    username = project.hasProperty("ossrhUsername") ? project.findProperty("ossrhUsername") : System.getenv('SONATYPE_USERNAME')
-                    password = project.hasProperty("ossrhPassword") ? project.findProperty("ossrhPassword") : System.getenv('SONATYPE_PASSWORD')
-                }
-            }
-        }
+        // Repositories are managed root-level by nexusPublishing block above
     }
 
     signing {
@@ -140,7 +131,6 @@ subprojects {
     repositories {
         mavenCentral()
         mavenLocal()
-        jcenter()
     }
 
     dependencies {

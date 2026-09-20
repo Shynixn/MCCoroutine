@@ -44,8 +44,7 @@ jobs:
           base64 --decode travis_secret_key_txt.gpg > travis_secret_key.gpg
           gpg2 --batch --cipher-algo AES256 --passphrase ${{ secrets.SIGNING_KEY_PASSWORD }} travis_secret_key.gpg
           echo "RELEASE_VERSION=$(./gradlew -q printVersion)" >> $GITHUB_ENV
-          ./gradlew clean publishToNexus
-          ./gradlew closeAndReleaseRepository
+          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 
       - name: Create Github Release
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
